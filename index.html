@@ -1,57 +1,247 @@
 <!doctype html>
 <html lang="fr">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <title>CMAC</title>
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootswatch/4.5.0/simplex/bootstrap.min.css" integrity="sha384-6ge4b1Lr1zrvyGvm5pdAkc3NMa97XYhFPBWsZsT6O3eOU+hqURR1bQEMm11Grf3a" crossorigin="anonymous">
-        <link rel="stylesheet" href="style.css">
-    </head>
-    <body>
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <div class="container">
-                <a class="navbar-brand" href="#">
-                    <img src="logo.png" alt="Logo CMAC" width="65" height="65"> 
-                    CMAC
-                </a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor03" aria-controls="navbarColor03" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarColor03">
-                    <ul class="navbar-nav mx-auto">
-                        <li class="nav-item active">
-                            <a class="nav-link" href="#">Acceuil <span class="sr-only">(current)</span></a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Produits / Services</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Contact</a>
-                        </li>
-                    </ul>
-                    <ul class="navbar-nav">
-                        <div class="d-flex">
-                            <li class="nav-item" id="facebook">
-                                <a class="nav-link" href="#"><i class="fab fa-facebook-f fa-lg"></i></a>
-                            </li>
-                            <li class="nav-item" id="instagram">
-                                <a class="nav-link" href="#"><i class="fab fa-instagram fa-lg"></i></a>
-                            </li>
-                            <li class="nav-item mr-2" id="linkedin">
-                                <a class="nav-link" href="#"><i class="fab fa-linkedin-in fa-lg"></i></a>
-                            </li>
-                        </div>
-                        <li class="form-inline">
-                            <button class="btn btn-secondary">Connexion</button>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
-        <script src="https://kit.fontawesome.com/c039bb065d.js" crossorigin="anonymous"></script>
-        <script src="navbar.js"></script> 
-    </body>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<title>CMAC</title>
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootswatch/4.5.0/simplex/bootstrap.min.css" integrity="sha384-6ge4b1Lr1zrvyGvm5pdAkc3NMa97XYhFPBWsZsT6O3eOU+hqURR1bQEMm11Grf3a" crossorigin="anonymous">
+		<link rel="stylesheet" href="style.css">
+		<link rel="stylesheet" href="index.css">
+	</head>
+	<body>
+		<header>
+			<nav class="navbar navbar-expand-lg navbar-light bg-light navbar-fixed-top">
+				<div class="container">
+					<a class="navbar-brand" href="#">
+						<img src="logo.png" alt="Logo CMAC" width="65" height="65">
+						CMAC
+					</a>
+					<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor03" aria-controls="navbarColor03" aria-expanded="false" aria-label="Toggle navigation">
+						<span class="navbar-toggler-icon"></span>
+					</button>
+					<div class="collapse navbar-collapse" id="navbarColor03">
+						<ul class="navbar-nav mx-auto">
+							<li class="nav-item active">
+								<a class="nav-link" href="#">Acceuil <span class="sr-only">(current)</span></a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="#">Produits / Services</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="#">Contact</a>
+							</li>
+						</ul>
+						<ul class="navbar-nav">
+							<div class="d-flex">
+								<li class="nav-item" id="facebook">
+									<a class="nav-link" href="#"><i class="fab fa-facebook-f fa-lg"></i></a>
+								</li>
+								<li class="nav-item" id="instagram">
+									<a class="nav-link" href="#"><i class="fab fa-instagram fa-lg"></i></a>
+								</li>
+								<li class="nav-item mr-2" id="linkedin">
+									<a class="nav-link" href="#"><i class="fab fa-linkedin-in fa-lg"></i></a>
+								</li>
+							</div>
+							<li class="form-inline">
+								<button class="btn btn-secondary nav-item">Connexion</button>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</nav>
+			<!--<div class="row mr-0 ml-0 mt-3">
+				<div class="col-8 offset-2 text-center">
+					<img id="menu-img" src="menu.png" alt="Menu CMAC">
+				</div>
+			</div>
+			<div class="row mr-0 ml-0">
+				<div class="col-2 offset-5 text-center" id="arrow-down"></div>
+			</div>
+			<img src="menu.png" alt="Menu CMAC">-->
+
+			<section class="menu menu-circle mt-auto mb-auto">
+				<input type="checkbox" id="menu-active">
+				<label for="menu-active" class="menu-active">
+					<div class="menu-toggle"></div>
+					<div class="menu-listings">
+						<ul class="circle">
+							<li>
+								<div class="placeholder">
+									<div class="upside">
+										<a href="https://codepen.io/logrithumn" class="button"><i class="fa fa-user"></i></a>
+									</div>
+								</div>
+							</li>
+							<li>
+								<div class="placeholder">
+									<div class="upside">
+										<a href="#" class="button"><i class="fa fa-cog"></i></a>
+									</div>
+								</div>
+							</li>
+							<li>
+								<div class="placeholder">
+									<div class="upside">
+										<a href="#">&nbsp</a>
+									</div>
+								</div>
+							</li>
+							<li>
+								<div class="placeholder">
+									<div class="upside">
+										<a href="#" class="button"><i class="fa fa-commenting"></i></a>
+									</div>
+								</div>
+							</li>
+							<li>
+								<div class="placeholder">
+									<div class="upside">
+										<a href="#" class="button">fsefsefs</a>
+									</div>
+								</div>
+							</li>
+							<li>
+								<div class="placeholder">
+									<div class="upside">
+										<a href="#" class="button"><i class="fa fa-battery-4"></i></a>
+									</div>
+								</div>
+							</li>
+							<li>
+								<div class="placeholder">
+									<div class="upside">
+										<a href="#" class="button"><i class="fa fa-calendar"></i></a>
+									</div>
+								</div>
+							</li>
+							<li>
+								<div class="placeholder">
+									<div class="upside">
+										<a href="#" class="button"><i class="fa fa-cloud"></i></a>
+									</div>
+								</div>
+							</li>
+							<li>
+								<div class="placeholder">
+									<div class="upside">
+										<a href="#" class="button"><i class="fa fa-wifi"></i></a>
+									</div>
+								</div>
+							</li>
+							<li>
+								<div class="placeholder">
+									<div class="upside">
+										<a href="#" class="button"><i class="fa fa-envelope-o"></i></a>
+									</div>
+								</div>
+							</li>
+						</ul>
+					</div>
+				</label>
+			</section>
+			
+			<!--<div class="text-center" id="arrow-down"></div>-->
+			<span id="down"></span>
+			<!--<section class="menu menu--circle">
+				<input type="checkbox" id="menu__active"/>
+				<label for="menu__active" class="menu__active">
+				  <div class="menu__toggle">
+				  </div>
+				  <input type="radio" name="arrow--up" id="degree--up-0"/>
+				  <input type="radio" name="arrow--up" id="degree--up-1" />
+				  <input type="radio" name="arrow--up" id="degree--up-2" />
+				  <div class="menu__listings">
+					<ul class="circle">
+					  <li>
+						<div class="placeholder">
+						  <div class="upside">
+							<a href="https://codepen.io/logrithumn" class="button"><i class="fa fa-user"></i></a>
+						  </div>
+						</div>
+					  </li>
+					  <li>
+						<div class="placeholder">
+						  <div class="upside">
+							<a href="#" class="button"><i class="fa fa-cog"></i></a>
+						  </div>
+						</div>
+					  </li>
+					  <li>
+						<div class="placeholder">
+						  <div class="upside">
+							<a href="#">&nbsp</a>
+						  </div>
+						</div>
+					  </li>
+					  <li>
+						<div class="placeholder">
+						  <div class="upside">
+							<a href="#" class="button"><i class="fa fa-commenting"></i></a>
+						  </div>
+						</div>
+					  </li>
+					  <li>
+						<div class="placeholder">
+						  <div class="upside">
+							<a href="#" class="button"><i class="fa fa-trash"></i></a>
+						  </div>
+						</div>
+					  </li>
+					  <li>
+						<div class="placeholder">
+						  <div class="upside">
+							<a href="#" class="button"><i class="fa fa-battery-4"></i></a>
+						  </div>
+						</div>
+					  </li>
+					  <li>
+						<div class="placeholder">
+						  <div class="upside">
+							<a href="#" class="button"><i class="fa fa-calendar"></i></a>
+						  </div>
+						</div>
+					  </li>
+					  <li>
+						<div class="placeholder">
+						  <div class="upside">
+							<a href="#" class="button"><i class="fa fa-cloud"></i></a>
+						  </div>
+						</div>
+					  </li>
+					  <li>
+						<div class="placeholder">
+						  <div class="upside">
+							<a href="#" class="button"><i class="fa fa-wifi"></i></a>
+						  </div>
+						</div>
+					  </li>
+					  <li>
+						<div class="placeholder">
+						  <div class="upside">
+							<a href="#" class="button"><i class="fa fa-envelope-o"></i></a>
+						  </div>
+						</div>
+					  </li>
+					</ul>
+				  </div>
+				  <div class="menu__arrow menu__arrow--top">
+					<ul>
+					  <li>
+						<label for="degree--up-0"><div class="arrow"></div></label>
+						<label for="degree--up-1"><div class="arrow"></div></label>
+						<label for="degree--up-2"><div class="arrow"></div></label>
+					  </li>
+					</ul>
+				  </div>
+				</label>
+			  </section>-->
+			  
+		</header>
+		<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+		<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+		<script src="https://kit.fontawesome.com/c039bb065d.js" crossorigin="anonymous"></script>
+		<script src="navbar.js"></script> 
+	</body>
 </html>
