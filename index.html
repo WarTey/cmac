@@ -6,9 +6,10 @@
 		<title>CMAC</title>
 		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootswatch/4.5.0/simplex/bootstrap.min.css" integrity="sha384-6ge4b1Lr1zrvyGvm5pdAkc3NMa97XYhFPBWsZsT6O3eOU+hqURR1bQEMm11Grf3a" crossorigin="anonymous">
 		<link rel="stylesheet" href="style.css">
-		<link rel="stylesheet" href="index.css">
+		<link rel="stylesheet" href="navbar.css">
 	</head>
 	<body>
+		<div id="particles-js"></div>
 		<header>
 			<nav class="navbar navbar-expand-lg navbar-light bg-light navbar-fixed-top">
 				<div class="container">
@@ -50,17 +51,7 @@
 					</div>
 				</div>
 			</nav>
-			<!--<div class="row mr-0 ml-0 mt-3">
-				<div class="col-8 offset-2 text-center">
-					<img id="menu-img" src="menu.png" alt="Menu CMAC">
-				</div>
-			</div>
-			<div class="row mr-0 ml-0">
-				<div class="col-2 offset-5 text-center" id="arrow-down"></div>
-			</div>
-			<img src="menu.png" alt="Menu CMAC">-->
-
-			<section class="menu menu-circle mt-auto mb-auto">
+			<section class="menu menu-circle">
 				<input type="checkbox" id="menu-active">
 				<label for="menu-active" class="menu-active">
 					<div class="menu-toggle"></div>
@@ -69,179 +60,61 @@
 							<li>
 								<div class="placeholder">
 									<div class="upside">
-										<a href="https://codepen.io/logrithumn" class="button"><i class="fa fa-user"></i></a>
+										<a href="#" class="button" id="produits-services" data-trigger="focus" data-toggle="popover" data-placement="left" title="Présentation produits / Services" data-content="And here's some amazing content. It's very engaging. Right?">Présentation produits / Services</a>
 									</div>
 								</div>
 							</li>
 							<li>
 								<div class="placeholder">
 									<div class="upside">
-										<a href="#" class="button"><i class="fa fa-cog"></i></a>
+										<a href="#" class="button" id="ressources" data-trigger="focus" data-toggle="popover" data-placement="left" title="Ressources Cours / Exos" data-content="And here's some amazing content. It's very engaging. Right?">Ressources Cours / Exos</a>
 									</div>
 								</div>
 							</li>
 							<li>
 								<div class="placeholder">
 									<div class="upside">
-										<a href="#">&nbsp</a>
+										<a href="#" class="button" id="actualites" data-trigger="focus" data-toggle="popover" data-placement="left" title="Actualités scientifiques" data-content="And here's some amazing content. It's very engaging. Right?">Actualités scientifiques</a>
 									</div>
 								</div>
 							</li>
 							<li>
 								<div class="placeholder">
 									<div class="upside">
-										<a href="#" class="button"><i class="fa fa-commenting"></i></a>
+										<a href="#" class="button" id="annuaire" data-trigger="focus" data-toggle="popover" data-placement="left" title="Annuaire des Anciens" data-content="And here's some amazing content. It's very engaging. Right?">Annuaire des Anciens</a>
 									</div>
 								</div>
 							</li>
 							<li>
 								<div class="placeholder">
 									<div class="upside">
-										<a href="#" class="button">fsefsefs</a>
+										<a href="#" class="button" id="copywriting" data-trigger="focus" data-toggle="popover" data-placement="left" title="Copywriting et articles scolaires" data-content="And here's some amazing content. It's very engaging. Right?">Copywriting et articles scolaires</a>
 									</div>
 								</div>
 							</li>
 							<li>
 								<div class="placeholder">
 									<div class="upside">
-										<a href="#" class="button"><i class="fa fa-battery-4"></i></a>
-									</div>
-								</div>
-							</li>
-							<li>
-								<div class="placeholder">
-									<div class="upside">
-										<a href="#" class="button"><i class="fa fa-calendar"></i></a>
-									</div>
-								</div>
-							</li>
-							<li>
-								<div class="placeholder">
-									<div class="upside">
-										<a href="#" class="button"><i class="fa fa-cloud"></i></a>
-									</div>
-								</div>
-							</li>
-							<li>
-								<div class="placeholder">
-									<div class="upside">
-										<a href="#" class="button"><i class="fa fa-wifi"></i></a>
-									</div>
-								</div>
-							</li>
-							<li>
-								<div class="placeholder">
-									<div class="upside">
-										<a href="#" class="button"><i class="fa fa-envelope-o"></i></a>
+										<a href="#" class="button" id="livre-forum" data-trigger="focus" data-toggle="popover" data-placement="left" title="Livre d'or / Forum" data-content="And here's some amazing content. It's very engaging. Right?">Livre d'or / Forum</a>
 									</div>
 								</div>
 							</li>
 						</ul>
 					</div>
+					<div class="menu-arrow menu-arrow-top arrow-slide">
+					</div>
 				</label>
 			</section>
-			
-			<!--<div class="text-center" id="arrow-down"></div>-->
 			<span id="down"></span>
-			<!--<section class="menu menu--circle">
-				<input type="checkbox" id="menu__active"/>
-				<label for="menu__active" class="menu__active">
-				  <div class="menu__toggle">
-				  </div>
-				  <input type="radio" name="arrow--up" id="degree--up-0"/>
-				  <input type="radio" name="arrow--up" id="degree--up-1" />
-				  <input type="radio" name="arrow--up" id="degree--up-2" />
-				  <div class="menu__listings">
-					<ul class="circle">
-					  <li>
-						<div class="placeholder">
-						  <div class="upside">
-							<a href="https://codepen.io/logrithumn" class="button"><i class="fa fa-user"></i></a>
-						  </div>
-						</div>
-					  </li>
-					  <li>
-						<div class="placeholder">
-						  <div class="upside">
-							<a href="#" class="button"><i class="fa fa-cog"></i></a>
-						  </div>
-						</div>
-					  </li>
-					  <li>
-						<div class="placeholder">
-						  <div class="upside">
-							<a href="#">&nbsp</a>
-						  </div>
-						</div>
-					  </li>
-					  <li>
-						<div class="placeholder">
-						  <div class="upside">
-							<a href="#" class="button"><i class="fa fa-commenting"></i></a>
-						  </div>
-						</div>
-					  </li>
-					  <li>
-						<div class="placeholder">
-						  <div class="upside">
-							<a href="#" class="button"><i class="fa fa-trash"></i></a>
-						  </div>
-						</div>
-					  </li>
-					  <li>
-						<div class="placeholder">
-						  <div class="upside">
-							<a href="#" class="button"><i class="fa fa-battery-4"></i></a>
-						  </div>
-						</div>
-					  </li>
-					  <li>
-						<div class="placeholder">
-						  <div class="upside">
-							<a href="#" class="button"><i class="fa fa-calendar"></i></a>
-						  </div>
-						</div>
-					  </li>
-					  <li>
-						<div class="placeholder">
-						  <div class="upside">
-							<a href="#" class="button"><i class="fa fa-cloud"></i></a>
-						  </div>
-						</div>
-					  </li>
-					  <li>
-						<div class="placeholder">
-						  <div class="upside">
-							<a href="#" class="button"><i class="fa fa-wifi"></i></a>
-						  </div>
-						</div>
-					  </li>
-					  <li>
-						<div class="placeholder">
-						  <div class="upside">
-							<a href="#" class="button"><i class="fa fa-envelope-o"></i></a>
-						  </div>
-						</div>
-					  </li>
-					</ul>
-				  </div>
-				  <div class="menu__arrow menu__arrow--top">
-					<ul>
-					  <li>
-						<label for="degree--up-0"><div class="arrow"></div></label>
-						<label for="degree--up-1"><div class="arrow"></div></label>
-						<label for="degree--up-2"><div class="arrow"></div></label>
-					  </li>
-					</ul>
-				  </div>
-				</label>
-			  </section>-->
-			  
 		</header>
 		<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
 		<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
 		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
 		<script src="https://kit.fontawesome.com/c039bb065d.js" crossorigin="anonymous"></script>
-		<script src="navbar.js"></script> 
+		<script src="circletype.min.js"></script>
+		<script src="particles.min.js"></script>
+        <script src="particles-settings.js"></script>
+		<script src="navbar.js"></script>
+		<script src="menu.js"></script>
 	</body>
 </html>

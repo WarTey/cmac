@@ -1,0 +1,32 @@
+.navbar {
+    width: 100%;
+    background-image: url("bg-4.jpg");
+    background-position-y: 52%;
+    background-repeat: no-repeat;
+    background-size: cover;
+    padding-bottom: 15vh;
+    -webkit-mask-image: linear-gradient(to bottom, black, rgba(0, 0, 0, 0.5));
+    mask-image: linear-gradient(to bottom, black, rgba(0, 0, 0, 0.5));
+}
+
+.nav-item {
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+.navbar-brand {
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+.nav-link, .navbar-brand {
+    color: rgba(255, 255, 255, 0.8) !important;
+}
+
+.nav-link:hover, .navbar-brand:hover {
+    color: rgba(255, 255, 255, 1) !important;
+}
+
+.navbar {
+    border-width: 0;
+}

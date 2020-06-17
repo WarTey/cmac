@@ -1,32 +1,220 @@
-.navbar {
-    width: 100%;
-    background-image: url("bg-4.jpg");
-    background-position-y: 52%;
-    background-repeat: no-repeat;
-    background-size: cover;
-    padding-bottom: 15vh;
-    -webkit-mask-image: linear-gradient(to bottom, black, rgba(0, 0, 0, 0.5));
-    mask-image: linear-gradient(to bottom, black, rgba(0, 0, 0, 0.5));
+header {
+	height: 100vh;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
 }
 
-.nav-item {
-    font-size: 1rem;
-    font-weight: 500;
+#particles-js {
+	position: absolute;
+	width: 100%;
+	height: 100%;
 }
 
-.navbar-brand {
-    font-size: 1.2rem;
-    font-weight: 600;
+#down {
+	position: absolute;
+	top: 92vh;
+	padding: 20px;
+	font-size: 2.5em;
 }
 
-.nav-link, .navbar-brand {
-    color: rgba(255, 255, 255, 0.8) !important;
+#down:hover {
+	cursor: pointer;
 }
 
-.nav-link:hover, .navbar-brand:hover {
-    color: rgba(255, 255, 255, 1) !important;
+#down::after {
+	content: "";
+	width: 30px;
+	height: 30px;
+	position: absolute;
+	margin: auto;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	border-right: 4px solid black;
+	border-bottom: 4px solid black;
+	border-radius: 3px;
+	-webkit-transform: rotate(45deg);
+	transform: rotate(45deg);
+	-webkit-animation: 2s arrow infinite ease;
+	animation: 2s arrow infinite ease;
 }
 
-.navbar {
-    border-width: 0;
+@-webkit-keyframes arrow {
+	50% {
+		top: 25px;
+	}
+}
+
+@keyframes arrow {
+	50% {
+		top: 25px;
+	}
+}
+
+.popover {
+	display: none;
+}
+
+.arrow {
+	display: none !important;
+}
+
+label {
+	display: block;
+	margin-bottom: 0;
+}
+
+.menu {
+	pointer-events: none;
+}
+
+.menu-circle {
+	position: absolute;
+	top: 30vh;
+}
+
+.menu-active {
+	position: relative;
+}
+
+.menu-listings {
+	width: 60vh;
+	height: 60vh;
+	border-radius: 50%;
+	background-color: rgb(42, 44, 50);
+}
+
+.menu-toggle {
+	z-index: 1;
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	background-image: url("menu.png");
+	transform: scale(1.075);
+	left: -0.25%;
+	top: 0.75%;
+	background-size: cover;
+	border-radius: 50%;
+}
+
+.arrow-slide {
+	position: absolute;
+	top: 50%;
+	left: 105%;
+	transform: rotate(-45deg);
+	width: 20px;
+	height: 20px;
+	border-right: 6.666666666666667px solid rgb(42, 44, 50);
+	border-top: 6.666666666666667px solid rgb(42, 44, 50);
+	border-radius: 3px;
+	transition: border-color 0.3s;
+	cursor: pointer;
+	pointer-events: auto;
+}
+
+.arrow-slide:hover {
+	border-color: rgb(42, 44, 50);
+	transition: border-color 0.3s;
+}
+
+.circle {
+	position: relative;
+	padding: 0;
+	margin: 0;
+	height: 100%;
+	width: 100%;
+	background-color: rgb(42, 44, 50);
+	border-radius: 50%;
+	overflow: hidden;
+	list-style: none;
+}
+
+@keyframes rotate {
+	from {
+		transform: rotate(0deg);
+	}
+
+	to {
+		transform: rotate(360deg);
+	}
+}
+
+.circle li {
+	position: absolute;
+	top: 0;
+	right: 0;
+	width: 50%;
+	height: 50%;
+	transform-origin: 0 100%;
+	background-color: rgb(42, 44, 50);
+}
+
+.circle li .placeholder {
+	position: absolute;
+	left: -100%;
+	padding-top: 0em;
+	width: 200%;
+	height: 200%;
+	text-align: center;
+	transform: skewY(54deg) rotate(18deg);
+}
+
+.circle li .placeholder a {
+	text-decoration: none;
+	pointer-events: auto;
+}
+
+.circle li .placeholder button {
+	pointer-events: auto;
+}
+
+.circle li .placeholder .button {
+	font-size: 0.875rem;
+	transition: font-size 1s;
+	background-color: transparent;
+	border: none;
+	color: rgba(255, 255, 255, 0.8);
+	cursor: pointer;
+}
+
+.circle li:nth-child(1) {
+	transform: rotate(0deg) skewY(-54deg);
+}
+
+.circle li:nth-child(2) {
+	transform: rotate(65deg) skewY(-54deg);
+}
+
+.circle li:nth-child(3) {
+	transform: rotate(125deg) skewY(-54deg);
+}
+
+.circle li:nth-child(4) {
+	transform: rotate(175deg) skewY(-54deg);
+}
+
+.circle li:nth-child(5) {
+	transform: rotate(240deg) skewY(-54deg);
+}
+
+.circle li:nth-child(6) {
+	transform: rotate(305deg) skewY(-54deg);
+}
+
+#menu-active {
+	position: fixed;
+	visibility: hidden;
+}
+
+#menu-active ~ label .menu-listings {
+	transform: rotate(10deg) scale(1);
+	transition: transform 1s;
+}
+
+#menu-active ~ label .button:hover {
+	color: rgba(255, 255, 255, 1);
+	font-size: 1rem;
+	transition: font-size 1s;
 }
