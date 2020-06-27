@@ -1,9 +1,16 @@
+body {
+	background-image: url(../bg-1.jpg);
+	background-position: center;
+	background-size: cover;
+	background-repeat: no-repeat;
+}
+
 header {
 	height: 100vh;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	overflow-x: hidden;
+	overflow: hidden;
 }
 
 #menu {
@@ -58,6 +65,7 @@ header {
 
 .slice a:hover {
 	color: rgba(255, 255, 255, 1);
+	text-decoration: none;
 }
 
 #middle {
@@ -72,6 +80,10 @@ header {
 	pointer-events: none;
 }
 
+.text-slice {
+	display: none;
+}
+
 .arrow {
 	position: relative;
 	max-width: 30px;
@@ -83,8 +95,8 @@ header {
 }
 
 #down {
-	position: absolute;
-	top: 92vh;
+	position: relative;
+	top: 7vh;
 	font-size: 1.5rem;
 	-webkit-animation: 2s arrow infinite ease;
 	animation: 2s arrow infinite ease;
@@ -98,9 +110,9 @@ header {
 }
 
 @-webkit-keyframes arrow {
-	50% { top: 90vh; }
+	50% { top: 5vh; }
 }
 
 @keyframes arrow {
-	50% { top: 90vh; }
+	50% { top: 5vh; }
 }
