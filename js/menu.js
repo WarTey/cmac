@@ -20,7 +20,7 @@ $(document).ready(function() {
 	/* 
 	** TODO : DEL
 	*/
-	var imageIndex = 1;
+	/*var imageIndex = 1;
 	setInterval(function() {
 		$("body").css({
 			"background-image" : 'url(bg-' + imageIndex + '.jpg)'
@@ -29,7 +29,7 @@ $(document).ready(function() {
 			imageIndex = 1;
 		else
 			imageIndex++;
-	}, 5000);
+	}, 5000);*/
 
 	$(".arrow").click(function() {
 		rotation++;
