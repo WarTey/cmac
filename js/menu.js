@@ -17,20 +17,6 @@ $(document).ready(function() {
 		}
 	}
 
-	/* 
-	** TODO : DEL
-	*/
-	/*var imageIndex = 1;
-	setInterval(function() {
-		$("body").css({
-			"background-image" : 'url(bg-' + imageIndex + '.jpg)'
-		});
-		if (imageIndex == 2)
-			imageIndex = 1;
-		else
-			imageIndex++;
-	}, 5000);*/
-
 	$(".arrow").click(function() {
 		rotation++;
 		$(".slice").each(function(index) {
