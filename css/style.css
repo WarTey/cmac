@@ -14,10 +14,9 @@ header {
 }
 
 #menu {
-	display: block;
+	display: none;
 	width: 60vh;
 	min-width: 40em;
-	margin-top: 7vh;
 }
 
 #menu li {
@@ -84,35 +83,75 @@ header {
 	display: none;
 }
 
-.arrow {
+#arrow {
 	position: relative;
 	max-width: 30px;
 	top: -50%;
 	left: 111%;
 	font-size: 1.5rem;
 	cursor: pointer;
+	transition: text-shadow 0.3s;
 	pointer-events: auto;
 }
 
-#down {
+#menu-small {
+	display: none;
+}
+
+#menu-small #down-small {
+	text-align: center;
+}
+
+.list-group-item {
+	border: 1px solid rgb(42, 44, 50);
+}
+
+#down, #down-small {
+	display: inline-block;
 	position: relative;
-	top: 7vh;
+	top: 0vh;
 	font-size: 1.5rem;
+	transition: text-shadow 0.3s;
 	-webkit-animation: 2s arrow infinite ease;
 	animation: 2s arrow infinite ease;
 }
 
-#down:hover {
+#down:hover, #down-small:hover, #arrow:hover {
 	cursor: pointer;
-	border-radius: 50%;
-	border: 1px solid rgba(0, 0, 0, 0.5);
-	transition: border-radius 0.3s;
+	text-shadow: 5px 5px 15px black;
+	transition: text-shadow 0.3s;
 }
 
 @-webkit-keyframes arrow {
-	50% { top: 5vh; }
+	50% { top: 2vh; }
 }
 
 @keyframes arrow {
-	50% { top: 5vh; }
+	50% { top: 2vh; }
+}
+
+small {
+	float: right;
+}
+
+@media (max-width: 768px) {
+	#menu { display: none !important; }
+
+	#menu-small { display: block !important; }
+}
+
+@media (max-height: 749px) {
+	#down { display: none; }
+}
+
+@media (max-height: 679px) {
+	#down-small { display: none; }
+}
+
+@media (max-height: 639px) {
+	header { height: 100%; }
+
+	#menu { display: none !important; }
+
+	#menu-small { display: block !important; }
 }
