@@ -23,11 +23,9 @@ $(document).ready(function() {
 	}
 
 	resizeMenu();
-	refreshMenuDisplay();
 
 	$(window).on('resize', function() {
 		resizeMenu();
-		refreshMenuDisplay();
 	});
 
 	function curveText(element) {
