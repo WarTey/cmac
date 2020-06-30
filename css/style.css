@@ -14,9 +14,11 @@ header {
 }
 
 #menu {
+	display: block;
 	display: none;
 	width: 60vh;
 	min-width: 40em;
+	max-width: 60em;
 }
 
 #menu li {
@@ -28,6 +30,7 @@ header {
 	max-width: 0;
 	max-height: 0;
 	padding: 50%;
+	margin-bottom: 5rem;
 	list-style: none;
 }
 
@@ -86,7 +89,7 @@ header {
 #arrow {
 	position: relative;
 	max-width: 30px;
-	top: -50%;
+	top: 45.5%;
 	left: 111%;
 	font-size: 1.5rem;
 	cursor: pointer;
@@ -134,13 +137,7 @@ small {
 	float: right;
 }
 
-@media (max-width: 768px) {
-	#menu { display: none !important; }
-
-	#menu-small { display: block !important; }
-}
-
-@media (max-height: 749px) {
+/*@media (max-height: 749px) {
 	#down { display: none; }
 }
 
@@ -149,9 +146,49 @@ small {
 }
 
 @media (max-height: 639px) {
+	#menu {
+		width: 65vh !important;
+		min-width: 0 !important;
+	}
+
+	.slice a {
+		font-size: 0.875rem;
+		font-weight: 500;
+	}
+}
+
+@media (max-height: 594px) {
+	#menu {
+		width: 55vh !important;
+		min-width: 0 !important;
+	}
+
+	#middle {
+		width: 100% !important;
+		height: 100% !important;
+		top: 0 !important;
+		left: 0 !important;
+	}
+}
+
+@media (max-height: 524px) {
+	#menu {
+		width: 45vh !important;
+		min-width: 0 !important;
+	}
+
+	#middle {
+		width: 98% !important;
+		height: 98% !important;
+		top: 1% !important;
+		left: 1% !important;
+	}
+}
+
+@media (max-height: 444px) {
 	header { height: 100%; }
 
 	#menu { display: none !important; }
 
 	#menu-small { display: block !important; }
-}
+}*/
