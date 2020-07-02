@@ -134,3 +134,13 @@ header {
 small {
 	float: right;
 }
+
+@media (max-width: 250px), (max-height: 235px) {
+	header { height: 100% !important; }
+
+	#menu { display: none; }
+
+	#menu-small { display: inline; }
+
+	.navbar { margin-bottom: 0 !important; }
+}
