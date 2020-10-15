@@ -15,8 +15,8 @@ header {
 
 #menu {
 	display: flex;
-	width: 60vh;
-	max-width: 40em;
+	width: 60%;
+	max-width: 35em;
 }
 
 #menu li {
@@ -33,7 +33,7 @@ header {
 }
 
 #menu span {
-	font-family: "Lucida Console", Courier, monospace;
+	font-family: "Andale Mono", monospace;
 }
 
 #products { transform: rotate(0deg) skewX(30deg) scale(1); transition: transform 1s; }
@@ -70,14 +70,15 @@ header {
 .slice a:hover {
 	color: rgba(255, 255, 255, 1);
 	text-decoration: none;
+	cursor: pointer;
 }
 
 #middle {
 	z-index: 1;
-	top: -1%;
-	left: -1%;
-	width: 102%;
-	height: 102%;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
 	background-image: url("../img/menu.png");
 	background-position: center;
 	background-size: contain;
@@ -135,7 +136,7 @@ small {
 	float: right;
 }
 
-@media (max-width: 250px), (max-height: 235px) {
+/*@media (max-width: 250px), (max-height: 235px) {
 	header { height: 100% !important; }
 
 	#menu { display: none; }
@@ -143,4 +144,31 @@ small {
 	#menu-small { display: inline; }
 
 	.navbar { margin-bottom: 0 !important; }
+}*/
+
+@media (min-width: 700px) and (max-width: 768px), (max-height: 780px) {
+	/*#down {
+		display: none;
+	}*/
+}
+
+@media (max-width: 768px) {
+	/*#arrow {
+		display: none;
+	}*/
+}
+
+.card {
+	max-width: 20rem;
+	margin-left: 0.5%;
+}
+
+footer {
+	color: white;
+	background-color: #475050;
+}
+
+footer a,
+footer a:hover {
+	color: white;
 }
