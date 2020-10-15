@@ -1,3 +1,7 @@
+html {
+	scroll-behavior: smooth;
+}
+
 body {
 	background-image: url(../img/bg.jpg);
 	background-position: center;
@@ -160,7 +164,19 @@ small {
 
 .card {
 	max-width: 20rem;
-	margin-left: 0.5%;
+	margin-left: 1%;
+	transition: all 0.5s;
+}
+
+.card a,
+.card a:hover {
+	color: black;
+}
+
+.card:hover {
+	box-shadow: 5px -5px 4px 4px rgba(0,0,0,.2);
+	transform: scale(1.01);
+	transition: all 0.5s;
 }
 
 footer {
