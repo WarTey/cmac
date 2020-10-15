@@ -127,7 +127,8 @@ $(document).ready(function() {
 			});
 			$(this).parent().find(".icn").fadeOut(0);
 			$(this).parent().find(".text-slice").fadeIn();
-			curveText($(this));
+			//curveText($(this));
+			$(this).arctext({radius: 200});
 		}, function() {
 			$(this).parent().css({
 				"transform" : 'rotate(' + (rotation * 360 / nbSlice + index * 360 / nbSlice) + 'deg) skewX(30deg) scale(1)',
