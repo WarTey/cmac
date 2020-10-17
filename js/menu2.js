@@ -70,9 +70,39 @@ $(document).ready(function() {
 		$("#middle").css({
 			"transform" : "scale(" + sizeMiddle + ")",
 		});
-		console.log(sizeMiddle);
+		//console.log(sizeMiddle);
 		$(".slice a").css({
-			"font-size" : sizeMiddle <= 0.92 ? sizeMiddle <= 0.9 ? '0.8rem' : '0.85rem' : '1rem',
+			"font-size" : sizeMiddle <= 0.92 ? sizeMiddle <= 0.9 ? '0.8rem' : '0.85rem' : '0.95rem',
+		});
+	}
+
+	function getAngle(element) {
+		var values = element.split("(")[1],
+			values = values.split(")")[0],
+			values = values.split(","),
+			radians = Math.atan2(values[1], values[0]);
+		if (radians < 0)
+			radians += (2 * Math.PI);
+		return Math.round(radians * (180 / Math.PI));
+	}
+
+	function showPopover(origin, object, event) {
+		if (!object.hasClass("show")) {
+			const angle = getAngle(origin.css("transform"));
+			var left = event.pageX - object.width() * 1.25;
+			if (angle == 60 || angle == 120 || angle == 180)
+				left = event.pageX + 75;
+			object.addClass("show");
+			object.css('left', left + 'px');
+			object.css('top', (event.pageY-object.height()/2) + 'px');
+		} else
+			object.removeClass("show");
+	}
+
+	function hidePopover(id) {
+		$(".popover").each(function() {
+			if ($(this).hasClass("show") && $(this).attr("id") != id)
+				$(this).removeClass("show");
 		});
 	}
 
@@ -89,6 +119,10 @@ $(document).ready(function() {
 		//menuResize();
 		resizeHeader();
 		resizeMiddle();
+	});
+
+	$(".close").click(function() {
+		hidePopover();
 	});
 
 	$("#arrow").click(function() {
@@ -110,14 +144,19 @@ $(document).ready(function() {
 				"transition" : 'transform 1s',
 			});
 			$(this).find(".icn").fadeOut(0);
-			$(this).find(".no-icn").fadeIn().arctext({radius: 200});
+			$(this).find(".no-icn").fadeIn(0).arctext({radius: 200});
 		}, function() {
 			$(this).css({
 				"transform" : 'rotate(' + (rotation * 360 / nbSlice + index * 360 / nbSlice) + 'deg) skewX(30deg) scale(1)',
 				"transition" : 'transform 1s',
 			});
 			$(this).find(".no-icn").fadeOut(0);
-			$(this).find(".icn").fadeIn();
+			$(this).find(".icn").fadeIn(0);
+		});
+
+		$(this).click(function(event) {
+			hidePopover("popover-" + $(this).attr("id"));
+			showPopover($(this), $("#popover-" + $(this).attr("id")), event);
 		});
 	});
 });
