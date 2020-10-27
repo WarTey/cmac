@@ -106,6 +106,10 @@ $(document).ready(function() {
 		});
 	}
 
+	$('.carousel').carousel({
+		interval: 2000
+	});
+
 	//menuResize();
 	resizeHeader();
 	resizeMiddle();
