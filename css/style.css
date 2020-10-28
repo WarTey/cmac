@@ -40,12 +40,11 @@ header {
 	font-family: "Andale Mono", monospace;
 }
 
-#products { transform: rotate(0deg) skewX(30deg) scale(1); transition: transform 1s; }
-#ressources { transform: rotate(60deg) skewX(30deg) scale(1); transition: transform 1s; }
-#forum { transform: rotate(120deg) skewX(30deg) scale(1); transition: transform 1s; }
-#art-school { transform: rotate(180deg) skewX(30deg) scale(1); transition: transform 1s; }
-#art-science { transform: rotate(240deg) skewX(30deg) scale(1); transition: transform 1s; }
-#old-students { transform: rotate(300deg) skewX(30deg) scale(1); transition: transform 1s; }
+#products { transform: rotate(54deg) skewX(18deg) scale(1); transition: transform 1s; }
+#ressources { transform: rotate(126deg) skewX(18deg) scale(1); transition: transform 1s; }
+#forum { transform: rotate(198deg) skewX(18deg) scale(1); transition: transform 1s; }
+#art-science { transform: rotate(270deg) skewX(18deg) scale(1); transition: transform 1s; }
+#old-students { transform: rotate(342deg) skewX(18deg) scale(1); transition: transform 1s; }
 
 .slice {
 	top: 0;
@@ -61,7 +60,7 @@ header {
 	background: rgb(42, 44, 50);
 	width: 200%;
 	height: 200%;
-	transform: skew(-30deg) rotate(-60deg);
+	transform: skew(-18deg) rotate(-52.5deg);
 	line-height: 1.75;
 	text-align: center;
 	color: rgba(255, 255, 255, 0.8);

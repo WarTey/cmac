@@ -1,6 +1,6 @@
 $(document).ready(function() {
 	var rotation = 0;
-	var nbSlice = $(".slice").length;
+	var nbSlice = 5;//$(".slice").length;
 
 	function hideCollapseNavbar() {
 		if ($(".collapse").hasClass("show"))
