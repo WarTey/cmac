@@ -90,7 +90,7 @@ $(document).ready(function() {
 		if (!object.hasClass("show")) {
 			const angle = getAngle(origin.css("transform"));
 			var left = event.pageX - object.width() * 1.25;
-			if (angle == 60 || angle == 120 || angle == 180)
+			if (angle == 54 || angle == 126 || angle == 198)
 				left = event.pageX + 75;
 			object.addClass("show");
 			object.css('left', left + 'px');
