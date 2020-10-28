@@ -1,6 +1,6 @@
 $(document).ready(function() {
 	var rotation = 0;
-	var nbSlice = 5;//$(".slice").length;
+	var nbSlice = $(".slice").length;
 
 	function hideCollapseNavbar() {
 		if ($(".collapse").hasClass("show"))
@@ -133,7 +133,7 @@ $(document).ready(function() {
 		rotation++;
 		$(".slice").each(function(index) {
 			$(this).css({
-				"transform" : 'rotate(' + (rotation * 360 / nbSlice + index * 360 / nbSlice) + 'deg) skewX(30deg) scale(1)',
+				"transform" : 'rotate(' + (rotation * 360 / nbSlice + index * 360 / nbSlice + 54) + 'deg) skewX(18deg) scale(1)',
 				"transition" : 'transform 1s',
 			});
 			$(this).find(".icn").fadeIn();
@@ -144,14 +144,14 @@ $(document).ready(function() {
 	$(".slice").each(function(index) {
 		$(this).hover(function() {
 			$(this).css({
-				"transform" : 'rotate(' + (rotation * 360 / nbSlice + index * 360 / nbSlice) + 'deg) skewX(30deg) scale(1.15)',
+				"transform" : 'rotate(' + (rotation * 360 / nbSlice + index * 360 / nbSlice + 54) + 'deg) skewX(18deg) scale(1.15)',
 				"transition" : 'transform 1s',
 			});
 			$(this).find(".icn").fadeOut(0);
 			$(this).find(".no-icn").fadeIn(0).arctext({radius: 200});
 		}, function() {
 			$(this).css({
-				"transform" : 'rotate(' + (rotation * 360 / nbSlice + index * 360 / nbSlice) + 'deg) skewX(30deg) scale(1)',
+				"transform" : 'rotate(' + (rotation * 360 / nbSlice + index * 360 / nbSlice + 54) + 'deg) skewX(18deg) scale(1)',
 				"transition" : 'transform 1s',
 			});
 			$(this).find(".no-icn").fadeOut(0);
