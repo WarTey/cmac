@@ -163,8 +163,13 @@ small {
 	}*/
 }
 
+.card {
+	overflow: auto;
+}
+
 .card-menu {
 	max-width: 20rem;
+	max-height: 30rem;
 	margin-left: 1%;
 	box-shadow: 1px -1px 4px 0.5px rgba(0, 0, 0, .2);
 	transition: all 0.5s;
@@ -183,6 +188,7 @@ small {
 
 .card-text {
 	text-align: justify;
+	word-wrap: break-word;
 }
 
 .popover {
