@@ -198,6 +198,11 @@ small {
 	max-width: auto;
 }
 
+#result-iframe-youtube iframe {
+	width: 100%;
+	height: 185px;
+}
+
 footer {
 	color: white;
 	background-color: #475050;
