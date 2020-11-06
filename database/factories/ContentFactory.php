@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Content;
+use App\Models\Course;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class ContentFactory extends Factory
@@ -22,7 +23,9 @@ class ContentFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'title' => $this->faker->sentence(),
+            'description' => $this->faker->paragraphs(2, true),
+            'course_id' => Course::all()->random()->id
         ];
     }
 }

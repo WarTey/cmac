@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Chapter;
+use App\Models\Level;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class ChapterFactory extends Factory
@@ -22,7 +23,10 @@ class ChapterFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'title' => $this->faker->sentence(),
+            'description' => $this->faker->paragraphs(2, true),
+            'image' => $this->faker->sentence(),
+            'level_id' => Level::all()->random()->id
         ];
     }
 }

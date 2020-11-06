@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Content;
 use App\Models\File;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -22,7 +23,8 @@ class FileFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'name' => $this->faker->sentence(),
+            'content_id' => Content::all()->random()->id
         ];
     }
 }
