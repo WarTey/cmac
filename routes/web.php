@@ -17,8 +17,11 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/levels', 'App\Http\Controllers\LevelController@index')->name('levels');
+Route::get('/niveaux', 'App\Http\Controllers\LevelController@index')->name('levels.index');
 
-Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
-    return Inertia\Inertia::render('Dashboard');
-})->name('dashboard');
+Route::group(['auth:sanctum', 'verified'], function () {
+    Route::get('/dashboard', function() {
+        return Inertia\Inertia::render('Dashboard');
+    })->name('dashboard');
+    Route::get('/niveau/{id}/chapitres', 'App\Http\Controllers\ChapterController@index')->name('chapters.index');
+});

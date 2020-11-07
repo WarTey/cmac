@@ -10,7 +10,7 @@ class LevelController extends Controller
 {
     public function index()
     {
-        $levels = Level::all();
+        $levels = Level::withCount('chapters')->get();
 
         return Inertia::render('Levels/Index', [
             'levels' => $levels

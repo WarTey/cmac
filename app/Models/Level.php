@@ -8,4 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class Level extends Model
 {
     use HasFactory;
+
+    public function chapters()
+    {
+        return $this->hasMany(Chapter::class);
+    }
 }

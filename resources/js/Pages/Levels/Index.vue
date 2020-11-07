@@ -10,11 +10,11 @@
                 <div class="bg-white overflow-hidden shadow-lg hover:shadow-xl sm:rounded-lg transition duration-500 ease-in-out">
                     <div class="p-6 sm:px-20 bg-white border-b border-gray-200">
                         <div class="flex justify-between items-center">
-                            <a href="#" class="text-2xl hover:underline">
-                                {{ level.title }}
+                            <a :href="'niveau/' + level.id + '/chapitres'" class="text-2xl hover:underline">
+                                Niveau - {{ level.title }}
                             </a>
                             <div class="text-gray-400">
-                                X chapitres
+                                {{ level.chapters_count }} chapitres
                             </div>
                         </div>
                         <div class="mt-6 text-gray-500 text-justify">
@@ -35,16 +35,12 @@
             AppLayout
         },
 
+        props: ['levels'],
+
         data() {
             return {
                 levelList: this.levels
             }
         },
-
-        props: ['levels'],
-
-        mounted() {
-            console.log(this.levels);
-        }
     }
 </script>
