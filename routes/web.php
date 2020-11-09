@@ -25,4 +25,5 @@ Route::group(['auth:sanctum', 'verified'], function () {
     })->name('dashboard');
     Route::get('/niveau/{id}', 'App\Http\Controllers\ChapterController@index')->name('chapters.index');
     Route::get('/chapitre/{id}', 'App\Http\Controllers\CourseController@index')->name('courses.index');
+    Route::get('/cours/{id}', 'App\Http\Controllers\ContentController@index')->name('contents.index');
 });

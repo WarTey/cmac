@@ -13,4 +13,9 @@ class Content extends Model
     {
         return $this->belongsTo(Course::class);
     }
+
+    public function files()
+    {
+        return $this->hasMany(File::class);
+    }
 }
