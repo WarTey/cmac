@@ -53,13 +53,6 @@ export default {
             chapterTitle: this.chapter.title,
             chapterId: this.chapter.id
         }
-    },
-
-    methods: {
-        notification(message)
-        {
-            alert(message);
-        }
     }
 }
 </script>

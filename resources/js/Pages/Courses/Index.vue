@@ -60,6 +60,7 @@ export default {
     methods: {
         notification(message)
         {
+            // TODO : Use library
             alert(message);
         }
     }

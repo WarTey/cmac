@@ -49,6 +49,7 @@
         methods: {
             notification(message)
             {
+                // TODO : Use library
                 alert(message);
             }
         }

@@ -3395,6 +3395,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     notification: function notification(message) {
+      // TODO : Use library
       alert(message);
     }
   }
@@ -3463,11 +3464,6 @@ __webpack_require__.r(__webpack_exports__);
       chapterTitle: this.chapter.title,
       chapterId: this.chapter.id
     };
-  },
-  methods: {
-    notification: function notification(message) {
-      alert(message);
-    }
   }
 });
 
@@ -3539,6 +3535,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     notification: function notification(message) {
+      // TODO : Use library
       alert(message);
     }
   }
@@ -3641,6 +3638,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     notification: function notification(message) {
+      // TODO : Use library
       alert(message);
     }
   }
