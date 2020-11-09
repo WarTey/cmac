@@ -9,6 +9,8 @@ class Level extends Model
 {
     use HasFactory;
 
+    protected $fillable = ['title', 'description', 'image'];
+
     public function chapters()
     {
         return $this->hasMany(Chapter::class);

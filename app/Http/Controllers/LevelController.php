@@ -16,4 +16,9 @@ class LevelController extends Controller
             'levels' => $levels
         ]);
     }
+
+    public function store(Request $request)
+    {
+        Level::create($request->all());
+    }
 }
