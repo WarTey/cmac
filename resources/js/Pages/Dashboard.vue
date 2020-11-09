@@ -8,6 +8,9 @@
 
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+                <div class="bg-green-200 text-green-500 p-3" v-if="$page.flash.success">
+                    {{ $page.flash.success }}
+                </div>
                 <div class="w-full">
                     <form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" @submit.prevent="submit">
                         <div class="mb-4">

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Level;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 
 class LevelController extends Controller
@@ -20,5 +21,7 @@ class LevelController extends Controller
     public function store(Request $request)
     {
         Level::create($request->all());
+
+        return Redirect::route('dashboard')->with('success', 'Formation mise en ligne.');
     }
 }
