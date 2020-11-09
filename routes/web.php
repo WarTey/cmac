@@ -17,11 +17,12 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/niveaux', 'App\Http\Controllers\LevelController@index')->name('levels.index');
+Route::get('/formations', 'App\Http\Controllers\LevelController@index')->name('levels.index');
 
 Route::group(['auth:sanctum', 'verified'], function () {
     Route::get('/dashboard', function() {
         return Inertia\Inertia::render('Dashboard');
     })->name('dashboard');
-    Route::get('/niveau/{id}/chapitres', 'App\Http\Controllers\ChapterController@index')->name('chapters.index');
+    Route::get('/niveau/{id}', 'App\Http\Controllers\ChapterController@index')->name('chapters.index');
+    Route::get('/chapitre/{id}', 'App\Http\Controllers\CourseController@index')->name('courses.index');
 });
