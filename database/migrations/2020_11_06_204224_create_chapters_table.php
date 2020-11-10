@@ -15,9 +15,10 @@ class CreateChaptersTable extends Migration
     {
         Schema::create('chapters', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
-            $table->text('description');
-            $table->string('image');
+            $table->uuid('uuid')->index();
+            $table->string('title')->unique();
+            $table->text('description')->nullable();
+            $table->string('image')->nullable();
             $table->foreignId('level_id')->constrained()->cascadeOnDelete();
             $table->timestamps();
         });

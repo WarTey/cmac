@@ -9,6 +9,13 @@ class Chapter extends Model
 {
     use HasFactory;
 
+    protected $hidden = ['id'];
+
+    public function getRouteKeyName()
+    {
+        return 'uuid';
+    }
+
     public function level()
     {
         return $this->belongsTo(Level::class);

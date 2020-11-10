@@ -22,6 +22,6 @@ class LevelController extends Controller
     {
         Level::create($request->all());
 
-        return Redirect::route('dashboard')->with('success', 'Formation mise en ligne.');
+        return Level::withCount('chapters')->get();
     }
 }

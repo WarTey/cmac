@@ -23,9 +23,9 @@ Route::group(['auth:sanctum', 'verified'], function () {
     Route::get('/dashboard', function() {
         return Inertia\Inertia::render('Dashboard');
     })->name('dashboard');
-    Route::get('/niveau/{id}', 'App\Http\Controllers\ChapterController@index')->name('chapters.index');
-    Route::get('/chapitre/{id}', 'App\Http\Controllers\CourseController@index')->name('courses.index');
-    Route::get('/cours/{id}', 'App\Http\Controllers\ContentController@index')->name('contents.index');
+    Route::get('/niveau/{uuid}', 'App\Http\Controllers\ChapterController@index')->name('chapters.index');
+    Route::get('/chapitre/{uuid}', 'App\Http\Controllers\CourseController@index')->name('courses.index');
+    Route::get('/cours/{uuid}', 'App\Http\Controllers\ContentController@index')->name('contents.index');
 
     Route::post('/formations', 'App\Http\Controllers\LevelController@store')->name('levels.store');
 });

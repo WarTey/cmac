@@ -3,7 +3,7 @@
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                 <div class="flex justify-between items-center">
-                    <a :href="'/niveau/' + levelId" class="hover:underline">
+                    <a :href="'/niveau/' + levelUuid" class="hover:underline">
                         <i class="fas fa-long-arrow-alt-left fa-sm"></i>
                         Niveau - {{ levelTitle }}
                     </a>
@@ -21,7 +21,7 @@
                             <a v-if="course.contents_count < 1" href="#" v-on:click="notification('Vide')" class="text-2xl hover:underline">
                                 {{ course.title }}
                             </a>
-                            <a v-else :href="'/cours/' + course.id" class="text-2xl hover:underline">
+                            <a v-else :href="'/cours/' + course.uuid" class="text-2xl hover:underline">
                                 {{ course.title }}
                             </a>
                             <div class="text-gray-400">
@@ -53,7 +53,7 @@ export default {
             courseList: this.courses,
             chapterTitle: this.chapter.title,
             levelTitle: this.level.title,
-            levelId: this.level.id
+            levelUuid: this.level.uuid
         }
     },
 

@@ -9,7 +9,14 @@ class Level extends Model
 {
     use HasFactory;
 
+    protected $hidden = ['id'];
+
     protected $fillable = ['title', 'description', 'image'];
+
+    public function getRouteKeyName()
+    {
+        return 'uuid';
+    }
 
     public function chapters()
     {

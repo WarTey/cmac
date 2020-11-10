@@ -9,6 +9,13 @@ class Content extends Model
 {
     use HasFactory;
 
+    protected $hidden = ['id'];
+
+    public function getRouteKeyName()
+    {
+        return 'uuid';
+    }
+
     public function course()
     {
         return $this->belongsTo(Course::class);

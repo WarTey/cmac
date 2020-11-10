@@ -9,11 +9,11 @@ use Inertia\Inertia;
 
 class ChapterController extends Controller
 {
-    public function index(int $id)
+    public function index(string $uuid)
     {
-        $chapters = Chapter::where('level_id', $id)->withCount('courses')->get();
+        $level = Level::where('uuid', $uuid)->first();
 
-        $level = Level::where('id', $chapters[0]->level_id)->first();
+        $chapters = Chapter::where('level_id', $level->id)->withCount('courses')->get();
 
         return Inertia::render('Chapters/Index', [
             'chapters' => $chapters,

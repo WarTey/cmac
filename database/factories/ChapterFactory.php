@@ -23,6 +23,7 @@ class ChapterFactory extends Factory
     public function definition()
     {
         return [
+            'uuid' => $this->faker->uuid,
             'title' => $this->faker->sentence(),
             'description' => $this->faker->paragraphs(2, true),
             'image' => $this->faker->sentence(),

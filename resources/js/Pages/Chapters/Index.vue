@@ -21,7 +21,7 @@
                             <a v-if="chapter.courses_count < 1" href="#" v-on:click="notification('Vide')" class="text-2xl hover:underline">
                                 {{ chapter.title }}
                             </a>
-                            <a v-else :href="'/chapitre/' + chapter.id" class="text-2xl hover:underline">
+                            <a v-else :href="'/chapitre/' + chapter.uuid" class="text-2xl hover:underline">
                                 {{ chapter.title }}
                             </a>
                             <div class="text-gray-400">
@@ -56,8 +56,7 @@ export default {
     },
 
     methods: {
-        notification(message)
-        {
+        notification(message) {
             // TODO : Use library
             alert(message);
         }

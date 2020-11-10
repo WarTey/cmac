@@ -10,11 +10,11 @@ use Inertia\Inertia;
 
 class CourseController extends Controller
 {
-    public function index(int $id)
+    public function index(string $uuid)
     {
-        $courses = Course::where('chapter_id', $id)->withCount('contents')->get();
+        $chapter = Chapter::where('uuid', $uuid)->first();
 
-        $chapter = Chapter::where('id', $courses[0]->chapter_id)->first();
+        $courses = Course::where('chapter_id', $chapter->id)->withCount('contents')->get();
 
         $level = Level::where('id', $chapter->level_id)->first();
 

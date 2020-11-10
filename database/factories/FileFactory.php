@@ -23,6 +23,8 @@ class FileFactory extends Factory
     public function definition()
     {
         return [
+            'uuid' => $this->faker->uuid,
+            'title' => $this->faker->sentence(),
             'name' => $this->faker->sentence(),
             'content_id' => Content::all()->random()->id
         ];

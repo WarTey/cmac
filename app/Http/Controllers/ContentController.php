@@ -5,17 +5,16 @@ namespace App\Http\Controllers;
 use App\Models\Chapter;
 use App\Models\Content;
 use App\Models\Course;
-use App\Models\File;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class ContentController extends Controller
 {
-    public function index(int $id)
+    public function index(string $uuid)
     {
-        $contents = Content::where('course_id', $id)->with('files')->get();
+        $course = Course::where('uuid', $uuid)->first();
 
-        $course = Course::where('id', $contents[0]->course_id)->first();
+        $contents = Content::where('course_id', $course->id)->with('files')->get();
 
         $chapter = Chapter::where('id', $course->chapter_id)->first();
 

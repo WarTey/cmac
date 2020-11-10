@@ -3,7 +3,7 @@
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                 <div class="flex justify-between items-center">
-                    <a :href="'/chapitre/' + chapterId" class="hover:underline">
+                    <a :href="'/chapitre/' + chapterUuid" class="hover:underline">
                         <i class="fas fa-long-arrow-alt-left fa-sm"></i>
                         {{ chapterTitle }}
                     </a>
@@ -25,7 +25,7 @@
                         <div class="mt-6 text-gray-500 text-justify">
                             {{ content.description }}
                         </div>
-                        <div class="mt-6 text-gray-500 text-justify cursor-pointer hover:underline" v-for="file in content.files" v-bind:key="file.id">
+                        <div class="mt-6 text-gray-700 text-justify cursor-pointer hover:underline" v-for="file in content.files" v-bind:key="file.id">
                             <!-- TODO : Update database with file.name and file.location -->
                             {{ file.name }}
                         </div>
@@ -51,7 +51,7 @@ export default {
             contentList: this.contents,
             courseTitle: this.course.title,
             chapterTitle: this.chapter.title,
-            chapterId: this.chapter.id
+            chapterUuid: this.chapter.uuid
         }
     }
 }

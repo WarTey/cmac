@@ -3348,7 +3348,7 @@ __webpack_require__.r(__webpack_exports__);
       contentList: this.contents,
       courseTitle: this.course.title,
       chapterTitle: this.chapter.title,
-      chapterId: this.chapter.id
+      chapterUuid: this.chapter.uuid
     };
   }
 });
@@ -3416,7 +3416,7 @@ __webpack_require__.r(__webpack_exports__);
       courseList: this.courses,
       chapterTitle: this.chapter.title,
       levelTitle: this.level.title,
-      levelId: this.level.id
+      levelUuid: this.level.uuid
     };
   },
   methods: {
@@ -3449,58 +3449,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
     AppLayout: _Layouts_AppLayout__WEBPACK_IMPORTED_MODULE_0__["default"]
-  },
-  data: function data() {
-    return {
-      form: {
-        title: null,
-        description: null,
-        image: null
-      }
-    };
-  },
-  methods: {
-    submit: function submit() {
-      this.$inertia.post('/formations', this.form);
-    }
   }
 });
 
@@ -3548,6 +3500,49 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
@@ -3556,10 +3551,27 @@ __webpack_require__.r(__webpack_exports__);
   props: ['levels'],
   data: function data() {
     return {
-      levelList: this.levels
+      levelList: this.levels,
+      form: {
+        title: null,
+        description: null,
+        image: null
+      },
+      addLevel: false
     };
   },
   methods: {
+    submit: function submit() {
+      var _this = this;
+
+      axios.post('/formations', {
+        title: this.form.title,
+        description: this.form.description,
+        image: this.form.image
+      }).then(function (response) {
+        return _this.levelList = response.data;
+      });
+    },
     notification: function notification(message) {
       // TODO : Use library
       alert(message);
@@ -25533,7 +25545,7 @@ var render = function() {
                               "a",
                               {
                                 staticClass: "text-2xl hover:underline",
-                                attrs: { href: "/chapitre/" + chapter.id }
+                                attrs: { href: "/chapitre/" + chapter.uuid }
                               },
                               [
                                 _vm._v(
@@ -25621,7 +25633,7 @@ var render = function() {
                         "a",
                         {
                           staticClass: "hover:underline",
-                          attrs: { href: "/chapitre/" + _vm.chapterId }
+                          attrs: { href: "/chapitre/" + _vm.chapterUuid }
                         },
                         [
                           _c("i", {
@@ -25703,7 +25715,7 @@ var render = function() {
                         {
                           key: file.id,
                           staticClass:
-                            "mt-6 text-gray-500 text-justify cursor-pointer hover:underline"
+                            "mt-6 text-gray-700 text-justify cursor-pointer hover:underline"
                         },
                         [
                           _vm._v(
@@ -25771,7 +25783,7 @@ var render = function() {
                         "a",
                         {
                           staticClass: "hover:underline",
-                          attrs: { href: "/niveau/" + _vm.levelId }
+                          attrs: { href: "/niveau/" + _vm.levelUuid }
                         },
                         [
                           _c("i", {
@@ -25849,7 +25861,7 @@ var render = function() {
                               "a",
                               {
                                 staticClass: "text-2xl hover:underline",
-                                attrs: { href: "/cours/" + course.id }
+                                attrs: { href: "/cours/" + course.uuid }
                               },
                               [
                                 _vm._v(
@@ -25914,196 +25926,25 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c(
-    "app-layout",
-    {
-      scopedSlots: _vm._u([
-        {
-          key: "header",
-          fn: function() {
-            return [
-              _c(
-                "h2",
-                {
-                  staticClass:
-                    "font-semibold text-xl text-gray-800 leading-tight"
-                },
-                [_vm._v("\n            Dashboard\n        ")]
-              )
-            ]
-          },
-          proxy: true
-        }
-      ])
-    },
-    [
-      _vm._v(" "),
-      _c("div", { staticClass: "py-12" }, [
-        _c("div", { staticClass: "max-w-7xl mx-auto sm:px-6 lg:px-8" }, [
-          _vm.$page.flash.success
-            ? _c("div", { staticClass: "bg-green-200 text-green-500 p-3" }, [
-                _vm._v(
-                  "\n                " +
-                    _vm._s(_vm.$page.flash.success) +
-                    "\n            "
-                )
-              ])
-            : _vm._e(),
-          _vm._v(" "),
-          _c("div", { staticClass: "w-full" }, [
+  return _c("app-layout", {
+    scopedSlots: _vm._u([
+      {
+        key: "header",
+        fn: function() {
+          return [
             _c(
-              "form",
+              "h2",
               {
-                staticClass: "bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4",
-                on: {
-                  submit: function($event) {
-                    $event.preventDefault()
-                    return _vm.submit($event)
-                  }
-                }
+                staticClass: "font-semibold text-xl text-gray-800 leading-tight"
               },
-              [
-                _c("div", { staticClass: "mb-4" }, [
-                  _c(
-                    "label",
-                    {
-                      staticClass: "block text-gray-700 text-sm font-bold mb-2",
-                      attrs: { for: "title" }
-                    },
-                    [
-                      _vm._v(
-                        "\n                            Niveau de formation\n                        "
-                      )
-                    ]
-                  ),
-                  _vm._v(" "),
-                  _c("input", {
-                    directives: [
-                      {
-                        name: "model",
-                        rawName: "v-model",
-                        value: _vm.form.title,
-                        expression: "form.title"
-                      }
-                    ],
-                    staticClass:
-                      "shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline",
-                    attrs: {
-                      id: "title",
-                      type: "text",
-                      placeholder: "Niveau de formation"
-                    },
-                    domProps: { value: _vm.form.title },
-                    on: {
-                      input: function($event) {
-                        if ($event.target.composing) {
-                          return
-                        }
-                        _vm.$set(_vm.form, "title", $event.target.value)
-                      }
-                    }
-                  })
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "mb-4" }, [
-                  _c(
-                    "label",
-                    {
-                      staticClass: "block text-gray-700 text-sm font-bold mb-2",
-                      attrs: { for: "description" }
-                    },
-                    [
-                      _vm._v(
-                        "\n                            Description (optionnel)\n                        "
-                      )
-                    ]
-                  ),
-                  _vm._v(" "),
-                  _c("textarea", {
-                    directives: [
-                      {
-                        name: "model",
-                        rawName: "v-model",
-                        value: _vm.form.description,
-                        expression: "form.description"
-                      }
-                    ],
-                    staticClass:
-                      "shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline",
-                    attrs: {
-                      id: "description",
-                      placeholder: "Description (optionnel)"
-                    },
-                    domProps: { value: _vm.form.description },
-                    on: {
-                      input: function($event) {
-                        if ($event.target.composing) {
-                          return
-                        }
-                        _vm.$set(_vm.form, "description", $event.target.value)
-                      }
-                    }
-                  })
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "mb-4" }, [
-                  _c(
-                    "label",
-                    {
-                      staticClass: "block text-gray-700 text-sm font-bold mb-2",
-                      attrs: { for: "image" }
-                    },
-                    [
-                      _vm._v(
-                        "\n                            Image\n                        "
-                      )
-                    ]
-                  ),
-                  _vm._v(" "),
-                  _c("input", {
-                    directives: [
-                      {
-                        name: "model",
-                        rawName: "v-model",
-                        value: _vm.form.image,
-                        expression: "form.image"
-                      }
-                    ],
-                    staticClass:
-                      "shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline",
-                    attrs: { id: "image", type: "text", placeholder: "Image" },
-                    domProps: { value: _vm.form.image },
-                    on: {
-                      input: function($event) {
-                        if ($event.target.composing) {
-                          return
-                        }
-                        _vm.$set(_vm.form, "image", $event.target.value)
-                      }
-                    }
-                  })
-                ]),
-                _vm._v(" "),
-                _c(
-                  "button",
-                  {
-                    staticClass:
-                      "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline",
-                    attrs: { type: "submit" }
-                  },
-                  [
-                    _vm._v(
-                      "\n                        Ajouter la formation\n                    "
-                    )
-                  ]
-                )
-              ]
+              [_vm._v("\n            Dashboard\n        ")]
             )
-          ])
-        ])
-      ])
-    ]
-  )
+          ]
+        },
+        proxy: true
+      }
+    ])
+  })
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -26151,6 +25992,213 @@ var render = function() {
     },
     [
       _vm._v(" "),
+      _c(
+        "div",
+        { staticClass: "py-4 max-w-7xl mx-auto sm:px-6 lg:px-8 right-0" },
+        [
+          _c("div", { staticClass: "flex flex-row-reverse" }, [
+            _c(
+              "button",
+              {
+                staticClass:
+                  "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline",
+                on: {
+                  click: function($event) {
+                    _vm.addLevel = !_vm.addLevel
+                  }
+                }
+              },
+              [_vm._v("\n                Ajouter une formation\n            ")]
+            )
+          ])
+        ]
+      ),
+      _vm._v(" "),
+      _c("transition", { attrs: { name: "slide-fade" } }, [
+        _vm.addLevel
+          ? _c("div", { staticClass: "py-4" }, [
+              _c("div", { staticClass: "max-w-7xl mx-auto sm:px-6 lg:px-8" }, [
+                _vm.$page.flash.success
+                  ? _c(
+                      "div",
+                      { staticClass: "bg-green-200 text-green-500 p-3" },
+                      [
+                        _vm._v(
+                          "\n                    " +
+                            _vm._s(_vm.$page.flash.success) +
+                            "\n                "
+                        )
+                      ]
+                    )
+                  : _vm._e(),
+                _vm._v(" "),
+                _c("div", { staticClass: "w-full" }, [
+                  _c(
+                    "form",
+                    {
+                      staticClass:
+                        "bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4",
+                      on: {
+                        submit: function($event) {
+                          $event.preventDefault()
+                          return _vm.submit($event)
+                        }
+                      }
+                    },
+                    [
+                      _c("div", { staticClass: "mb-4" }, [
+                        _c(
+                          "label",
+                          {
+                            staticClass:
+                              "block text-gray-700 text-sm font-bold mb-2",
+                            attrs: { for: "title" }
+                          },
+                          [
+                            _vm._v(
+                              "\n                                Niveau de formation\n                            "
+                            )
+                          ]
+                        ),
+                        _vm._v(" "),
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.form.title,
+                              expression: "form.title"
+                            }
+                          ],
+                          staticClass:
+                            "shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline",
+                          attrs: {
+                            id: "title",
+                            type: "text",
+                            placeholder: "Niveau de formation"
+                          },
+                          domProps: { value: _vm.form.title },
+                          on: {
+                            input: function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.$set(_vm.form, "title", $event.target.value)
+                            }
+                          }
+                        })
+                      ]),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "mb-4" }, [
+                        _c(
+                          "label",
+                          {
+                            staticClass:
+                              "block text-gray-700 text-sm font-bold mb-2",
+                            attrs: { for: "description" }
+                          },
+                          [
+                            _vm._v(
+                              "\n                                Description (optionnel)\n                            "
+                            )
+                          ]
+                        ),
+                        _vm._v(" "),
+                        _c("textarea", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.form.description,
+                              expression: "form.description"
+                            }
+                          ],
+                          staticClass:
+                            "shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline",
+                          attrs: {
+                            id: "description",
+                            placeholder: "Description (optionnel)"
+                          },
+                          domProps: { value: _vm.form.description },
+                          on: {
+                            input: function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.$set(
+                                _vm.form,
+                                "description",
+                                $event.target.value
+                              )
+                            }
+                          }
+                        })
+                      ]),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "mb-4" }, [
+                        _c(
+                          "label",
+                          {
+                            staticClass:
+                              "block text-gray-700 text-sm font-bold mb-2",
+                            attrs: { for: "image" }
+                          },
+                          [
+                            _vm._v(
+                              "\n                                Image\n                            "
+                            )
+                          ]
+                        ),
+                        _vm._v(" "),
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.form.image,
+                              expression: "form.image"
+                            }
+                          ],
+                          staticClass:
+                            "shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline",
+                          attrs: {
+                            id: "image",
+                            type: "text",
+                            placeholder: "Image"
+                          },
+                          domProps: { value: _vm.form.image },
+                          on: {
+                            input: function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.$set(_vm.form, "image", $event.target.value)
+                            }
+                          }
+                        })
+                      ]),
+                      _vm._v(" "),
+                      _c(
+                        "button",
+                        {
+                          staticClass:
+                            "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline",
+                          attrs: { type: "submit" }
+                        },
+                        [
+                          _vm._v(
+                            "\n                            Ajouter la formation\n                        "
+                          )
+                        ]
+                      )
+                    ]
+                  )
+                ])
+              ])
+            ])
+          : _vm._e()
+      ]),
+      _vm._v(" "),
       _vm._l(this.levelList, function(level) {
         return _c("div", { key: level.id, staticClass: "py-4" }, [
           _c("div", { staticClass: "max-w-7xl mx-auto sm:px-6 lg:px-8" }, [
@@ -26196,7 +26244,7 @@ var render = function() {
                               "a",
                               {
                                 staticClass: "text-2xl hover:underline",
-                                attrs: { href: "/niveau/" + level.id }
+                                attrs: { href: "/niveau/" + level.uuid }
                               },
                               [
                                 _vm._v(
