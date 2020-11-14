@@ -12,6 +12,7 @@
 
         <!-- Styles -->
         <link rel="stylesheet" href="{{ mix('css/app.css') }}">
+        <link rel="stylesheet" href="{{ mix('css/toastr.css') }}">
         <link rel="stylesheet" href="{{ '/css/transition.css' }}">
 
         <!-- Scripts -->

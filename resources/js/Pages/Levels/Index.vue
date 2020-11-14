@@ -15,10 +15,6 @@
         <transition name="slide-fade">
             <div class="py-4" v-if="addLevel">
                 <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                    <!-- TODO : Update for Notification -->
-                    <div class="bg-green-200 text-green-500 p-3" v-if="$page.flash.success">
-                        {{ $page.flash.success }}
-                    </div>
                     <div class="w-full">
                         <form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" @submit.prevent="submit">
                             <div class="mb-4">
@@ -53,7 +49,7 @@
                 <div class="bg-white overflow-hidden shadow-lg hover:shadow-xl sm:rounded-lg transition duration-500 ease-in-out">
                     <div class="p-6 sm:px-20 bg-white border-b border-gray-200">
                         <div class="flex justify-between items-center">
-                            <a v-if="level.chapters_count < 1" href="#" v-on:click="notification('Vide')" class="text-2xl hover:underline">
+                            <a v-if="level.chapters_count < 1" href="#" v-on:click.prevent="notification('Formation vide.')" class="text-2xl hover:underline">
                                 Formation - {{ level.title }}
                             </a>
                             <a v-else :href="'/niveau/' + level.uuid" class="text-2xl hover:underline">
@@ -102,11 +98,14 @@
                     description: this.form.description,
                     image: this.form.image
                 })
-                .then(response => this.levelList = response.data);
+                .then(response => {
+                    this.levelList = response.data;
+                    toastr.success('Formation en ligne!');
+                })
+                .catch(error => toastr.error(error));
             },
             notification(message) {
-                // TODO : Use library
-                alert(message);
+                toastr.warning(message);
             }
         }
     }
