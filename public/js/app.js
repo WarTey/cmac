@@ -3449,10 +3449,61 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
     AppLayout: _Layouts_AppLayout__WEBPACK_IMPORTED_MODULE_0__["default"]
+  },
+  data: function data() {
+    return {
+      form: {
+        title: null,
+        description: null,
+        image: null
+      }
+    };
+  },
+  methods: {
+    submit: function submit() {
+      this.$inertia.post('/formations', this.form);
+    }
   }
 });
 
@@ -3500,45 +3551,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
@@ -3547,31 +3559,11 @@ __webpack_require__.r(__webpack_exports__);
   props: ['levels'],
   data: function data() {
     return {
-      levelList: this.levels,
-      form: {
-        title: null,
-        description: null,
-        image: null
-      },
-      addLevel: false
+      levelList: this.levels
     };
   },
   methods: {
-    submit: function submit() {
-      var _this = this;
-
-      axios.post('/formations', {
-        title: this.form.title,
-        description: this.form.description,
-        image: this.form.image
-      }).then(function (response) {
-        _this.levelList = response.data;
-        toastr.success('Formation en ligne!');
-      })["catch"](function (error) {
-        return toastr.error(error);
-      });
-    },
-    notification: function notification(message) {
+    warning: function warning(message) {
       toastr.warning(message);
     }
   }
@@ -37290,25 +37282,206 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("app-layout", {
-    scopedSlots: _vm._u([
-      {
-        key: "header",
-        fn: function() {
-          return [
+  return _c(
+    "app-layout",
+    {
+      scopedSlots: _vm._u([
+        {
+          key: "header",
+          fn: function() {
+            return [
+              _c(
+                "h2",
+                {
+                  staticClass:
+                    "font-semibold text-xl text-gray-800 leading-tight"
+                },
+                [_vm._v("\n            Dashboard\n        ")]
+              )
+            ]
+          },
+          proxy: true
+        }
+      ])
+    },
+    [
+      _vm._v(" "),
+      _c("div", { staticClass: "py-12" }, [
+        _c("div", { staticClass: "max-w-7xl mx-auto sm:px-6 lg:px-8" }, [
+          _c("div", { staticClass: "w-full" }, [
             _c(
-              "h2",
+              "form",
               {
-                staticClass: "font-semibold text-xl text-gray-800 leading-tight"
+                staticClass: "bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4",
+                on: {
+                  submit: function($event) {
+                    $event.preventDefault()
+                    return _vm.submit($event)
+                  }
+                }
               },
-              [_vm._v("\n            Dashboard\n        ")]
+              [
+                _c("div", { staticClass: "mb-4" }, [
+                  _c(
+                    "label",
+                    {
+                      staticClass: "block text-gray-700 text-sm font-bold mb-2",
+                      attrs: { for: "title" }
+                    },
+                    [
+                      _vm._v(
+                        "\n                            Niveau de formation\n                        "
+                      )
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.form.title,
+                        expression: "form.title"
+                      }
+                    ],
+                    staticClass:
+                      "shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline",
+                    attrs: {
+                      id: "title",
+                      type: "text",
+                      placeholder: "Niveau de formation"
+                    },
+                    domProps: { value: _vm.form.title },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(_vm.form, "title", $event.target.value)
+                      }
+                    }
+                  })
+                ]),
+                _vm._v(" "),
+                _vm.$page.errors.title
+                  ? _c("div", { staticClass: "text-red-700 mb-4" }, [
+                      _vm._v(
+                        "\n                        " +
+                          _vm._s(_vm.$page.errors.title[0]) +
+                          "\n                    "
+                      )
+                    ])
+                  : _vm._e(),
+                _vm._v(" "),
+                _c("div", { staticClass: "mb-4" }, [
+                  _c(
+                    "label",
+                    {
+                      staticClass: "block text-gray-700 text-sm font-bold mb-2",
+                      attrs: { for: "description" }
+                    },
+                    [
+                      _vm._v(
+                        "\n                            Description (optionnel)\n                        "
+                      )
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c("textarea", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.form.description,
+                        expression: "form.description"
+                      }
+                    ],
+                    staticClass:
+                      "shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline",
+                    attrs: {
+                      id: "description",
+                      placeholder: "Description (optionnel)"
+                    },
+                    domProps: { value: _vm.form.description },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(_vm.form, "description", $event.target.value)
+                      }
+                    }
+                  })
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "mb-4" }, [
+                  _c(
+                    "label",
+                    {
+                      staticClass: "block text-gray-700 text-sm font-bold mb-2",
+                      attrs: { for: "image" }
+                    },
+                    [
+                      _vm._v(
+                        "\n                            Image\n                        "
+                      )
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.form.image,
+                        expression: "form.image"
+                      }
+                    ],
+                    staticClass:
+                      "shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline",
+                    attrs: { id: "image", type: "text", placeholder: "Image" },
+                    domProps: { value: _vm.form.image },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(_vm.form, "image", $event.target.value)
+                      }
+                    }
+                  })
+                ]),
+                _vm._v(" "),
+                _vm.$page.flash.success
+                  ? _c("div", { staticClass: "text-green-700 mb-4" }, [
+                      _vm._v(
+                        "\n                        " +
+                          _vm._s(_vm.$page.flash.success) +
+                          "\n                    "
+                      )
+                    ])
+                  : _vm._e(),
+                _vm._v(" "),
+                _c(
+                  "button",
+                  {
+                    staticClass:
+                      "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline",
+                    attrs: { type: "submit" }
+                  },
+                  [
+                    _vm._v(
+                      "\n                        Ajouter la formation\n                    "
+                    )
+                  ]
+                )
+              ]
             )
-          ]
-        },
-        proxy: true
-      }
-    ])
-  })
+          ])
+        ])
+      ])
+    ]
+  )
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -37356,199 +37529,6 @@ var render = function() {
     },
     [
       _vm._v(" "),
-      _c(
-        "div",
-        { staticClass: "py-4 max-w-7xl mx-auto sm:px-6 lg:px-8 right-0" },
-        [
-          _c("div", { staticClass: "flex flex-row-reverse" }, [
-            _c(
-              "button",
-              {
-                staticClass:
-                  "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline",
-                on: {
-                  click: function($event) {
-                    _vm.addLevel = !_vm.addLevel
-                  }
-                }
-              },
-              [_vm._v("\n                Ajouter une formation\n            ")]
-            )
-          ])
-        ]
-      ),
-      _vm._v(" "),
-      _c("transition", { attrs: { name: "slide-fade" } }, [
-        _vm.addLevel
-          ? _c("div", { staticClass: "py-4" }, [
-              _c("div", { staticClass: "max-w-7xl mx-auto sm:px-6 lg:px-8" }, [
-                _c("div", { staticClass: "w-full" }, [
-                  _c(
-                    "form",
-                    {
-                      staticClass:
-                        "bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4",
-                      on: {
-                        submit: function($event) {
-                          $event.preventDefault()
-                          return _vm.submit($event)
-                        }
-                      }
-                    },
-                    [
-                      _c("div", { staticClass: "mb-4" }, [
-                        _c(
-                          "label",
-                          {
-                            staticClass:
-                              "block text-gray-700 text-sm font-bold mb-2",
-                            attrs: { for: "title" }
-                          },
-                          [
-                            _vm._v(
-                              "\n                                Niveau de formation\n                            "
-                            )
-                          ]
-                        ),
-                        _vm._v(" "),
-                        _c("input", {
-                          directives: [
-                            {
-                              name: "model",
-                              rawName: "v-model",
-                              value: _vm.form.title,
-                              expression: "form.title"
-                            }
-                          ],
-                          staticClass:
-                            "shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline",
-                          attrs: {
-                            id: "title",
-                            type: "text",
-                            placeholder: "Niveau de formation"
-                          },
-                          domProps: { value: _vm.form.title },
-                          on: {
-                            input: function($event) {
-                              if ($event.target.composing) {
-                                return
-                              }
-                              _vm.$set(_vm.form, "title", $event.target.value)
-                            }
-                          }
-                        })
-                      ]),
-                      _vm._v(" "),
-                      _c("div", { staticClass: "mb-4" }, [
-                        _c(
-                          "label",
-                          {
-                            staticClass:
-                              "block text-gray-700 text-sm font-bold mb-2",
-                            attrs: { for: "description" }
-                          },
-                          [
-                            _vm._v(
-                              "\n                                Description (optionnel)\n                            "
-                            )
-                          ]
-                        ),
-                        _vm._v(" "),
-                        _c("textarea", {
-                          directives: [
-                            {
-                              name: "model",
-                              rawName: "v-model",
-                              value: _vm.form.description,
-                              expression: "form.description"
-                            }
-                          ],
-                          staticClass:
-                            "shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline",
-                          attrs: {
-                            id: "description",
-                            placeholder: "Description (optionnel)"
-                          },
-                          domProps: { value: _vm.form.description },
-                          on: {
-                            input: function($event) {
-                              if ($event.target.composing) {
-                                return
-                              }
-                              _vm.$set(
-                                _vm.form,
-                                "description",
-                                $event.target.value
-                              )
-                            }
-                          }
-                        })
-                      ]),
-                      _vm._v(" "),
-                      _c("div", { staticClass: "mb-4" }, [
-                        _c(
-                          "label",
-                          {
-                            staticClass:
-                              "block text-gray-700 text-sm font-bold mb-2",
-                            attrs: { for: "image" }
-                          },
-                          [
-                            _vm._v(
-                              "\n                                Image\n                            "
-                            )
-                          ]
-                        ),
-                        _vm._v(" "),
-                        _c("input", {
-                          directives: [
-                            {
-                              name: "model",
-                              rawName: "v-model",
-                              value: _vm.form.image,
-                              expression: "form.image"
-                            }
-                          ],
-                          staticClass:
-                            "shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline",
-                          attrs: {
-                            id: "image",
-                            type: "text",
-                            placeholder: "Image"
-                          },
-                          domProps: { value: _vm.form.image },
-                          on: {
-                            input: function($event) {
-                              if ($event.target.composing) {
-                                return
-                              }
-                              _vm.$set(_vm.form, "image", $event.target.value)
-                            }
-                          }
-                        })
-                      ]),
-                      _vm._v(" "),
-                      _c(
-                        "button",
-                        {
-                          staticClass:
-                            "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline",
-                          attrs: { type: "submit" }
-                        },
-                        [
-                          _vm._v(
-                            "\n                            Ajouter la formation\n                        "
-                          )
-                        ]
-                      )
-                    ]
-                  )
-                ])
-              ])
-            ])
-          : _vm._e()
-      ]),
-      _vm._v(" "),
       _vm._l(this.levelList, function(level) {
         return _c("div", { key: level.id, staticClass: "py-4" }, [
           _c("div", { staticClass: "max-w-7xl mx-auto sm:px-6 lg:px-8" }, [
@@ -37579,7 +37559,7 @@ var render = function() {
                                 on: {
                                   click: function($event) {
                                     $event.preventDefault()
-                                    return _vm.notification("Formation vide.")
+                                    return _vm.warning("Formation vide.")
                                   }
                                 }
                               },

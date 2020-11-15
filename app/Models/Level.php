@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class Level extends Model
 {
@@ -12,6 +13,15 @@ class Level extends Model
     protected $hidden = ['id'];
 
     protected $fillable = ['title', 'description', 'image'];
+
+    public static function boot()
+    {
+        parent::boot();
+
+        self::creating(function ($model) {
+            $model->uuid = Str::uuid();
+        });
+    }
 
     public function getRouteKeyName()
     {
