@@ -26,6 +26,7 @@ class LevelController extends Controller
             'image' => 'max:50'
         ]);
 
+        // TODO : Delete ?
         /*$level = new Level();
         $level->uuid = Str::uuid();
         $level->title = $request->post('title');
