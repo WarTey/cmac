@@ -3498,6 +3498,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
@@ -3509,27 +3512,35 @@ __webpack_require__.r(__webpack_exports__);
         title: null,
         description: null,
         image: null
-      },
-      file: null
+      }
     };
   },
   methods: {
     submit: function submit() {
-      this.$inertia.post('/formations', this.form);
+      if (this.form.image) {
+        var formData = new FormData();
+        formData.append('title', this.form.title);
+        formData.append('description', this.form.description);
+        formData.append('image', this.form.image);
+        this.$inertia.post('/formations', formData);
+      } else {
+        this.$inertia.post('/formations', this.form);
+      }
     },
     updateFile: function updateFile(event) {
-      this.file = event.target.files[0];
+      if (event.target.files[0].type.match("image.*")) {
+        this.form.image = event.target.files[0];
 
-      if (this.file) {
-        /*const reader = new FileReader();
-        reader.onload = function () {
-            document.getElementById("preview").src = reader.result;
+        if (this.form.image) {
+          document.getElementById("empty").classList.add("hidden");
+        } else {
+          document.getElementById("empty").classList.remove("hidden");
         }
-        reader.readAsDataURL(this.file);*/
-        document.getElementById("empty").classList.add("hidden");
-      } else {
-        document.getElementById("empty").classList.remove("hidden");
       }
+    },
+    resetFile: function resetFile() {
+      this.form.image = null;
+      document.getElementById("empty").classList.remove("hidden");
     },
     selectFile: function selectFile() {
       document.getElementById("hidden-input").click();
@@ -37464,7 +37475,13 @@ var render = function() {
                         _vm.$set(_vm.form, "description", $event.target.value)
                       }
                     }
-                  })
+                  }),
+                  _vm._v(" "),
+                  _vm.$page.errors.description
+                    ? _c("p", { staticClass: "text-red-700 mt-2" }, [
+                        _vm._v(_vm._s(_vm.$page.errors.description[0]))
+                      ])
+                    : _vm._e()
                 ]),
                 _vm._v(" "),
                 _c("div", { staticClass: "mb-4" }, [
@@ -37537,8 +37554,7 @@ var render = function() {
                           _c("img", {
                             staticClass: "mx-auto w-32",
                             attrs: {
-                              src:
-                                "https://user-images.githubusercontent.com/507615/54591670-ac0a0180-4a65-11e9-846c-e55ffce0fe7b.png",
+                              src: "/img/no-img.png",
                               alt: "Aucune image sélectionnée"
                             }
                           }),
@@ -37551,15 +37567,41 @@ var render = function() {
                     ]
                   ),
                   _vm._v(" "),
-                  this.file
+                  this.form.image
                     ? _c("div", { staticClass: "pt-4" }, [
                         _c(
                           "div",
                           {
                             staticClass: "font-semibold text-gray-700 text-sm"
                           },
-                          [_vm._v(_vm._s(_vm.file.name))]
+                          [
+                            _vm._v(
+                              "\n                                " +
+                                _vm._s(this.form.image.name) +
+                                " - "
+                            ),
+                            _c(
+                              "a",
+                              {
+                                staticClass: "text-red-700 hover:underline",
+                                attrs: { href: "#" },
+                                on: {
+                                  click: function($event) {
+                                    $event.preventDefault()
+                                    return _vm.resetFile($event)
+                                  }
+                                }
+                              },
+                              [_vm._v("Supprimer")]
+                            )
+                          ]
                         )
+                      ])
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _vm.$page.errors.image
+                    ? _c("p", { staticClass: "text-red-700 mt-2" }, [
+                        _vm._v(_vm._s(_vm.$page.errors.image[0]))
                       ])
                     : _vm._e()
                 ]),

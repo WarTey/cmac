@@ -22,6 +22,7 @@
                                 Description (optionnel)
                             </label>
                             <textarea class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="description" v-model="form.description" placeholder="Description (optionnel)"></textarea>
+                            <p class="text-red-700 mt-2" v-if="$page.errors.description">{{ $page.errors.description[0] }}</p>
                         </div>
                         <div class="mb-4">
                             <label class="block text-gray-700 text-sm font-bold mb-2">
@@ -35,14 +36,16 @@
                             </header>
                             <ul id="gallery" class="flex flex-1 flex-wrap -m-1">
                                 <li id="empty" class="h-full w-full text-center flex flex-col items-center justify-center items-center">
-                                    <img class="mx-auto w-32" src="https://user-images.githubusercontent.com/507615/54591670-ac0a0180-4a65-11e9-846c-e55ffce0fe7b.png" alt="Aucune image sélectionnée">
+                                    <img class="mx-auto w-32" :src="'/img/no-img.png'" alt="Aucune image sélectionnée">
                                     <span class="text-sm text-gray-500">Aucune image sélectionnée</span>
                                 </li>
                             </ul>
-                            <div class="pt-4" v-if="this.file">
-                                <div class="font-semibold text-gray-700 text-sm">{{ file.name }}</div>
-                                <!--<img id="preview" alt="Image" class="pt-2 img-preview sticky object-cover rounded-md bg-fixed" src="" width="250">-->
+                            <div class="pt-4" v-if="this.form.image">
+                                <div class="font-semibold text-gray-700 text-sm">
+                                    {{ this.form.image.name }} - <a href="#" v-on:click.prevent="resetFile" class="text-red-700 hover:underline">Supprimer</a>
+                                </div>
                             </div>
+                            <p class="text-red-700 mt-2" v-if="$page.errors.image">{{ $page.errors.image[0] }}</p>
                         </div>
                         <div class="text-green-700 mb-4" v-if="$page.flash.success">
                             {{ $page.flash.success }}
@@ -71,30 +74,40 @@
                     title: null,
                     description: null,
                     image: null
-                },
-                file: null
+                }
             }
         },
 
         methods: {
             submit() {
-                this.$inertia.post('/formations', this.form);
+                if (this.form.image) {
+                    const formData = new FormData();
+                    formData.append('title', this.form.title);
+                    formData.append('description', this.form.description);
+                    formData.append('image', this.form.image);
+
+                    this.$inertia.post('/formations', formData);
+                } else {
+                    this.$inertia.post('/formations', this.form);
+                }
             },
 
             updateFile(event) {
-                this.file = event.target.files[0];
+                if (event.target.files[0].type.match("image.*")) {
+                    this.form.image = event.target.files[0];
 
-                if (this.file) {
-                    /*const reader = new FileReader();
-                    reader.onload = function () {
-                        document.getElementById("preview").src = reader.result;
+                    if (this.form.image) {
+                        document.getElementById("empty").classList.add("hidden");
+                    } else {
+                        document.getElementById("empty").classList.remove("hidden");
                     }
-                    reader.readAsDataURL(this.file);*/
-
-                    document.getElementById("empty").classList.add("hidden");
-                } else {
-                    document.getElementById("empty").classList.remove("hidden");
                 }
+            },
+
+            resetFile() {
+                this.form.image = null;
+
+                document.getElementById("empty").classList.remove("hidden");
             },
 
             selectFile() {
