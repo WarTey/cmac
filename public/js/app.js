@@ -3592,6 +3592,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
@@ -37693,6 +37694,16 @@ var render = function() {
                   "bg-white overflow-hidden shadow-lg hover:shadow-xl sm:rounded-lg transition duration-500 ease-in-out"
               },
               [
+                level.image
+                  ? _c("div", {
+                      staticClass: "h-20 bg-auto bg-center",
+                      style:
+                        "background-image: url(storage/img/levels/" +
+                        level.image +
+                        ")"
+                    })
+                  : _vm._e(),
+                _vm._v(" "),
                 _c(
                   "div",
                   {
@@ -37729,7 +37740,7 @@ var render = function() {
                               "a",
                               {
                                 staticClass: "text-2xl hover:underline",
-                                attrs: { href: "/niveau/" + level.uuid }
+                                attrs: { href: "/formation/" + level.uuid }
                               },
                               [
                                 _vm._v(
@@ -37750,17 +37761,19 @@ var render = function() {
                       ]
                     ),
                     _vm._v(" "),
-                    _c(
-                      "div",
-                      { staticClass: "mt-6 text-gray-500 text-justify" },
-                      [
-                        _vm._v(
-                          "\n                        " +
-                            _vm._s(level.description) +
-                            "\n                    "
+                    level.description
+                      ? _c(
+                          "div",
+                          { staticClass: "mt-6 text-gray-500 text-justify" },
+                          [
+                            _vm._v(
+                              "\n                        " +
+                                _vm._s(level.description) +
+                                "\n                    "
+                            )
+                          ]
                         )
-                      ]
-                    )
+                      : _vm._e()
                   ]
                 )
               ]

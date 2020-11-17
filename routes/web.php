@@ -23,7 +23,8 @@ Route::group(['auth:sanctum', 'verified'], function () {
     Route::get('/dashboard', function() {
         return Inertia\Inertia::render('Dashboard');
     })->name('dashboard');
-    Route::get('/niveau/{uuid}', 'App\Http\Controllers\ChapterController@index')->name('chapters.index');
+
+    Route::get('/formation/{uuid}', 'App\Http\Controllers\ChapterController@index')->name('chapters.index');
     Route::get('/chapitre/{uuid}', 'App\Http\Controllers\CourseController@index')->name('courses.index');
     Route::get('/cours/{uuid}', 'App\Http\Controllers\ContentController@index')->name('contents.index');
 

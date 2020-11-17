@@ -22,20 +22,22 @@ class LevelController extends Controller
     {
         $request->validate([
             'title' => 'required|unique:levels|max:50',
-            'description' => 'max:255',
+            'description' => 'nullable|max:255',
             'image' => 'nullable|image|mimes:jpg,png,jpeg|max:2048'
         ]);
 
-        $values = $request->all();
+        $level = new Level();
+        $level->title = $request->post('title');
+        $level->description = $request->post('description');
 
         if ($request->file('image'))
         {
             $path = $request->file('image')->store('public/img/levels');
 
-            $values['image'] = $path;
+            $level->image = basename($path);
         }
 
-        Level::create($values);
+        $level->save();
 
         return Redirect::route('dashboard')->with('success', 'Formation en ligne.');
     }
