@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Chapter;
 use App\Models\Level;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 
 class ChapterController extends Controller
@@ -19,5 +20,31 @@ class ChapterController extends Controller
             'chapters' => $chapters,
             'level' => $level
         ]);
+    }
+
+    public function store(Request $request)
+    {
+        $request->validate([
+            'title' => 'required|unique:levels|max:50',
+            'description' => 'nullable|max:255',
+            'image' => 'nullable|image|mimes:jpg,png,jpeg|max:2048',
+            'level_uuid' => 'required'
+        ]);
+
+        $chapter = new Chapter();
+        $chapter->title = $request->post('title');
+        $chapter->description = $request->post('description');
+        $chapter->level_id = Level::where('uuid', $request->post('level_uuid'))->first()->id;
+
+        if ($request->file('image'))
+        {
+            $path = $request->file('image')->store('public/img/chapters');
+
+            $chapter->image = basename($path);
+        }
+
+        $chapter->save();
+
+        return Redirect::route('chapters.index', ['uuid' => $request->post('level_uuid')])->with('success', 'Chapitre en ligne.');
     }
 }
