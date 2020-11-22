@@ -26,7 +26,6 @@ class CourseFactory extends Factory
             'uuid' => $this->faker->uuid,
             'title' => $this->faker->sentence(),
             'description' => $this->faker->paragraphs(2, true),
-            'image' => $this->faker->sentence(),
             'chapter_id' => Chapter::all()->random()->id
         ];
     }

@@ -3264,9 +3264,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
@@ -3280,9 +3277,8 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
-    notification: function notification(message) {
-      // TODO : Use library
-      alert(message);
+    warning: function warning(message) {
+      toastr.warning(message);
     }
   }
 });
@@ -3337,18 +3333,24 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
     AppLayout: _Layouts_AppLayout__WEBPACK_IMPORTED_MODULE_0__["default"]
   },
-  props: ['contents', 'course', 'chapter'],
+  props: ['contents', 'course', 'chapter', 'level'],
   data: function data() {
     return {
       contentList: this.contents,
       courseTitle: this.course.title,
       chapterTitle: this.chapter.title,
-      chapterUuid: this.chapter.uuid
+      chapterUuid: this.chapter.uuid,
+      levelTitle: this.level.title,
+      levelUuid: this.level.uuid
     };
   }
 });
@@ -3405,6 +3407,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
@@ -3420,9 +3423,8 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
-    notification: function notification(message) {
-      // TODO : Use library
-      alert(message);
+    warning: function warning(message) {
+      toastr.warning(message);
     }
   }
 });
@@ -3449,102 +3451,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
     AppLayout: _Layouts_AppLayout__WEBPACK_IMPORTED_MODULE_0__["default"]
-  },
-  data: function data() {
-    return {
-      form: {
-        title: null,
-        description: null,
-        image: null
-      }
-    };
-  },
-  methods: {
-    submit: function submit() {
-      if (this.form.image) {
-        var formData = new FormData();
-        formData.append('title', this.form.title);
-        formData.append('description', this.form.description);
-        formData.append('image', this.form.image);
-        this.$inertia.post('/formations', formData);
-      } else {
-        this.$inertia.post('/formations', this.form);
-      }
-    },
-    updateFile: function updateFile(event) {
-      if (event.target.files[0].type.match("image.*")) {
-        this.form.image = event.target.files[0];
-
-        if (this.form.image) {
-          document.getElementById("empty").classList.add("hidden");
-        } else {
-          document.getElementById("empty").classList.remove("hidden");
-        }
-      }
-    },
-    resetFile: function resetFile() {
-      this.form.image = null;
-      document.getElementById("empty").classList.remove("hidden");
-    },
-    selectFile: function selectFile() {
-      document.getElementById("hidden-input").click();
-    }
   }
 });
 
@@ -3593,6 +3503,67 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
@@ -3601,10 +3572,44 @@ __webpack_require__.r(__webpack_exports__);
   props: ['levels'],
   data: function data() {
     return {
-      levelList: this.levels
+      addLevel: false,
+      form: {
+        title: null,
+        description: null,
+        image: null
+      }
     };
   },
   methods: {
+    submit: function submit() {
+      if (this.form.image) {
+        var formData = new FormData();
+        formData.append('title', this.form.title);
+        formData.append('description', this.form.description);
+        formData.append('image', this.form.image);
+        this.$inertia.post('/formations', formData);
+      } else {
+        this.$inertia.post('/formations', this.form);
+      }
+    },
+    updateFile: function updateFile(event) {
+      if (event.target.files[0].type.match("image.*")) {
+        this.form.image = event.target.files[0];
+
+        if (this.form.image) {
+          document.getElementById("empty").classList.add("hidden");
+        } else {
+          document.getElementById("empty").classList.remove("hidden");
+        }
+      }
+    },
+    resetFile: function resetFile() {
+      this.form.image = null;
+      document.getElementById("empty").classList.remove("hidden");
+    },
+    selectFile: function selectFile() {
+      document.getElementById("hidden-input").click();
+    },
     warning: function warning(message) {
       toastr.warning(message);
     }
@@ -35740,7 +35745,7 @@ var render = function() {
     [
       _c("nav", { staticClass: "bg-white border-b border-gray-100" }, [
         _c("div", { staticClass: "max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" }, [
-          _c("div", { staticClass: "flex justify-between h-16" }, [
+          _c("div", { staticClass: "flex justify-between h-20" }, [
             _c("div", { staticClass: "flex" }, [
               _c(
                 "div",
@@ -36118,7 +36123,7 @@ var render = function() {
       _c("header", { staticClass: "bg-white shadow" }, [
         _c(
           "div",
-          { staticClass: "max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8" },
+          { staticClass: "max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8" },
           [_vm._t("header")],
           2
         )
@@ -36854,39 +36859,22 @@ var render = function() {
             return [
               _c(
                 "h2",
-                {
-                  staticClass:
-                    "font-semibold text-xl text-gray-800 leading-tight"
-                },
+                { staticClass: "font-semibold text-gray-800 leading-tight" },
                 [
                   _c(
-                    "div",
-                    { staticClass: "flex justify-between items-center" },
-                    [
-                      _c(
-                        "a",
-                        {
-                          staticClass: "hover:underline",
-                          attrs: { href: _vm.route("levels.index") }
-                        },
-                        [
-                          _c("i", {
-                            staticClass: "fas fa-long-arrow-alt-left fa-sm"
-                          }),
-                          _vm._v(
-                            "\n                    Liste des formations\n                "
-                          )
-                        ]
-                      ),
-                      _vm._v(" "),
-                      _c("div", [
-                        _vm._v(
-                          "\n                    Formation - " +
-                            _vm._s(_vm.levelTitle) +
-                            "\n                "
-                        )
-                      ])
-                    ]
+                    "a",
+                    {
+                      staticClass: "hover:underline",
+                      attrs: { href: _vm.route("levels.index") }
+                    },
+                    [_vm._v("\n                Les formations\n            ")]
+                  ),
+                  _vm._v(" "),
+                  _c("i", { staticClass: "fas fa-chevron-right fa-xs" }),
+                  _vm._v(
+                    "\n            " +
+                      _vm._s(_vm._f("truncate")(_vm.levelTitle, 30)) +
+                      "\n        "
                   )
                 ]
               )
@@ -36899,7 +36887,7 @@ var render = function() {
     [
       _vm._v(" "),
       _vm._l(this.chapterList, function(chapter) {
-        return _c("div", { key: chapter.id, staticClass: "py-4" }, [
+        return _c("div", { key: chapter.uuid, staticClass: "py-4" }, [
           _c("div", { staticClass: "max-w-7xl mx-auto sm:px-6 lg:px-8" }, [
             _c(
               "div",
@@ -36908,6 +36896,16 @@ var render = function() {
                   "bg-white overflow-hidden shadow-lg hover:shadow-xl sm:rounded-lg transition duration-500 ease-in-out"
               },
               [
+                chapter.image
+                  ? _c("div", {
+                      staticClass: "h-20 bg-auto bg-center",
+                      style:
+                        "background-image: url(storage/img/levels/" +
+                        _vm.level.image +
+                        ")"
+                    })
+                  : _vm._e(),
+                _vm._v(" "),
                 _c(
                   "div",
                   {
@@ -36927,7 +36925,7 @@ var render = function() {
                                 attrs: { href: "#" },
                                 on: {
                                   click: function($event) {
-                                    return _vm.notification("Vide")
+                                    return _vm.warning("Vide")
                                   }
                                 }
                               },
@@ -37018,41 +37016,56 @@ var render = function() {
             return [
               _c(
                 "h2",
-                {
-                  staticClass:
-                    "font-semibold text-xl text-gray-800 leading-tight"
-                },
+                { staticClass: "font-semibold text-gray-800 leading-tight" },
                 [
                   _c(
-                    "div",
-                    { staticClass: "flex justify-between items-center" },
+                    "a",
+                    {
+                      staticClass: "hover:underline",
+                      attrs: { href: _vm.route("levels.index") }
+                    },
+                    [_vm._v("\n                Les formations\n            ")]
+                  ),
+                  _vm._v(" "),
+                  _c("i", { staticClass: "fas fa-chevron-right fa-xs" }),
+                  _vm._v(" "),
+                  _c(
+                    "a",
+                    {
+                      staticClass: "hover:underline",
+                      attrs: { href: "/formation/" + _vm.levelUuid }
+                    },
                     [
-                      _c(
-                        "a",
-                        {
-                          staticClass: "hover:underline",
-                          attrs: { href: "/chapitre/" + _vm.chapterUuid }
-                        },
-                        [
-                          _c("i", {
-                            staticClass: "fas fa-long-arrow-alt-left fa-sm"
-                          }),
-                          _vm._v(
-                            "\n                    " +
-                              _vm._s(_vm.chapterTitle) +
-                              "\n                "
-                          )
-                        ]
-                      ),
-                      _vm._v(" "),
-                      _c("div", [
-                        _vm._v(
-                          "\n                    " +
-                            _vm._s(_vm.courseTitle) +
-                            "\n                "
-                        )
-                      ])
+                      _vm._v(
+                        "\n                " +
+                          _vm._s(_vm._f("truncate")(_vm.levelTitle, 30)) +
+                          "\n            "
+                      )
                     ]
+                  ),
+                  _vm._v(" "),
+                  _c("i", { staticClass: "fas fa-chevron-right fa-xs" }),
+                  _vm._v(" "),
+                  _c(
+                    "a",
+                    {
+                      staticClass: "hover:underline",
+                      attrs: { href: "/chapitre/" + _vm.chapterUuid }
+                    },
+                    [
+                      _vm._v(
+                        "\n                " +
+                          _vm._s(_vm._f("truncate")(_vm.chapterTitle, 30)) +
+                          "\n            "
+                      )
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c("i", { staticClass: "fas fa-chevron-right fa-xs" }),
+                  _vm._v(
+                    "\n            " +
+                      _vm._s(_vm._f("truncate")(_vm.courseTitle, 30)) +
+                      "\n        "
                   )
                 ]
               )
@@ -37168,41 +37181,39 @@ var render = function() {
             return [
               _c(
                 "h2",
-                {
-                  staticClass:
-                    "font-semibold text-xl text-gray-800 leading-tight"
-                },
+                { staticClass: "font-semibold text-gray-800 leading-tight" },
                 [
                   _c(
-                    "div",
-                    { staticClass: "flex justify-between items-center" },
+                    "a",
+                    {
+                      staticClass: "hover:underline",
+                      attrs: { href: _vm.route("levels.index") }
+                    },
+                    [_vm._v("\n                Les formations\n            ")]
+                  ),
+                  _vm._v(" "),
+                  _c("i", { staticClass: "fas fa-chevron-right fa-xs" }),
+                  _vm._v(" "),
+                  _c(
+                    "a",
+                    {
+                      staticClass: "hover:underline",
+                      attrs: { href: "/formation/" + _vm.levelUuid }
+                    },
                     [
-                      _c(
-                        "a",
-                        {
-                          staticClass: "hover:underline",
-                          attrs: { href: "/niveau/" + _vm.levelUuid }
-                        },
-                        [
-                          _c("i", {
-                            staticClass: "fas fa-long-arrow-alt-left fa-sm"
-                          }),
-                          _vm._v(
-                            "\n                    Niveau - " +
-                              _vm._s(_vm.levelTitle) +
-                              "\n                "
-                          )
-                        ]
-                      ),
-                      _vm._v(" "),
-                      _c("div", [
-                        _vm._v(
-                          "\n                    " +
-                            _vm._s(_vm.chapterTitle) +
-                            "\n                "
-                        )
-                      ])
+                      _vm._v(
+                        "\n                " +
+                          _vm._s(_vm._f("truncate")(_vm.levelTitle, 30)) +
+                          "\n            "
+                      )
                     ]
+                  ),
+                  _vm._v(" "),
+                  _c("i", { staticClass: "fas fa-chevron-right fa-xs" }),
+                  _vm._v(
+                    "\n            " +
+                      _vm._s(_vm._f("truncate")(_vm.chapterTitle, 30)) +
+                      "\n        "
                   )
                 ]
               )
@@ -37215,7 +37226,7 @@ var render = function() {
     [
       _vm._v(" "),
       _vm._l(this.courseList, function(course) {
-        return _c("div", { key: course.id, staticClass: "py-4" }, [
+        return _c("div", { key: course.uuid, staticClass: "py-4" }, [
           _c("div", { staticClass: "max-w-7xl mx-auto sm:px-6 lg:px-8" }, [
             _c(
               "div",
@@ -37224,6 +37235,16 @@ var render = function() {
                   "bg-white overflow-hidden shadow-lg hover:shadow-xl sm:rounded-lg transition duration-500 ease-in-out"
               },
               [
+                course.image
+                  ? _c("div", {
+                      staticClass: "h-20 bg-auto bg-center",
+                      style:
+                        "background-image: url(storage/img/levels/" +
+                        _vm.level.image +
+                        ")"
+                    })
+                  : _vm._e(),
+                _vm._v(" "),
                 _c(
                   "div",
                   {
@@ -37243,7 +37264,7 @@ var render = function() {
                                 attrs: { href: "#" },
                                 on: {
                                   click: function($event) {
-                                    return _vm.notification("Vide")
+                                    return _vm.warning("Vide")
                                   }
                                 }
                               },
@@ -37324,319 +37345,23 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c(
-    "app-layout",
-    {
-      scopedSlots: _vm._u([
-        {
-          key: "header",
-          fn: function() {
-            return [
-              _c(
-                "h2",
-                {
-                  staticClass:
-                    "font-semibold text-xl text-gray-800 leading-tight"
-                },
-                [_vm._v("\n            Dashboard\n        ")]
-              )
-            ]
-          },
-          proxy: true
-        }
-      ])
-    },
-    [
-      _vm._v(" "),
-      _c("div", { staticClass: "py-12" }, [
-        _c("div", { staticClass: "max-w-7xl mx-auto sm:px-6 lg:px-8" }, [
-          _c("div", { staticClass: "w-full" }, [
+  return _c("app-layout", {
+    scopedSlots: _vm._u([
+      {
+        key: "header",
+        fn: function() {
+          return [
             _c(
-              "form",
-              {
-                staticClass: "bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4",
-                on: {
-                  submit: function($event) {
-                    $event.preventDefault()
-                    return _vm.submit($event)
-                  }
-                }
-              },
-              [
-                _c("div", { staticClass: "mb-4" }, [
-                  _c(
-                    "label",
-                    {
-                      staticClass: "block text-gray-700 text-sm font-bold mb-2",
-                      attrs: { for: "title" }
-                    },
-                    [
-                      _vm._v(
-                        "\n                            Niveau de formation\n                        "
-                      )
-                    ]
-                  ),
-                  _vm._v(" "),
-                  _vm.$page.errors.title
-                    ? _c("input", {
-                        directives: [
-                          {
-                            name: "model",
-                            rawName: "v-model",
-                            value: _vm.form.title,
-                            expression: "form.title"
-                          }
-                        ],
-                        staticClass:
-                          "shadow appearance-none border border-red-700 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline",
-                        attrs: {
-                          id: "title",
-                          type: "text",
-                          placeholder: "Niveau de formation"
-                        },
-                        domProps: { value: _vm.form.title },
-                        on: {
-                          input: function($event) {
-                            if ($event.target.composing) {
-                              return
-                            }
-                            _vm.$set(_vm.form, "title", $event.target.value)
-                          }
-                        }
-                      })
-                    : _c("input", {
-                        directives: [
-                          {
-                            name: "model",
-                            rawName: "v-model",
-                            value: _vm.form.title,
-                            expression: "form.title"
-                          }
-                        ],
-                        staticClass:
-                          "shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline",
-                        attrs: {
-                          id: "title",
-                          type: "text",
-                          placeholder: "Niveau de formation"
-                        },
-                        domProps: { value: _vm.form.title },
-                        on: {
-                          input: function($event) {
-                            if ($event.target.composing) {
-                              return
-                            }
-                            _vm.$set(_vm.form, "title", $event.target.value)
-                          }
-                        }
-                      }),
-                  _vm._v(" "),
-                  _vm.$page.errors.title
-                    ? _c("p", { staticClass: "text-red-700 mt-2" }, [
-                        _vm._v(_vm._s(_vm.$page.errors.title[0]))
-                      ])
-                    : _vm._e()
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "mb-4" }, [
-                  _c(
-                    "label",
-                    {
-                      staticClass: "block text-gray-700 text-sm font-bold mb-2",
-                      attrs: { for: "description" }
-                    },
-                    [
-                      _vm._v(
-                        "\n                            Description (optionnel)\n                        "
-                      )
-                    ]
-                  ),
-                  _vm._v(" "),
-                  _c("textarea", {
-                    directives: [
-                      {
-                        name: "model",
-                        rawName: "v-model",
-                        value: _vm.form.description,
-                        expression: "form.description"
-                      }
-                    ],
-                    staticClass:
-                      "shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline",
-                    attrs: {
-                      id: "description",
-                      placeholder: "Description (optionnel)"
-                    },
-                    domProps: { value: _vm.form.description },
-                    on: {
-                      input: function($event) {
-                        if ($event.target.composing) {
-                          return
-                        }
-                        _vm.$set(_vm.form, "description", $event.target.value)
-                      }
-                    }
-                  }),
-                  _vm._v(" "),
-                  _vm.$page.errors.description
-                    ? _c("p", { staticClass: "text-red-700 mt-2" }, [
-                        _vm._v(_vm._s(_vm.$page.errors.description[0]))
-                      ])
-                    : _vm._e()
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "mb-4" }, [
-                  _c(
-                    "label",
-                    {
-                      staticClass: "block text-gray-700 text-sm font-bold mb-2"
-                    },
-                    [
-                      _vm._v(
-                        "\n                            Image (optionnel)\n                        "
-                      )
-                    ]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "header",
-                    {
-                      staticClass:
-                        "border-dashed border-2 border-gray-400 py-12 flex flex-col justify-center items-center mb-4"
-                    },
-                    [
-                      _c("input", {
-                        staticClass: "hidden",
-                        attrs: {
-                          id: "hidden-input",
-                          type: "file",
-                          multiple: ""
-                        },
-                        on: { change: _vm.updateFile }
-                      }),
-                      _vm._v(" "),
-                      _c(
-                        "button",
-                        {
-                          staticClass:
-                            "mt-2 rounded-sm text-sm px-3 py-1 bg-gray-200 hover:bg-gray-300 focus:shadow-outline focus:outline-none",
-                          attrs: { id: "button" },
-                          on: {
-                            click: function($event) {
-                              $event.preventDefault()
-                              return _vm.selectFile($event)
-                            }
-                          }
-                        },
-                        [
-                          _vm._v(
-                            "\n                                Télécharger une image\n                            "
-                          )
-                        ]
-                      )
-                    ]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "ul",
-                    {
-                      staticClass: "flex flex-1 flex-wrap -m-1",
-                      attrs: { id: "gallery" }
-                    },
-                    [
-                      _c(
-                        "li",
-                        {
-                          staticClass:
-                            "h-full w-full text-center flex flex-col items-center justify-center items-center",
-                          attrs: { id: "empty" }
-                        },
-                        [
-                          _c("img", {
-                            staticClass: "mx-auto w-32",
-                            attrs: {
-                              src: "/img/no-img.png",
-                              alt: "Aucune image sélectionnée"
-                            }
-                          }),
-                          _vm._v(" "),
-                          _c("span", { staticClass: "text-sm text-gray-500" }, [
-                            _vm._v("Aucune image sélectionnée")
-                          ])
-                        ]
-                      )
-                    ]
-                  ),
-                  _vm._v(" "),
-                  this.form.image
-                    ? _c("div", { staticClass: "pt-4" }, [
-                        _c(
-                          "div",
-                          {
-                            staticClass: "font-semibold text-gray-700 text-sm"
-                          },
-                          [
-                            _vm._v(
-                              "\n                                " +
-                                _vm._s(this.form.image.name) +
-                                " - "
-                            ),
-                            _c(
-                              "a",
-                              {
-                                staticClass: "text-red-700 hover:underline",
-                                attrs: { href: "#" },
-                                on: {
-                                  click: function($event) {
-                                    $event.preventDefault()
-                                    return _vm.resetFile($event)
-                                  }
-                                }
-                              },
-                              [_vm._v("Supprimer")]
-                            )
-                          ]
-                        )
-                      ])
-                    : _vm._e(),
-                  _vm._v(" "),
-                  _vm.$page.errors.image
-                    ? _c("p", { staticClass: "text-red-700 mt-2" }, [
-                        _vm._v(_vm._s(_vm.$page.errors.image[0]))
-                      ])
-                    : _vm._e()
-                ]),
-                _vm._v(" "),
-                _vm.$page.flash.success
-                  ? _c("div", { staticClass: "text-green-700 mb-4" }, [
-                      _vm._v(
-                        "\n                        " +
-                          _vm._s(_vm.$page.flash.success) +
-                          "\n                    "
-                      )
-                    ])
-                  : _vm._e(),
-                _vm._v(" "),
-                _c(
-                  "button",
-                  {
-                    staticClass:
-                      "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline",
-                    attrs: { type: "submit" }
-                  },
-                  [
-                    _vm._v(
-                      "\n                        Ajouter la formation\n                    "
-                    )
-                  ]
-                )
-              ]
+              "h2",
+              { staticClass: "font-semibold text-gray-800 leading-tight" },
+              [_vm._v("\n            Dashboard\n        ")]
             )
-          ])
-        ])
-      ])
-    ]
-  )
+          ]
+        },
+        proxy: true
+      }
+    ])
+  })
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -37670,10 +37395,7 @@ var render = function() {
             return [
               _c(
                 "h2",
-                {
-                  staticClass:
-                    "font-semibold text-xl text-gray-800 leading-tight"
-                },
+                { staticClass: "font-semibold text-gray-800 leading-tight" },
                 [_vm._v("\n            Les formations\n        ")]
               )
             ]
@@ -37684,8 +37406,342 @@ var render = function() {
     },
     [
       _vm._v(" "),
-      _vm._l(this.levelList, function(level) {
-        return _c("div", { key: level.id, staticClass: "py-4" }, [
+      _c(
+        "div",
+        { staticClass: "pt-4 max-w-7xl mx-auto sm:px-6 lg:px-8 right-0" },
+        [
+          _c("div", { staticClass: "flex flex-row-reverse" }, [
+            _c(
+              "button",
+              {
+                staticClass:
+                  "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline",
+                on: {
+                  click: function($event) {
+                    _vm.addLevel = !_vm.addLevel
+                  }
+                }
+              },
+              [_vm._v("\n                Ajouter une formation\n            ")]
+            )
+          ])
+        ]
+      ),
+      _vm._v(" "),
+      _c("transition", { attrs: { name: "slide-fade" } }, [
+        _vm.addLevel
+          ? _c("div", { staticClass: "py-4" }, [
+              _c("div", { staticClass: "max-w-7xl mx-auto sm:px-6 lg:px-8" }, [
+                _c("div", { staticClass: "w-full" }, [
+                  _c(
+                    "form",
+                    {
+                      staticClass:
+                        "bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4",
+                      on: {
+                        submit: function($event) {
+                          $event.preventDefault()
+                          return _vm.submit($event)
+                        }
+                      }
+                    },
+                    [
+                      _c("div", { staticClass: "mb-4" }, [
+                        _c(
+                          "label",
+                          {
+                            staticClass:
+                              "block text-gray-700 text-sm font-bold mb-2",
+                            attrs: { for: "title" }
+                          },
+                          [
+                            _vm._v(
+                              "\n                                Niveau de formation\n                            "
+                            )
+                          ]
+                        ),
+                        _vm._v(" "),
+                        _vm.$page.errors.title
+                          ? _c("input", {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: _vm.form.title,
+                                  expression: "form.title"
+                                }
+                              ],
+                              staticClass:
+                                "shadow appearance-none border border-red-700 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline",
+                              attrs: {
+                                id: "title",
+                                type: "text",
+                                placeholder: "Niveau de formation"
+                              },
+                              domProps: { value: _vm.form.title },
+                              on: {
+                                input: function($event) {
+                                  if ($event.target.composing) {
+                                    return
+                                  }
+                                  _vm.$set(
+                                    _vm.form,
+                                    "title",
+                                    $event.target.value
+                                  )
+                                }
+                              }
+                            })
+                          : _c("input", {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: _vm.form.title,
+                                  expression: "form.title"
+                                }
+                              ],
+                              staticClass:
+                                "shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline",
+                              attrs: {
+                                id: "title",
+                                type: "text",
+                                placeholder: "Niveau de formation"
+                              },
+                              domProps: { value: _vm.form.title },
+                              on: {
+                                input: function($event) {
+                                  if ($event.target.composing) {
+                                    return
+                                  }
+                                  _vm.$set(
+                                    _vm.form,
+                                    "title",
+                                    $event.target.value
+                                  )
+                                }
+                              }
+                            }),
+                        _vm._v(" "),
+                        _vm.$page.errors.title
+                          ? _c("p", { staticClass: "text-red-700 mt-2" }, [
+                              _vm._v(_vm._s(_vm.$page.errors.title[0]))
+                            ])
+                          : _vm._e()
+                      ]),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "mb-4" }, [
+                        _c(
+                          "label",
+                          {
+                            staticClass:
+                              "block text-gray-700 text-sm font-bold mb-2",
+                            attrs: { for: "description" }
+                          },
+                          [
+                            _vm._v(
+                              "\n                                Description (optionnel)\n                            "
+                            )
+                          ]
+                        ),
+                        _vm._v(" "),
+                        _c("textarea", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.form.description,
+                              expression: "form.description"
+                            }
+                          ],
+                          staticClass:
+                            "shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline",
+                          attrs: {
+                            id: "description",
+                            placeholder: "Description (optionnel)"
+                          },
+                          domProps: { value: _vm.form.description },
+                          on: {
+                            input: function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.$set(
+                                _vm.form,
+                                "description",
+                                $event.target.value
+                              )
+                            }
+                          }
+                        }),
+                        _vm._v(" "),
+                        _vm.$page.errors.description
+                          ? _c("p", { staticClass: "text-red-700 mt-2" }, [
+                              _vm._v(_vm._s(_vm.$page.errors.description[0]))
+                            ])
+                          : _vm._e()
+                      ]),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "mb-4" }, [
+                        _c(
+                          "label",
+                          {
+                            staticClass:
+                              "block text-gray-700 text-sm font-bold mb-2"
+                          },
+                          [
+                            _vm._v(
+                              "\n                                Image (optionnel)\n                            "
+                            )
+                          ]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "header",
+                          {
+                            staticClass:
+                              "border-dashed border-2 border-gray-400 py-12 flex flex-col justify-center items-center mb-4"
+                          },
+                          [
+                            _c("input", {
+                              staticClass: "hidden",
+                              attrs: {
+                                id: "hidden-input",
+                                type: "file",
+                                multiple: ""
+                              },
+                              on: { change: _vm.updateFile }
+                            }),
+                            _vm._v(" "),
+                            _c(
+                              "button",
+                              {
+                                staticClass:
+                                  "mt-2 rounded-sm text-sm px-3 py-1 bg-gray-200 hover:bg-gray-300 focus:shadow-outline focus:outline-none",
+                                attrs: { id: "button" },
+                                on: {
+                                  click: function($event) {
+                                    $event.preventDefault()
+                                    return _vm.selectFile($event)
+                                  }
+                                }
+                              },
+                              [
+                                _vm._v(
+                                  "\n                                    Télécharger une image\n                                "
+                                )
+                              ]
+                            )
+                          ]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "ul",
+                          {
+                            staticClass: "flex flex-1 flex-wrap -m-1",
+                            attrs: { id: "gallery" }
+                          },
+                          [
+                            _c(
+                              "li",
+                              {
+                                staticClass:
+                                  "h-full w-full text-center flex flex-col items-center justify-center items-center",
+                                attrs: { id: "empty" }
+                              },
+                              [
+                                _c("img", {
+                                  staticClass: "mx-auto w-32",
+                                  attrs: {
+                                    src: "/img/no-img.png",
+                                    alt: "Aucune image sélectionnée"
+                                  }
+                                }),
+                                _vm._v(" "),
+                                _c(
+                                  "span",
+                                  { staticClass: "text-sm text-gray-500" },
+                                  [_vm._v("Aucune image sélectionnée")]
+                                )
+                              ]
+                            )
+                          ]
+                        ),
+                        _vm._v(" "),
+                        this.form.image
+                          ? _c("div", { staticClass: "pt-4" }, [
+                              _c(
+                                "div",
+                                {
+                                  staticClass:
+                                    "font-semibold text-gray-700 text-sm"
+                                },
+                                [
+                                  _vm._v(
+                                    "\n                                    " +
+                                      _vm._s(this.form.image.name) +
+                                      " - "
+                                  ),
+                                  _c(
+                                    "a",
+                                    {
+                                      staticClass:
+                                        "text-red-700 hover:underline",
+                                      attrs: { href: "#" },
+                                      on: {
+                                        click: function($event) {
+                                          $event.preventDefault()
+                                          return _vm.resetFile($event)
+                                        }
+                                      }
+                                    },
+                                    [_vm._v("Supprimer")]
+                                  )
+                                ]
+                              )
+                            ])
+                          : _vm._e(),
+                        _vm._v(" "),
+                        _vm.$page.errors.image
+                          ? _c("p", { staticClass: "text-red-700 mt-2" }, [
+                              _vm._v(_vm._s(_vm.$page.errors.image[0]))
+                            ])
+                          : _vm._e()
+                      ]),
+                      _vm._v(" "),
+                      _vm.$page.flash.success
+                        ? _c("div", { staticClass: "text-green-700 mb-4" }, [
+                            _vm._v(
+                              "\n                            " +
+                                _vm._s(_vm.$page.flash.success) +
+                                "\n                        "
+                            )
+                          ])
+                        : _vm._e(),
+                      _vm._v(" "),
+                      _c(
+                        "button",
+                        {
+                          staticClass:
+                            "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline",
+                          attrs: { type: "submit" }
+                        },
+                        [
+                          _vm._v(
+                            "\n                            Ajouter la formation\n                        "
+                          )
+                        ]
+                      )
+                    ]
+                  )
+                ])
+              ])
+            ])
+          : _vm._e()
+      ]),
+      _vm._v(" "),
+      _vm._l(_vm.$page.levels, function(level) {
+        return _c("div", { key: level.uuid, staticClass: "py-4" }, [
           _c("div", { staticClass: "max-w-7xl mx-auto sm:px-6 lg:px-8" }, [
             _c(
               "div",
@@ -39158,6 +39214,57 @@ function normalizeComponent (
     options: options
   }
 }
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-truncate-filter/vue-truncate.js":
+/*!**********************************************************!*\
+  !*** ./node_modules/vue-truncate-filter/vue-truncate.js ***!
+  \**********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+;(function () {
+
+  var vueTruncate = {};
+
+  vueTruncate.install = function (Vue) {
+    
+    /**
+     * 
+     * @param {String} text
+     * @param {Number} length
+     * @param {String} clamp
+     * 
+     */
+
+    Vue.filter('truncate', function (text, length, clamp) {
+      clamp = clamp || '...';
+      length = length || 30;
+      
+      if (text.length <= length) return text;
+
+      var tcText = text.slice(0, length - clamp.length);
+      var last = tcText.length - 1;
+      
+
+      while (last > 0 && tcText[last] !== ' ' && tcText[last] !== clamp[0]) last -= 1;
+
+      // Fix for case when text dont have any `space`
+      last = last || length - clamp.length;
+
+      tcText =  tcText.slice(0, last);
+
+      return tcText + clamp;
+    });
+  }
+
+  if (true) {
+    module.exports = vueTruncate;
+  } else {}
+
+})()
 
 
 /***/ }),
@@ -53613,6 +53720,10 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.mixin({
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(_inertiajs_inertia_vue__WEBPACK_IMPORTED_MODULE_1__["InertiaApp"]);
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(laravel_jetstream__WEBPACK_IMPORTED_MODULE_2__["InertiaForm"]);
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(portal_vue__WEBPACK_IMPORTED_MODULE_3___default.a);
+
+var VueTruncate = __webpack_require__(/*! vue-truncate-filter */ "./node_modules/vue-truncate-filter/vue-truncate.js");
+
+vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(VueTruncate);
 var app = document.getElementById('app');
 new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
   render: function render(h) {

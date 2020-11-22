@@ -26,7 +26,6 @@ class ChapterFactory extends Factory
             'uuid' => $this->faker->uuid,
             'title' => $this->faker->sentence(),
             'description' => $this->faker->paragraphs(2, true),
-            'image' => $this->faker->sentence(),
             'level_id' => Level::all()->random()->id
         ];
     }

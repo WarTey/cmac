@@ -1,16 +1,20 @@
 <template>
     <app-layout>
         <template #header>
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                <div class="flex justify-between items-center">
-                    <a :href="'/chapitre/' + chapterUuid" class="hover:underline">
-                        <i class="fas fa-long-arrow-alt-left fa-sm"></i>
-                        {{ chapterTitle }}
-                    </a>
-                    <div>
-                        {{ courseTitle }}
-                    </div>
-                </div>
+            <h2 class="font-semibold text-gray-800 leading-tight">
+                <a :href="route('levels.index')" class="hover:underline">
+                    Les formations
+                </a>
+                <i class="fas fa-chevron-right fa-xs"></i>
+                <a :href="'/formation/' + levelUuid" class="hover:underline">
+                    {{ levelTitle | truncate(30) }}
+                </a>
+                <i class="fas fa-chevron-right fa-xs"></i>
+                <a :href="'/chapitre/' + chapterUuid" class="hover:underline">
+                    {{ chapterTitle | truncate(30) }}
+                </a>
+                <i class="fas fa-chevron-right fa-xs"></i>
+                {{ courseTitle | truncate(30) }}
             </h2>
         </template>
         <div class="py-4" v-for="content in this.contentList" v-bind:key="content.id">
@@ -44,14 +48,16 @@ export default {
         AppLayout
     },
 
-    props: ['contents', 'course', 'chapter'],
+    props: ['contents', 'course', 'chapter', 'level'],
 
     data() {
         return {
             contentList: this.contents,
             courseTitle: this.course.title,
             chapterTitle: this.chapter.title,
-            chapterUuid: this.chapter.uuid
+            chapterUuid: this.chapter.uuid,
+            levelTitle: this.level.title,
+            levelUuid: this.level.uuid
         }
     }
 }

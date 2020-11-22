@@ -39,6 +39,6 @@ class LevelController extends Controller
 
         $level->save();
 
-        return Redirect::route('dashboard')->with('success', 'Formation en ligne.');
+        return Redirect::route('levels.index')->with('success', 'Formation en ligne.');
     }
 }

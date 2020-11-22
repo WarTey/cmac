@@ -11,6 +11,9 @@ Vue.use(InertiaApp);
 Vue.use(InertiaForm);
 Vue.use(PortalVue);
 
+const VueTruncate = require('vue-truncate-filter');
+Vue.use(VueTruncate)
+
 const app = document.getElementById('app');
 
 new Vue({

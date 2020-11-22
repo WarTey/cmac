@@ -1,24 +1,25 @@
 <template>
     <app-layout>
         <template #header>
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                <div class="flex justify-between items-center">
-                    <a :href="'/niveau/' + levelUuid" class="hover:underline">
-                        <i class="fas fa-long-arrow-alt-left fa-sm"></i>
-                        Niveau - {{ levelTitle }}
-                    </a>
-                    <div>
-                        {{ chapterTitle }}
-                    </div>
-                </div>
+            <h2 class="font-semibold text-gray-800 leading-tight">
+                <a :href="route('levels.index')" class="hover:underline">
+                    Les formations
+                </a>
+                <i class="fas fa-chevron-right fa-xs"></i>
+                <a :href="'/formation/' + levelUuid" class="hover:underline">
+                    {{ levelTitle | truncate(30) }}
+                </a>
+                <i class="fas fa-chevron-right fa-xs"></i>
+                {{ chapterTitle | truncate(30) }}
             </h2>
         </template>
-        <div class="py-4" v-for="course in this.courseList" v-bind:key="course.id">
+        <div class="py-4" v-for="course in this.courseList" v-bind:key="course.uuid">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white overflow-hidden shadow-lg hover:shadow-xl sm:rounded-lg transition duration-500 ease-in-out">
+                    <div v-if="course.image" class="h-20 bg-auto bg-center" :style="'background-image: url(storage/img/levels/' + level.image + ')'"></div>
                     <div class="p-6 sm:px-20 bg-white border-b border-gray-200">
                         <div class="flex justify-between items-center">
-                            <a v-if="course.contents_count < 1" href="#" v-on:click="notification('Vide')" class="text-2xl hover:underline">
+                            <a v-if="course.contents_count < 1" href="#" v-on:click="warning('Vide')" class="text-2xl hover:underline">
                                 {{ course.title }}
                             </a>
                             <a v-else :href="'/cours/' + course.uuid" class="text-2xl hover:underline">
@@ -58,10 +59,8 @@ export default {
     },
 
     methods: {
-        notification(message)
-        {
-            // TODO : Use library
-            alert(message);
+        warning(message) {
+            toastr.warning(message);
         }
     }
 }
