@@ -70,7 +70,7 @@
         <div class="py-4" v-for="level in $page.levels" v-bind:key="level.uuid">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white overflow-hidden shadow-lg hover:shadow-xl sm:rounded-lg transition duration-500 ease-in-out">
-                    <div v-if="level.image" class="h-20 bg-auto bg-center" :style="'background-image: url(storage/img/levels/' + level.image + ')'"></div>
+                    <div v-if="level.image" class="h-20 bg-auto bg-center" :style="'background-image: url(/storage/img/levels/' + level.image + ')'"></div>
                     <div class="p-6 sm:px-20 bg-white border-b border-gray-200">
                         <div class="flex justify-between items-center">
                             <a v-if="level.chapters_count < 1" href="#" v-on:click.prevent="warning('Formation vide.')" class="text-2xl hover:underline">

@@ -37337,8 +37337,8 @@ var render = function() {
                   ? _c("div", {
                       staticClass: "h-20 bg-auto bg-center",
                       style:
-                        "background-image: url(storage/img/levels/" +
-                        _vm.level.image +
+                        "background-image: url(/storage/img/chapters/" +
+                        chapter.image +
                         ")"
                     })
                   : _vm._e(),
@@ -38193,7 +38193,7 @@ var render = function() {
                   ? _c("div", {
                       staticClass: "h-20 bg-auto bg-center",
                       style:
-                        "background-image: url(storage/img/levels/" +
+                        "background-image: url(/storage/img/levels/" +
                         level.image +
                         ")"
                     })
