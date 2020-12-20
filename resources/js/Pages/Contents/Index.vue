@@ -45,7 +45,7 @@
                                 <textarea class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="description" v-model="form.description" placeholder="Description (optionnel)"></textarea>
                                 <p class="text-red-700 mt-2" v-if="$page.errors.description">{{ $page.errors.description[0] }}</p>
                             </div>
-                            <!--<div class="mb-4">
+                            <div class="mb-4">
                                 <label class="block text-gray-700 text-sm font-bold mb-2">
                                     PDF (optionnel)
                                 </label>
@@ -61,13 +61,15 @@
                                         <span class="text-sm text-gray-500">Aucun PDF sélectionné</span>
                                     </li>
                                 </ul>
-                                <div class="pt-4" v-if="this.form.image">
+                                <div class="pt-4" v-for="(file, index) in this.form.files" v-bind:key="file.name">
                                     <div class="font-semibold text-gray-700 text-sm">
-                                        {{ this.form.image.name }} - <a href="#" v-on:click.prevent="resetFile" class="text-red-700 hover:underline">Supprimer</a>
+                                        {{ file.name }} - <a href="#" v-on:click.prevent="resetFile(index)" class="text-red-700 hover:underline">Supprimer</a>
                                     </div>
+                                    <p class="text-red-700 mt-2" v-if="$page.errors.hasOwnProperty('files.' + index)">
+                                        Format du fichier ou taille incorrect.
+                                    </p>
                                 </div>
-                                <p class="text-red-700 mt-2" v-if="$page.errors.image">{{ $page.errors.image[0] }}</p>
-                            </div>-->
+                            </div>
                             <div class="text-green-700 mb-4" v-if="$page.flash.success">
                                 {{ $page.flash.success }}
                             </div>
@@ -92,7 +94,6 @@
                             {{ content.description }}
                         </div>
                         <div class="mt-6 text-gray-700 text-justify cursor-pointer hover:underline" v-for="file in content.files" v-bind:key="file.id">
-                            <!-- TODO : Update database with file.name and file.location -->
                             {{ file.name }}
                         </div>
                     </div>
@@ -124,6 +125,7 @@ export default {
             form: {
                 title: null,
                 description: null,
+                files: [],
                 course_uuid: null
             },
         }
@@ -132,12 +134,16 @@ export default {
     methods: {
         submit() {
             const formData = new FormData();
-            formData.append('title', this.form.title);
+            if (this.form.title) {
+                formData.append('title', this.form.title);
+            }
             if (this.form.description) {
                 formData.append('description', this.form.description);
             }
-            if (this.form.image) {
-                formData.append('image', this.form.image);
+            if (this.form.files.length > 0) {
+                this.form.files.forEach(element =>
+                    formData.append('files[]', element)
+                );
             }
             formData.append('course_uuid', this.courseUuid);
 
@@ -145,10 +151,10 @@ export default {
         },
 
         updateFile(event) {
-            if (event.target.files[0].type.match("image.*")) {
-                this.form.image = event.target.files[0];
+            if (event.target.files[0].type.match("application/pdf")) {
+                this.form.files.push(event.target.files[0]);
 
-                if (this.form.image) {
+                if (this.form.files.length > 0) {
                     document.getElementById("empty").classList.add("hidden");
                 } else {
                     document.getElementById("empty").classList.remove("hidden");
@@ -156,10 +162,12 @@ export default {
             }
         },
 
-        resetFile() {
-            this.form.image = null;
+        resetFile(index) {
+            this.form.files.splice(index, 1);
 
-            document.getElementById("empty").classList.remove("hidden");
+            if (this.form.files.length === 0) {
+                document.getElementById("empty").classList.remove("hidden");
+            }
         },
 
         selectFile() {

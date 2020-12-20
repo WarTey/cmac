@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Chapter;
 use App\Models\Content;
 use App\Models\Course;
+use App\Models\File;
 use App\Models\Level;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
@@ -33,8 +34,9 @@ class ContentController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'title' => 'required|unique:levels|max:100',
+            'title' => 'required|unique:contents|max:100',
             'description' => 'nullable',
+            'files.*' => 'nullable|file|mimes:pdf|max:2048',
             'course_uuid' => 'required'
         ]);
 
@@ -43,14 +45,23 @@ class ContentController extends Controller
         $content->description = $request->post('description');
         $content->course_id = Course::where('uuid', $request->post('course_uuid'))->first()->id;
 
-        /*if ($request->file('image'))
-        {
-            $path = $request->file('image')->store('public/img/courses');
-
-            $course->image = basename($path);
-        }*/
-
         $content->save();
+
+        if ($request->file()) {
+            foreach ($request->file()["files"] as $file) {
+                if ($file->getError() == 0) {
+                    $path = $file->store('public/files');
+                    $fileName = $file->getClientOriginalName();
+
+                    $file = new File();
+                    $file->title = basename($path);
+                    $file->name = $fileName;
+                    $file->content_id = Content::where('uuid', $content->uuid)->first()->id;
+
+                    $file->save();
+                }
+            }
+        }
 
         return Redirect::route('contents.index', ['uuid' => $request->post('course_uuid')])->with('success', 'Contenu en ligne.');
     }

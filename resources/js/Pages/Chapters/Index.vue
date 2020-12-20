@@ -42,7 +42,7 @@
                                     Image (optionnel)
                                 </label>
                                 <header class="border-dashed border-2 border-gray-400 py-12 flex flex-col justify-center items-center mb-4">
-                                    <input id="hidden-input" type="file" multiple class="hidden" v-on:change="updateFile">
+                                    <input id="hidden-input" type="file" class="hidden" v-on:change="updateFile">
                                     <button id="button" class="mt-2 rounded-sm text-sm px-3 py-1 bg-gray-200 hover:bg-gray-300 focus:shadow-outline focus:outline-none" @click.prevent="selectFile">
                                         Télécharger une image
                                     </button>
@@ -124,7 +124,9 @@ export default {
     methods: {
         submit() {
             const formData = new FormData();
-            formData.append('title', this.form.title);
+            if (this.form.title) {
+                formData.append('title', this.form.title);
+            }
             if (this.form.description) {
                 formData.append('description', this.form.description);
             }

@@ -3348,7 +3348,10 @@ __webpack_require__.r(__webpack_exports__);
   methods: {
     submit: function submit() {
       var formData = new FormData();
-      formData.append('title', this.form.title);
+
+      if (this.form.title) {
+        formData.append('title', this.form.title);
+      }
 
       if (this.form.description) {
         formData.append('description', this.form.description);
@@ -3501,6 +3504,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
@@ -3519,6 +3523,7 @@ __webpack_require__.r(__webpack_exports__);
       form: {
         title: null,
         description: null,
+        files: [],
         course_uuid: null
       }
     };
@@ -3526,33 +3531,41 @@ __webpack_require__.r(__webpack_exports__);
   methods: {
     submit: function submit() {
       var formData = new FormData();
-      formData.append('title', this.form.title);
+
+      if (this.form.title) {
+        formData.append('title', this.form.title);
+      }
 
       if (this.form.description) {
         formData.append('description', this.form.description);
       }
 
-      if (this.form.image) {
-        formData.append('image', this.form.image);
+      if (this.form.files.length > 0) {
+        this.form.files.forEach(function (element) {
+          return formData.append('files[]', element);
+        });
       }
 
       formData.append('course_uuid', this.courseUuid);
       this.$inertia.post('/contents', formData);
     },
     updateFile: function updateFile(event) {
-      if (event.target.files[0].type.match("image.*")) {
-        this.form.image = event.target.files[0];
+      if (event.target.files[0].type.match("application/pdf")) {
+        this.form.files.push(event.target.files[0]);
 
-        if (this.form.image) {
+        if (this.form.files.length > 0) {
           document.getElementById("empty").classList.add("hidden");
         } else {
           document.getElementById("empty").classList.remove("hidden");
         }
       }
     },
-    resetFile: function resetFile() {
-      this.form.image = null;
-      document.getElementById("empty").classList.remove("hidden");
+    resetFile: function resetFile(index) {
+      this.form.files.splice(index, 1);
+
+      if (this.form.files.length === 0) {
+        document.getElementById("empty").classList.remove("hidden");
+      }
     },
     selectFile: function selectFile() {
       document.getElementById("hidden-input").click();
@@ -3699,7 +3712,10 @@ __webpack_require__.r(__webpack_exports__);
   methods: {
     submit: function submit() {
       var formData = new FormData();
-      formData.append('title', this.form.title);
+
+      if (this.form.title) {
+        formData.append('title', this.form.title);
+      }
 
       if (this.form.description) {
         formData.append('description', this.form.description);
@@ -3890,15 +3906,21 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     submit: function submit() {
-      if (this.form.image) {
-        var formData = new FormData();
+      var formData = new FormData();
+
+      if (this.form.title) {
         formData.append('title', this.form.title);
-        formData.append('description', this.form.description);
-        formData.append('image', this.form.image);
-        this.$inertia.post('/formations', formData);
-      } else {
-        this.$inertia.post('/formations', this.form);
       }
+
+      if (this.form.description) {
+        formData.append('description', this.form.description);
+      }
+
+      if (this.form.image) {
+        formData.append('image', this.form.image);
+      }
+
+      this.$inertia.post('/formations', formData);
     },
     updateFile: function updateFile(event) {
       if (event.target.files[0].type.match("image.*")) {
@@ -37393,11 +37415,7 @@ var render = function() {
                           [
                             _c("input", {
                               staticClass: "hidden",
-                              attrs: {
-                                id: "hidden-input",
-                                type: "file",
-                                multiple: ""
-                              },
+                              attrs: { id: "hidden-input", type: "file" },
                               on: { change: _vm.updateFile }
                             }),
                             _vm._v(" "),
@@ -37897,6 +37915,150 @@ var render = function() {
                           : _vm._e()
                       ]),
                       _vm._v(" "),
+                      _c(
+                        "div",
+                        { staticClass: "mb-4" },
+                        [
+                          _c(
+                            "label",
+                            {
+                              staticClass:
+                                "block text-gray-700 text-sm font-bold mb-2"
+                            },
+                            [
+                              _vm._v(
+                                "\n                                PDF (optionnel)\n                            "
+                              )
+                            ]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "header",
+                            {
+                              staticClass:
+                                "border-dashed border-2 border-gray-400 py-12 flex flex-col justify-center items-center mb-4"
+                            },
+                            [
+                              _c("input", {
+                                staticClass: "hidden",
+                                attrs: {
+                                  id: "hidden-input",
+                                  type: "file",
+                                  multiple: ""
+                                },
+                                on: { change: _vm.updateFile }
+                              }),
+                              _vm._v(" "),
+                              _c(
+                                "button",
+                                {
+                                  staticClass:
+                                    "mt-2 rounded-sm text-sm px-3 py-1 bg-gray-200 hover:bg-gray-300 focus:shadow-outline focus:outline-none",
+                                  attrs: { id: "button" },
+                                  on: {
+                                    click: function($event) {
+                                      $event.preventDefault()
+                                      return _vm.selectFile($event)
+                                    }
+                                  }
+                                },
+                                [
+                                  _vm._v(
+                                    "\n                                    Télécharger un PDF\n                                "
+                                  )
+                                ]
+                              )
+                            ]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "ul",
+                            {
+                              staticClass: "flex flex-1 flex-wrap -m-1",
+                              attrs: { id: "gallery" }
+                            },
+                            [
+                              _c(
+                                "li",
+                                {
+                                  staticClass:
+                                    "h-full w-full text-center flex flex-col items-center justify-center items-center",
+                                  attrs: { id: "empty" }
+                                },
+                                [
+                                  _c("img", {
+                                    staticClass: "mx-auto w-32",
+                                    attrs: {
+                                      src: "/img/no-img.png",
+                                      alt: "Aucune image sélectionnée"
+                                    }
+                                  }),
+                                  _vm._v(" "),
+                                  _c(
+                                    "span",
+                                    { staticClass: "text-sm text-gray-500" },
+                                    [_vm._v("Aucun PDF sélectionné")]
+                                  )
+                                ]
+                              )
+                            ]
+                          ),
+                          _vm._v(" "),
+                          _vm._l(this.form.files, function(file, index) {
+                            return _c(
+                              "div",
+                              { key: file.name, staticClass: "pt-4" },
+                              [
+                                _c(
+                                  "div",
+                                  {
+                                    staticClass:
+                                      "font-semibold text-gray-700 text-sm"
+                                  },
+                                  [
+                                    _vm._v(
+                                      "\n                                    " +
+                                        _vm._s(file.name) +
+                                        " - "
+                                    ),
+                                    _c(
+                                      "a",
+                                      {
+                                        staticClass:
+                                          "text-red-700 hover:underline",
+                                        attrs: { href: "#" },
+                                        on: {
+                                          click: function($event) {
+                                            $event.preventDefault()
+                                            return _vm.resetFile(index)
+                                          }
+                                        }
+                                      },
+                                      [_vm._v("Supprimer")]
+                                    )
+                                  ]
+                                ),
+                                _vm._v(" "),
+                                _vm.$page.errors.hasOwnProperty(
+                                  "files." + index
+                                )
+                                  ? _c(
+                                      "p",
+                                      { staticClass: "text-red-700 mt-2" },
+                                      [
+                                        _vm._v(
+                                          "\n                                    Format du fichier ou taille incorrect.\n                                "
+                                        )
+                                      ]
+                                    )
+                                  : _vm._e()
+                              ]
+                            )
+                          })
+                        ],
+                        2
+                      ),
+                      _vm._v(" "),
                       _vm.$page.flash.success
                         ? _c("div", { staticClass: "text-green-700 mb-4" }, [
                             _vm._v(
@@ -38275,11 +38437,7 @@ var render = function() {
                           [
                             _c("input", {
                               staticClass: "hidden",
-                              attrs: {
-                                id: "hidden-input",
-                                type: "file",
-                                multiple: ""
-                              },
+                              attrs: { id: "hidden-input", type: "file" },
                               on: { change: _vm.updateFile }
                             }),
                             _vm._v(" "),
@@ -38790,11 +38948,7 @@ var render = function() {
                           [
                             _c("input", {
                               staticClass: "hidden",
-                              attrs: {
-                                id: "hidden-input",
-                                type: "file",
-                                multiple: ""
-                              },
+                              attrs: { id: "hidden-input", type: "file" },
                               on: { change: _vm.updateFile }
                             }),
                             _vm._v(" "),
