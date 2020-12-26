@@ -3505,6 +3505,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
@@ -3569,6 +3570,26 @@ __webpack_require__.r(__webpack_exports__);
     },
     selectFile: function selectFile() {
       document.getElementById("hidden-input").click();
+    },
+    showFile: function showFile(url, uuid) {
+      pdfjsLib.disableWorker = true;
+      pdfjsLib.getDocument("/storage/files/" + url).promise.then(function (pdf) {
+        console.log("NB Pages : " + pdf._pdfInfo.numPages + " pages");
+        pdf.getPage(1).then(function (page) {
+          var canvas = document.getElementById(uuid);
+          var context = canvas.getContext('2d');
+          var viewport = page.getViewport({
+            scale: 2,
+            rotation: 0
+          });
+          canvas.height = viewport.height;
+          canvas.width = viewport.width;
+          page.render({
+            canvasContext: context,
+            viewport: viewport
+          });
+        });
+      });
     }
   }
 });
@@ -38145,7 +38166,19 @@ var render = function() {
                           _vm._v(
                             "\n                        " +
                               _vm._s(file.name) +
-                              "\n                    "
+                              "\n                        "
+                          ),
+                          _c(
+                            "canvas",
+                            {
+                              staticClass: "pdf-files",
+                              attrs: { id: file.uuid }
+                            },
+                            [
+                              _vm._v(
+                                _vm._s(_vm.showFile(file.title, file.uuid))
+                              )
+                            ]
                           )
                         ]
                       )

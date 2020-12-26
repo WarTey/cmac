@@ -95,6 +95,7 @@
                         </div>
                         <div class="mt-6 text-gray-700 text-justify cursor-pointer hover:underline" v-for="file in content.files" v-bind:key="file.id">
                             {{ file.name }}
+                            <canvas class="pdf-files" :id="file.uuid">{{ showFile(file.title, file.uuid) }}</canvas>
                         </div>
                     </div>
                 </div>
@@ -172,6 +173,29 @@ export default {
 
         selectFile() {
             document.getElementById("hidden-input").click();
+        },
+
+        showFile(url, uuid) {
+            pdfjsLib.disableWorker = true;
+            pdfjsLib.getDocument("/storage/files/" + url).promise.then(pdf => {
+                console.log("NB Pages : " + pdf._pdfInfo.numPages + " pages");
+                pdf.getPage(1).then(page => {
+                    const canvas = document.getElementById(uuid);
+                    const context = canvas.getContext('2d');
+                    const viewport = page.getViewport({
+                        scale: 2,
+                        rotation: 0
+                    });
+
+                    canvas.height = viewport.height;
+                    canvas.width = viewport.width;
+
+                    page.render({
+                        canvasContext: context,
+                        viewport: viewport
+                    });
+                });
+            });
         }
     }
 }
