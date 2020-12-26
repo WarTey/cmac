@@ -10,7 +10,7 @@
                     {{ levelTitle | truncate(30) }}
                 </a>
                 <i class="fas fa-chevron-right fa-xs"></i>
-                <a :href="'/chapitre/' + chapterUuid" class="hover:underline">
+                <a :href="'/chapter/' + chapterUuid" class="hover:underline">
                     {{ chapterTitle | truncate(30) }}
                 </a>
                 <i class="fas fa-chevron-right fa-xs"></i>
@@ -96,6 +96,14 @@
                         <div class="mt-6 text-gray-700 text-justify cursor-pointer hover:underline" v-for="file in content.files" v-bind:key="file.uuid">
                             <canvas class="w-full rounded border" :id="file.uuid">{{ showFile(file.title, file.uuid) }}</canvas>
                         </div>
+                        <div class="mt-2 flex">
+                            <a class="text-blue-500 font-semibold text-justify hover:underline cursor-pointer">
+                                Enregistrer les modifications
+                            </a>
+                            <a class="text-red-500 font-semibold text-justify hover:underline cursor-pointer ml-auto" v-on:click.prevent="removeContent(content.uuid)">
+                                Retirer le contenu
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -125,9 +133,18 @@ export default {
             form: {
                 title: null,
                 description: null,
-                files: [],
-                course_uuid: null
+                files: []
             },
+        }
+    },
+
+    watch: {
+        contents: {
+            handler() {
+                if (this.$page.flash.toast) {
+                    toastr.success(this.$page.flash.toast);
+                }
+            }
         }
     },
 
@@ -145,9 +162,9 @@ export default {
                     formData.append('files[]', element)
                 );
             }
-            formData.append('course_uuid', this.courseUuid);
+            formData.append('courseUuid', this.courseUuid);
 
-            this.$inertia.post('/contenus', formData);
+            this.$inertia.post('/contents', formData);
         },
 
         updateFile(event) {
@@ -195,6 +212,14 @@ export default {
                     });
                 });
             });
+        },
+
+        removeContent(uuid) {
+            const formData = new FormData();
+            formData.append('uuid', uuid);
+            formData.append('courseUuid', this.courseUuid);
+
+            this.$inertia.post('/content/delete', formData);
         }
     }
 }

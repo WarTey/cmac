@@ -3326,6 +3326,14 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
@@ -3340,10 +3348,18 @@ __webpack_require__.r(__webpack_exports__);
       form: {
         title: null,
         description: null,
-        image: null,
-        level_uuid: null
+        image: null
       }
     };
+  },
+  watch: {
+    chapters: {
+      handler: function handler() {
+        if (this.$page.flash.toast) {
+          toastr.success(this.$page.flash.toast);
+        }
+      }
+    }
   },
   methods: {
     submit: function submit() {
@@ -3361,8 +3377,8 @@ __webpack_require__.r(__webpack_exports__);
         formData.append('image', this.form.image);
       }
 
-      formData.append('level_uuid', this.levelUuid);
-      this.$inertia.post('/chapitres', formData);
+      formData.append('levelUuid', this.levelUuid);
+      this.$inertia.post('/chapters', formData);
     },
     updateFile: function updateFile(event) {
       if (event.target.files[0].type.match("image.*")) {
@@ -3382,8 +3398,11 @@ __webpack_require__.r(__webpack_exports__);
     selectFile: function selectFile() {
       document.getElementById("hidden-input").click();
     },
-    warning: function warning(message) {
-      toastr.warning(message);
+    removeChapter: function removeChapter(uuid) {
+      var formData = new FormData();
+      formData.append('uuid', uuid);
+      formData.append('levelUuid', this.levelUuid);
+      this.$inertia.post('/chapter/delete', formData);
     }
   }
 });
@@ -3400,6 +3419,14 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Layouts_AppLayout__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @/Layouts/AppLayout */ "./resources/js/Layouts/AppLayout.vue");
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -3523,10 +3550,18 @@ __webpack_require__.r(__webpack_exports__);
       form: {
         title: null,
         description: null,
-        files: [],
-        course_uuid: null
+        files: []
       }
     };
+  },
+  watch: {
+    contents: {
+      handler: function handler() {
+        if (this.$page.flash.toast) {
+          toastr.success(this.$page.flash.toast);
+        }
+      }
+    }
   },
   methods: {
     submit: function submit() {
@@ -3546,8 +3581,8 @@ __webpack_require__.r(__webpack_exports__);
         });
       }
 
-      formData.append('course_uuid', this.courseUuid);
-      this.$inertia.post('/contenus', formData);
+      formData.append('courseUuid', this.courseUuid);
+      this.$inertia.post('/contents', formData);
     },
     updateFile: function updateFile(event) {
       if (event.target.files[0].type.match("application/pdf")) {
@@ -3589,6 +3624,12 @@ __webpack_require__.r(__webpack_exports__);
           });
         });
       });
+    },
+    removeContent: function removeContent(uuid) {
+      var formData = new FormData();
+      formData.append('uuid', uuid);
+      formData.append('courseUuid', this.courseUuid);
+      this.$inertia.post('/content/delete', formData);
     }
   }
 });
@@ -3708,6 +3749,14 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
@@ -3724,10 +3773,18 @@ __webpack_require__.r(__webpack_exports__);
       form: {
         title: null,
         description: null,
-        image: null,
-        chapter_uuid: null
+        image: null
       }
     };
+  },
+  watch: {
+    courses: {
+      handler: function handler() {
+        if (this.$page.flash.toast) {
+          toastr.success(this.$page.flash.toast);
+        }
+      }
+    }
   },
   methods: {
     submit: function submit() {
@@ -3745,7 +3802,7 @@ __webpack_require__.r(__webpack_exports__);
         formData.append('image', this.form.image);
       }
 
-      formData.append('chapter_uuid', this.chapterUuid);
+      formData.append('chapterUuid', this.chapterUuid);
       this.$inertia.post('/courses', formData);
     },
     updateFile: function updateFile(event) {
@@ -3766,8 +3823,11 @@ __webpack_require__.r(__webpack_exports__);
     selectFile: function selectFile() {
       document.getElementById("hidden-input").click();
     },
-    warning: function warning(message) {
-      toastr.warning(message);
+    removeCourse: function removeCourse(uuid) {
+      var formData = new FormData();
+      formData.append('uuid', uuid);
+      formData.append('chapterUuid', this.chapterUuid);
+      this.$inertia.post('/course/delete', formData);
     }
   }
 });
@@ -3936,8 +3996,6 @@ __webpack_require__.r(__webpack_exports__);
   watch: {
     levels: {
       handler: function handler() {
-        console.log(this.$page.flash);
-
         if (this.$page.flash.toast) {
           toastr.success(this.$page.flash.toast);
         }
@@ -37624,12 +37682,7 @@ var render = function() {
                               "a",
                               {
                                 staticClass: "text-2xl hover:underline",
-                                attrs: { href: "#" },
-                                on: {
-                                  click: function($event) {
-                                    return _vm.warning("Vide")
-                                  }
-                                }
+                                attrs: { href: "#" }
                               },
                               [
                                 _vm._v(
@@ -37643,7 +37696,7 @@ var render = function() {
                               "a",
                               {
                                 staticClass: "text-2xl hover:underline",
-                                attrs: { href: "/chapitre/" + chapter.uuid }
+                                attrs: { href: "/chapter/" + chapter.uuid }
                               },
                               [
                                 _vm._v(
@@ -37676,7 +37729,41 @@ var render = function() {
                             )
                           ]
                         )
-                      : _vm._e()
+                      : _vm._e(),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "mt-2 flex" }, [
+                      _c(
+                        "a",
+                        {
+                          staticClass:
+                            "text-blue-500 font-semibold text-justify hover:underline cursor-pointer"
+                        },
+                        [
+                          _vm._v(
+                            "\n                            Enregistrer les modifications\n                        "
+                          )
+                        ]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "a",
+                        {
+                          staticClass:
+                            "text-red-500 font-semibold text-justify hover:underline cursor-pointer ml-auto",
+                          on: {
+                            click: function($event) {
+                              $event.preventDefault()
+                              return _vm.removeChapter(chapter.uuid)
+                            }
+                          }
+                        },
+                        [
+                          _vm._v(
+                            "\n                            Retirer le chapitre\n                        "
+                          )
+                        ]
+                      )
+                    ])
                   ]
                 )
               ]
@@ -37754,7 +37841,7 @@ var render = function() {
                     "a",
                     {
                       staticClass: "hover:underline",
-                      attrs: { href: "/chapitre/" + _vm.chapterUuid }
+                      attrs: { href: "/chapter/" + _vm.chapterUuid }
                     },
                     [
                       _vm._v(
@@ -38198,7 +38285,41 @@ var render = function() {
                           )
                         ]
                       )
-                    })
+                    }),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "mt-2 flex" }, [
+                      _c(
+                        "a",
+                        {
+                          staticClass:
+                            "text-blue-500 font-semibold text-justify hover:underline cursor-pointer"
+                        },
+                        [
+                          _vm._v(
+                            "\n                            Enregistrer les modifications\n                        "
+                          )
+                        ]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "a",
+                        {
+                          staticClass:
+                            "text-red-500 font-semibold text-justify hover:underline cursor-pointer ml-auto",
+                          on: {
+                            click: function($event) {
+                              $event.preventDefault()
+                              return _vm.removeContent(content.uuid)
+                            }
+                          }
+                        },
+                        [
+                          _vm._v(
+                            "\n                            Retirer le contenu\n                        "
+                          )
+                        ]
+                      )
+                    ])
                   ],
                   2
                 )
@@ -38653,12 +38774,7 @@ var render = function() {
                               "a",
                               {
                                 staticClass: "text-2xl hover:underline",
-                                attrs: { href: "#" },
-                                on: {
-                                  click: function($event) {
-                                    return _vm.warning("Vide")
-                                  }
-                                }
+                                attrs: { href: "#" }
                               },
                               [
                                 _vm._v(
@@ -38672,7 +38788,7 @@ var render = function() {
                               "a",
                               {
                                 staticClass: "text-2xl hover:underline",
-                                attrs: { href: "/cours/" + course.uuid }
+                                attrs: { href: "/course/" + course.uuid }
                               },
                               [
                                 _vm._v(
@@ -38703,7 +38819,41 @@ var render = function() {
                             "\n                    "
                         )
                       ]
-                    )
+                    ),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "mt-2 flex" }, [
+                      _c(
+                        "a",
+                        {
+                          staticClass:
+                            "text-blue-500 font-semibold text-justify hover:underline cursor-pointer"
+                        },
+                        [
+                          _vm._v(
+                            "\n                            Enregistrer les modifications\n                        "
+                          )
+                        ]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "a",
+                        {
+                          staticClass:
+                            "text-red-500 font-semibold text-justify hover:underline cursor-pointer ml-auto",
+                          on: {
+                            click: function($event) {
+                              $event.preventDefault()
+                              return _vm.removeCourse(course.uuid)
+                            }
+                          }
+                        },
+                        [
+                          _vm._v(
+                            "\n                            Retirer le cours\n                        "
+                          )
+                        ]
+                      )
+                    ])
                   ]
                 )
               ]

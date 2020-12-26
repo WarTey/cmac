@@ -126,7 +126,6 @@
         watch: {
             levels: {
                 handler() {
-                    console.log(this.$page.flash);
                     if (this.$page.flash.toast) {
                         toastr.success(this.$page.flash.toast);
                     }

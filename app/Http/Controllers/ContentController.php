@@ -37,13 +37,13 @@ class ContentController extends Controller
             'title' => 'required|unique:contents|max:100',
             'description' => 'nullable',
             'files.*' => 'nullable|file|mimes:pdf|max:2048',
-            'course_uuid' => 'required'
+            'courseUuid' => 'required'
         ]);
 
         $content = new Content();
         $content->title = $request->post('title');
         $content->description = $request->post('description');
-        $content->course_id = Course::where('uuid', $request->post('course_uuid'))->first()->id;
+        $content->course_id = Course::where('uuid', $request->post('courseUuid'))->first()->id;
 
         $content->save();
 
@@ -63,6 +63,18 @@ class ContentController extends Controller
             }
         }
 
-        return Redirect::route('contents.index', ['uuid' => $request->post('course_uuid')])->with('success', 'Contenu en ligne.');
+        return Redirect::route('contents.index', ['uuid' => $request->post('courseUuid')])->with('success', 'Contenu en ligne.');
+    }
+
+    public function delete(Request $request)
+    {
+        $request->validate([
+            'uuid' => 'required',
+            'courseUuid' => 'required'
+        ]);
+
+        Content::where('uuid', $request->post('uuid'))->first()->delete();
+
+        return Redirect::route('contents.index', ['uuid' => $request->post('courseUuid')])->with('toast', 'Contenu supprimé.');
     }
 }

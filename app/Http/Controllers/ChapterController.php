@@ -28,13 +28,13 @@ class ChapterController extends Controller
             'title' => 'required|unique:chapters|max:100',
             'description' => 'nullable|max:2048',
             'image' => 'nullable|image|mimes:jpg,png,jpeg|max:2048',
-            'level_uuid' => 'required'
+            'levelUuid' => 'required'
         ]);
 
         $chapter = new Chapter();
         $chapter->title = $request->post('title');
         $chapter->description = $request->post('description');
-        $chapter->level_id = Level::where('uuid', $request->post('level_uuid'))->first()->id;
+        $chapter->level_id = Level::where('uuid', $request->post('levelUuid'))->first()->id;
 
         if ($request->file('image'))
         {
@@ -45,6 +45,18 @@ class ChapterController extends Controller
 
         $chapter->save();
 
-        return Redirect::route('chapters.index', ['uuid' => $request->post('level_uuid')])->with('success', 'Chapitre en ligne.');
+        return Redirect::route('chapters.index', ['uuid' => $request->post('levelUuid')])->with('success', 'Chapitre en ligne.');
+    }
+
+    public function delete(Request $request)
+    {
+        $request->validate([
+            'uuid' => 'required',
+            'levelUuid' => 'required'
+        ]);
+
+        Chapter::where('uuid', $request->post('uuid'))->first()->delete();
+
+        return Redirect::route('chapters.index', ['uuid' => $request->post('levelUuid')])->with('toast', 'Chapitre supprimé.');
     }
 }

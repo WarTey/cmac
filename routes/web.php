@@ -25,14 +25,17 @@ Route::group(['auth:sanctum', 'verified'], function () {
     })->name('dashboard');
 
     Route::get('/formation/{uuid}', 'App\Http\Controllers\ChapterController@index')->name('chapters.index');
-    Route::get('/chapitre/{uuid}', 'App\Http\Controllers\CourseController@index')->name('courses.index');
-    Route::get('/cours/{uuid}', 'App\Http\Controllers\ContentController@index')->name('contents.index');
+    Route::get('/chapter/{uuid}', 'App\Http\Controllers\CourseController@index')->name('courses.index');
+    Route::get('/course/{uuid}', 'App\Http\Controllers\ContentController@index')->name('contents.index');
 
     // TODO : Add middleware for Admin
     Route::post('/formations', 'App\Http\Controllers\LevelController@store')->name('levels.store');
-    Route::post('/chapitres', 'App\Http\Controllers\ChapterController@store')->name('chapters.store');
+    Route::post('/chapters', 'App\Http\Controllers\ChapterController@store')->name('chapters.store');
     Route::post('/courses', 'App\Http\Controllers\CourseController@store')->name('courses.store');
-    Route::post('/contenus', 'App\Http\Controllers\ContentController@store')->name('contents.store');
+    Route::post('/contents', 'App\Http\Controllers\ContentController@store')->name('contents.store');
 
     Route::post('/formation/delete', 'App\Http\Controllers\LevelController@delete')->name('levels.delete');
+    Route::post('/chapter/delete', 'App\Http\Controllers\ChapterController@delete')->name('chapters.delete');
+    Route::post('/course/delete', 'App\Http\Controllers\CourseController@delete')->name('courses.delete');
+    Route::post('/content/delete', 'App\Http\Controllers\ContentController@delete')->name('contents.delete');
 });

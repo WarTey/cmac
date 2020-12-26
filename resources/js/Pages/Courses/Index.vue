@@ -81,10 +81,10 @@
                     <div v-if="course.image" class="h-20 bg-auto bg-center" :style="'background-image: url(/storage/img/courses/' + course.image + ')'"></div>
                     <div class="p-6 sm:px-20 bg-white border-b border-gray-200">
                         <div class="flex justify-between items-center">
-                            <a v-if="course.contents_count < 1" href="#" v-on:click="warning('Vide')" class="text-2xl hover:underline">
+                            <a v-if="course.contents_count < 1" href="#" class="text-2xl hover:underline">
                                 {{ course.title }}
                             </a>
-                            <a v-else :href="'/cours/' + course.uuid" class="text-2xl hover:underline">
+                            <a v-else :href="'/course/' + course.uuid" class="text-2xl hover:underline">
                                 {{ course.title }}
                             </a>
                             <div class="text-gray-400">
@@ -93,6 +93,14 @@
                         </div>
                         <div class="mt-6 text-gray-500 text-justify">
                             {{ course.description }}
+                        </div>
+                        <div class="mt-2 flex">
+                            <a class="text-blue-500 font-semibold text-justify hover:underline cursor-pointer">
+                                Enregistrer les modifications
+                            </a>
+                            <a class="text-red-500 font-semibold text-justify hover:underline cursor-pointer ml-auto" v-on:click.prevent="removeCourse(course.uuid)">
+                                Retirer le cours
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -121,9 +129,18 @@ export default {
             form: {
                 title: null,
                 description: null,
-                image: null,
-                chapter_uuid: null
+                image: null
             },
+        }
+    },
+
+    watch: {
+        courses: {
+            handler() {
+                if (this.$page.flash.toast) {
+                    toastr.success(this.$page.flash.toast);
+                }
+            }
         }
     },
 
@@ -139,7 +156,7 @@ export default {
             if (this.form.image) {
                 formData.append('image', this.form.image);
             }
-            formData.append('chapter_uuid', this.chapterUuid);
+            formData.append('chapterUuid', this.chapterUuid);
 
             this.$inertia.post('/courses', formData);
         },
@@ -166,8 +183,12 @@ export default {
             document.getElementById("hidden-input").click();
         },
 
-        warning(message) {
-            toastr.warning(message);
+        removeCourse(uuid) {
+            const formData = new FormData();
+            formData.append('uuid', uuid);
+            formData.append('chapterUuid', this.chapterUuid);
+
+            this.$inertia.post('/course/delete', formData);
         }
     }
 }

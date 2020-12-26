@@ -77,10 +77,10 @@
                     <div v-if="chapter.image" class="h-20 bg-auto bg-center" :style="'background-image: url(/storage/img/chapters/' + chapter.image + ')'"></div>
                     <div class="p-6 sm:px-20 bg-white border-b border-gray-200">
                         <div class="flex justify-between items-center">
-                            <a v-if="chapter.courses_count < 1" href="#" v-on:click="warning('Vide')" class="text-2xl hover:underline">
+                            <a v-if="chapter.courses_count < 1" href="#" class="text-2xl hover:underline">
                                 {{ chapter.title }}
                             </a>
-                            <a v-else :href="'/chapitre/' + chapter.uuid" class="text-2xl hover:underline">
+                            <a v-else :href="'/chapter/' + chapter.uuid" class="text-2xl hover:underline">
                                 {{ chapter.title }}
                             </a>
                             <div class="text-gray-400">
@@ -89,6 +89,14 @@
                         </div>
                         <div v-if="chapter.description" class="mt-6 text-gray-500 text-justify">
                             {{ chapter.description }}
+                        </div>
+                        <div class="mt-2 flex">
+                            <a class="text-blue-500 font-semibold text-justify hover:underline cursor-pointer">
+                                Enregistrer les modifications
+                            </a>
+                            <a class="text-red-500 font-semibold text-justify hover:underline cursor-pointer ml-auto" v-on:click.prevent="removeChapter(chapter.uuid)">
+                                Retirer le chapitre
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -115,9 +123,18 @@ export default {
             form: {
                 title: null,
                 description: null,
-                image: null,
-                level_uuid: null
+                image: null
             },
+        }
+    },
+
+    watch: {
+        chapters: {
+            handler() {
+                if (this.$page.flash.toast) {
+                    toastr.success(this.$page.flash.toast);
+                }
+            }
         }
     },
 
@@ -133,9 +150,9 @@ export default {
             if (this.form.image) {
                 formData.append('image', this.form.image);
             }
-            formData.append('level_uuid', this.levelUuid);
+            formData.append('levelUuid', this.levelUuid);
 
-            this.$inertia.post('/chapitres', formData);
+            this.$inertia.post('/chapters', formData);
         },
 
         updateFile(event) {
@@ -160,8 +177,12 @@ export default {
             document.getElementById("hidden-input").click();
         },
 
-        warning(message) {
-            toastr.warning(message);
+        removeChapter(uuid) {
+            const formData = new FormData();
+            formData.append('uuid', uuid);
+            formData.append('levelUuid', this.levelUuid);
+
+            this.$inertia.post('/chapter/delete', formData);
         }
     }
 }
