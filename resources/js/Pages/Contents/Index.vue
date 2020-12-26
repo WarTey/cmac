@@ -81,7 +81,7 @@
                 </div>
             </div>
         </transition>
-        <div class="py-4" v-for="content in $page.contents" v-bind:key="content.id">
+        <div class="py-4" v-for="content in $page.contents" v-bind:key="content.uuid">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white overflow-hidden shadow-lg hover:shadow-xl sm:rounded-lg transition duration-500 ease-in-out">
                     <div class="p-6 sm:px-20 bg-white border-b border-gray-200">
@@ -93,9 +93,8 @@
                         <div class="mt-6 text-gray-500 text-justify">
                             {{ content.description }}
                         </div>
-                        <div class="mt-6 text-gray-700 text-justify cursor-pointer hover:underline" v-for="file in content.files" v-bind:key="file.id">
-                            {{ file.name }}
-                            <canvas class="pdf-files" :id="file.uuid">{{ showFile(file.title, file.uuid) }}</canvas>
+                        <div class="mt-6 text-gray-700 text-justify cursor-pointer hover:underline" v-for="file in content.files" v-bind:key="file.uuid">
+                            <canvas class="w-full rounded border" :id="file.uuid">{{ showFile(file.title, file.uuid) }}</canvas>
                         </div>
                     </div>
                 </div>
@@ -148,7 +147,7 @@ export default {
             }
             formData.append('course_uuid', this.courseUuid);
 
-            this.$inertia.post('/contents', formData);
+            this.$inertia.post('/contenus', formData);
         },
 
         updateFile(event) {

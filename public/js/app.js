@@ -3505,7 +3505,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
@@ -3548,7 +3547,7 @@ __webpack_require__.r(__webpack_exports__);
       }
 
       formData.append('course_uuid', this.courseUuid);
-      this.$inertia.post('/contents', formData);
+      this.$inertia.post('/contenus', formData);
     },
     updateFile: function updateFile(event) {
       if (event.target.files[0].type.match("application/pdf")) {
@@ -3909,6 +3908,15 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
@@ -3924,6 +3932,17 @@ __webpack_require__.r(__webpack_exports__);
         image: null
       }
     };
+  },
+  watch: {
+    levels: {
+      handler: function handler() {
+        console.log(this.$page.flash);
+
+        if (this.$page.flash.toast) {
+          toastr.success(this.$page.flash.toast);
+        }
+      }
+    }
   },
   methods: {
     submit: function submit() {
@@ -3961,8 +3980,10 @@ __webpack_require__.r(__webpack_exports__);
     selectFile: function selectFile() {
       document.getElementById("hidden-input").click();
     },
-    warning: function warning(message) {
-      toastr.warning(message);
+    removeLevel: function removeLevel(uuid) {
+      var formData = new FormData();
+      formData.append('uuid', uuid);
+      this.$inertia.post('/formation/delete', formData);
     }
   }
 });
@@ -38112,7 +38133,7 @@ var render = function() {
       ]),
       _vm._v(" "),
       _vm._l(_vm.$page.contents, function(content) {
-        return _c("div", { key: content.id, staticClass: "py-4" }, [
+        return _c("div", { key: content.uuid, staticClass: "py-4" }, [
           _c("div", { staticClass: "max-w-7xl mx-auto sm:px-6 lg:px-8" }, [
             _c(
               "div",
@@ -38158,20 +38179,15 @@ var render = function() {
                       return _c(
                         "div",
                         {
-                          key: file.id,
+                          key: file.uuid,
                           staticClass:
                             "mt-6 text-gray-700 text-justify cursor-pointer hover:underline"
                         },
                         [
-                          _vm._v(
-                            "\n                        " +
-                              _vm._s(file.name) +
-                              "\n                        "
-                          ),
                           _c(
                             "canvas",
                             {
-                              staticClass: "pdf-files",
+                              staticClass: "w-full rounded border",
                               attrs: { id: file.uuid }
                             },
                             [
@@ -39148,13 +39164,7 @@ var render = function() {
                               "a",
                               {
                                 staticClass: "text-2xl hover:underline",
-                                attrs: { href: "#" },
-                                on: {
-                                  click: function($event) {
-                                    $event.preventDefault()
-                                    return _vm.warning("Formation vide.")
-                                  }
-                                }
+                                attrs: { href: "#" }
                               },
                               [
                                 _vm._v(
@@ -39201,7 +39211,41 @@ var render = function() {
                             )
                           ]
                         )
-                      : _vm._e()
+                      : _vm._e(),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "mt-2 flex" }, [
+                      _c(
+                        "a",
+                        {
+                          staticClass:
+                            "text-blue-500 font-semibold text-justify hover:underline cursor-pointer"
+                        },
+                        [
+                          _vm._v(
+                            "\n                            Enregistrer les modifications\n                        "
+                          )
+                        ]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "a",
+                        {
+                          staticClass:
+                            "text-red-500 font-semibold text-justify hover:underline cursor-pointer ml-auto",
+                          on: {
+                            click: function($event) {
+                              $event.preventDefault()
+                              return _vm.removeLevel(level.uuid)
+                            }
+                          }
+                        },
+                        [
+                          _vm._v(
+                            "\n                            Retirer la formation\n                        "
+                          )
+                        ]
+                      )
+                    ])
                   ]
                 )
               ]

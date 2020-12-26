@@ -14,7 +14,6 @@
         <link rel="stylesheet" href="{{ mix('css/app.css') }}">
         <link rel="stylesheet" href="{{ mix('css/toastr.css') }}">
         <link rel="stylesheet" href="{{ '/css/transition.css' }}">
-        <link rel="stylesheet" href="{{ '/css/canvas.css' }}">
 
         <!-- Scripts -->
         @routes

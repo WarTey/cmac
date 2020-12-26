@@ -41,4 +41,15 @@ class LevelController extends Controller
 
         return Redirect::route('levels.index')->with('success', 'Formation en ligne.');
     }
+
+    public function delete(Request $request)
+    {
+        $request->validate([
+            'uuid' => 'required'
+        ]);
+
+        Level::where('uuid', $request->post('uuid'))->first()->delete();
+
+        return Redirect::route('levels.index')->with('toast', 'Formation supprimée.');
+    }
 }
