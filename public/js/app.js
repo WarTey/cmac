@@ -3977,6 +3977,64 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
@@ -3986,11 +4044,18 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       addLevel: false,
-      form: {
+      modalVisible: false,
+      createForm: {
         title: null,
         description: null,
         image: null
-      }
+      },
+      editForm: {
+        uuid: null,
+        title: null,
+        description: null
+      },
+      editImage: null
     };
   },
   watch: {
@@ -4003,45 +4068,93 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   methods: {
-    submit: function submit() {
+    toggleAddLevel: function toggleAddLevel() {
+      this.addLevel = !this.addLevel;
+      this.clearFormMessages();
+    },
+    storeSubmit: function storeSubmit() {
       var formData = new FormData();
 
-      if (this.form.title) {
-        formData.append('title', this.form.title);
+      if (this.createForm.title) {
+        formData.append('titleStore', this.createForm.title);
       }
 
-      if (this.form.description) {
-        formData.append('description', this.form.description);
+      if (this.createForm.description) {
+        formData.append('descriptionStore', this.createForm.description);
       }
 
-      if (this.form.image) {
-        formData.append('image', this.form.image);
+      if (this.createForm.image) {
+        formData.append('imageStore', this.createForm.image);
       }
 
-      this.$inertia.post('/formations', formData);
+      this.$inertia.post('/formation/store', formData);
     },
-    updateFile: function updateFile(event) {
+    updateFileStore: function updateFileStore(event) {
       if (event.target.files[0].type.match("image.*")) {
-        this.form.image = event.target.files[0];
-
-        if (this.form.image) {
-          document.getElementById("empty").classList.add("hidden");
-        } else {
-          document.getElementById("empty").classList.remove("hidden");
-        }
+        this.createForm.image = event.target.files[0];
       }
     },
-    resetFile: function resetFile() {
-      this.form.image = null;
-      document.getElementById("empty").classList.remove("hidden");
+    resetFileStore: function resetFileStore() {
+      this.createForm.image = null;
     },
-    selectFile: function selectFile() {
-      document.getElementById("hidden-input").click();
+    selectFileStore: function selectFileStore() {
+      document.getElementById("hidden-input-store").click();
     },
     removeLevel: function removeLevel(uuid) {
       var formData = new FormData();
       formData.append('uuid', uuid);
       this.$inertia.post('/formation/delete', formData);
+    },
+    showModal: function showModal(level) {
+      this.updateEditForm(level);
+      this.modalVisible = true;
+    },
+    closeModal: function closeModal() {
+      this.modalVisible = false;
+      this.updateEditForm(null);
+      this.clearFormMessages();
+    },
+    editSubmit: function editSubmit() {
+      var formData = new FormData();
+
+      if (this.editForm.uuid) {
+        formData.append('uuid', this.editForm.uuid);
+      }
+
+      if (this.editForm.title) {
+        formData.append('titleEdit', this.editForm.title);
+      }
+
+      if (this.editForm.description) {
+        formData.append('descriptionEdit', this.editForm.description);
+      }
+
+      if (this.editImage) {
+        formData.append('imageEdit', this.editImage);
+      }
+
+      this.$inertia.post('/formation/edit', formData);
+    },
+    updateFileEdit: function updateFileEdit(event) {
+      if (event.target.files[0].type.match("image.*")) {
+        this.editImage = event.target.files[0];
+      }
+    },
+    resetFileEdit: function resetFileEdit() {
+      this.editImage = null;
+    },
+    selectFileEdit: function selectFileEdit() {
+      document.getElementById("hidden-input-edit").click();
+    },
+    updateEditForm: function updateEditForm(level) {
+      this.editForm.uuid = level ? level.uuid : null;
+      this.editForm.title = level ? level.title : null;
+      this.editForm.description = level ? level.description : null;
+      this.editImage = level ? level.image : null;
+    },
+    clearFormMessages: function clearFormMessages() {
+      this.$page.errors = {};
+      this.$page.flash = {};
     }
   }
 });
@@ -38958,11 +39071,7 @@ var render = function() {
               {
                 staticClass:
                   "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline",
-                on: {
-                  click: function($event) {
-                    _vm.addLevel = !_vm.addLevel
-                  }
-                }
+                on: { click: _vm.toggleAddLevel }
               },
               [_vm._v("\n                Ajouter une formation\n            ")]
             )
@@ -38983,7 +39092,7 @@ var render = function() {
                       on: {
                         submit: function($event) {
                           $event.preventDefault()
-                          return _vm.submit($event)
+                          return _vm.storeSubmit($event)
                         }
                       }
                     },
@@ -39003,14 +39112,14 @@ var render = function() {
                           ]
                         ),
                         _vm._v(" "),
-                        _vm.$page.errors.title
+                        _vm.$page.errors.titleStore
                           ? _c("input", {
                               directives: [
                                 {
                                   name: "model",
                                   rawName: "v-model",
-                                  value: _vm.form.title,
-                                  expression: "form.title"
+                                  value: _vm.createForm.title,
+                                  expression: "createForm.title"
                                 }
                               ],
                               staticClass:
@@ -39020,14 +39129,14 @@ var render = function() {
                                 type: "text",
                                 placeholder: "Niveau de formation"
                               },
-                              domProps: { value: _vm.form.title },
+                              domProps: { value: _vm.createForm.title },
                               on: {
                                 input: function($event) {
                                   if ($event.target.composing) {
                                     return
                                   }
                                   _vm.$set(
-                                    _vm.form,
+                                    _vm.createForm,
                                     "title",
                                     $event.target.value
                                   )
@@ -39039,8 +39148,8 @@ var render = function() {
                                 {
                                   name: "model",
                                   rawName: "v-model",
-                                  value: _vm.form.title,
-                                  expression: "form.title"
+                                  value: _vm.createForm.title,
+                                  expression: "createForm.title"
                                 }
                               ],
                               staticClass:
@@ -39050,14 +39159,14 @@ var render = function() {
                                 type: "text",
                                 placeholder: "Niveau de formation"
                               },
-                              domProps: { value: _vm.form.title },
+                              domProps: { value: _vm.createForm.title },
                               on: {
                                 input: function($event) {
                                   if ($event.target.composing) {
                                     return
                                   }
                                   _vm.$set(
-                                    _vm.form,
+                                    _vm.createForm,
                                     "title",
                                     $event.target.value
                                   )
@@ -39065,9 +39174,9 @@ var render = function() {
                               }
                             }),
                         _vm._v(" "),
-                        _vm.$page.errors.title
+                        _vm.$page.errors.titleStore
                           ? _c("p", { staticClass: "text-red-700 mt-2" }, [
-                              _vm._v(_vm._s(_vm.$page.errors.title[0]))
+                              _vm._v(_vm._s(_vm.$page.errors.titleStore[0]))
                             ])
                           : _vm._e()
                       ]),
@@ -39092,8 +39201,8 @@ var render = function() {
                             {
                               name: "model",
                               rawName: "v-model",
-                              value: _vm.form.description,
-                              expression: "form.description"
+                              value: _vm.createForm.description,
+                              expression: "createForm.description"
                             }
                           ],
                           staticClass:
@@ -39102,14 +39211,14 @@ var render = function() {
                             id: "description",
                             placeholder: "Description (optionnel)"
                           },
-                          domProps: { value: _vm.form.description },
+                          domProps: { value: _vm.createForm.description },
                           on: {
                             input: function($event) {
                               if ($event.target.composing) {
                                 return
                               }
                               _vm.$set(
-                                _vm.form,
+                                _vm.createForm,
                                 "description",
                                 $event.target.value
                               )
@@ -39117,9 +39226,11 @@ var render = function() {
                           }
                         }),
                         _vm._v(" "),
-                        _vm.$page.errors.description
+                        _vm.$page.errors.descriptionStore
                           ? _c("p", { staticClass: "text-red-700 mt-2" }, [
-                              _vm._v(_vm._s(_vm.$page.errors.description[0]))
+                              _vm._v(
+                                _vm._s(_vm.$page.errors.descriptionStore[0])
+                              )
                             ])
                           : _vm._e()
                       ]),
@@ -39147,8 +39258,8 @@ var render = function() {
                           [
                             _c("input", {
                               staticClass: "hidden",
-                              attrs: { id: "hidden-input", type: "file" },
-                              on: { change: _vm.updateFile }
+                              attrs: { id: "hidden-input-store", type: "file" },
+                              on: { change: _vm.updateFileStore }
                             }),
                             _vm._v(" "),
                             _c(
@@ -39156,11 +39267,11 @@ var render = function() {
                               {
                                 staticClass:
                                   "mt-2 rounded-sm text-sm px-3 py-1 bg-gray-200 hover:bg-gray-300 focus:shadow-outline focus:outline-none",
-                                attrs: { id: "button" },
+                                attrs: { id: "button-store" },
                                 on: {
                                   click: function($event) {
                                     $event.preventDefault()
-                                    return _vm.selectFile($event)
+                                    return _vm.selectFileStore($event)
                                   }
                                 }
                               },
@@ -39177,36 +39288,37 @@ var render = function() {
                           "ul",
                           {
                             staticClass: "flex flex-1 flex-wrap -m-1",
-                            attrs: { id: "gallery" }
+                            attrs: { id: "gallery-store" }
                           },
                           [
-                            _c(
-                              "li",
-                              {
-                                staticClass:
-                                  "h-full w-full text-center flex flex-col items-center justify-center items-center",
-                                attrs: { id: "empty" }
-                              },
-                              [
-                                _c("img", {
-                                  staticClass: "mx-auto w-32",
-                                  attrs: {
-                                    src: "/img/no-img.png",
-                                    alt: "Aucune image sélectionnée"
-                                  }
-                                }),
-                                _vm._v(" "),
-                                _c(
-                                  "span",
-                                  { staticClass: "text-sm text-gray-500" },
-                                  [_vm._v("Aucune image sélectionnée")]
+                            !this.createForm.image
+                              ? _c(
+                                  "li",
+                                  {
+                                    staticClass:
+                                      "h-full w-full text-center flex flex-col items-center justify-center items-center"
+                                  },
+                                  [
+                                    _c("img", {
+                                      staticClass: "mx-auto w-32",
+                                      attrs: {
+                                        src: "/img/no-img.png",
+                                        alt: "Aucune image sélectionnée"
+                                      }
+                                    }),
+                                    _vm._v(" "),
+                                    _c(
+                                      "span",
+                                      { staticClass: "text-sm text-gray-500" },
+                                      [_vm._v("Aucune image sélectionnée")]
+                                    )
+                                  ]
                                 )
-                              ]
-                            )
+                              : _vm._e()
                           ]
                         ),
                         _vm._v(" "),
-                        this.form.image
+                        this.createForm.image
                           ? _c("div", { staticClass: "pt-4" }, [
                               _c(
                                 "div",
@@ -39217,7 +39329,7 @@ var render = function() {
                                 [
                                   _vm._v(
                                     "\n                                    " +
-                                      _vm._s(this.form.image.name) +
+                                      _vm._s(this.createForm.image.name) +
                                       " - "
                                   ),
                                   _c(
@@ -39229,7 +39341,7 @@ var render = function() {
                                       on: {
                                         click: function($event) {
                                           $event.preventDefault()
-                                          return _vm.resetFile($event)
+                                          return _vm.resetFileStore($event)
                                         }
                                       }
                                     },
@@ -39240,18 +39352,18 @@ var render = function() {
                             ])
                           : _vm._e(),
                         _vm._v(" "),
-                        _vm.$page.errors.image
+                        _vm.$page.errors.imageStore
                           ? _c("p", { staticClass: "text-red-700 mt-2" }, [
-                              _vm._v(_vm._s(_vm.$page.errors.image[0]))
+                              _vm._v(_vm._s(_vm.$page.errors.imageStore[0]))
                             ])
                           : _vm._e()
                       ]),
                       _vm._v(" "),
-                      _vm.$page.flash.success
+                      _vm.$page.flash.successStore
                         ? _c("div", { staticClass: "text-green-700 mb-4" }, [
                             _vm._v(
                               "\n                            " +
-                                _vm._s(_vm.$page.flash.success) +
+                                _vm._s(_vm.$page.flash.successStore) +
                                 "\n                        "
                             )
                           ])
@@ -39368,11 +39480,17 @@ var render = function() {
                         "a",
                         {
                           staticClass:
-                            "text-blue-500 font-semibold text-justify hover:underline cursor-pointer"
+                            "text-blue-500 font-semibold text-justify hover:underline cursor-pointer",
+                          on: {
+                            click: function($event) {
+                              $event.preventDefault()
+                              return _vm.showModal(level)
+                            }
+                          }
                         },
                         [
                           _vm._v(
-                            "\n                            Enregistrer les modifications\n                        "
+                            "\n                            Éditer la formation\n                        "
                           )
                         ]
                       ),
@@ -39402,7 +39520,365 @@ var render = function() {
             )
           ])
         ])
-      })
+      }),
+      _vm._v(" "),
+      _vm.modalVisible
+        ? _c(
+            "div",
+            {
+              staticClass:
+                "fixed overflow-hidden top-0 left-0 flex items-center justify-center w-full h-full bg-black bg-opacity-50"
+            },
+            [
+              _c(
+                "form",
+                {
+                  staticClass:
+                    "bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 md:max-w-xl w-full",
+                  on: {
+                    submit: function($event) {
+                      $event.preventDefault()
+                      return _vm.editSubmit($event)
+                    }
+                  }
+                },
+                [
+                  _c("div", { staticClass: "mb-4" }, [
+                    _c(
+                      "label",
+                      {
+                        staticClass:
+                          "block text-gray-700 text-sm font-bold mb-2",
+                        attrs: { for: "edit-title" }
+                      },
+                      [
+                        _vm._v(
+                          "\n                    Niveau de formation\n                "
+                        )
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _vm.$page.errors.titleEdit
+                      ? _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.editForm.title,
+                              expression: "editForm.title"
+                            }
+                          ],
+                          staticClass:
+                            "shadow appearance-none border border-red-700 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline",
+                          attrs: {
+                            id: "edit-title",
+                            type: "text",
+                            placeholder: "Niveau de formation"
+                          },
+                          domProps: { value: _vm.editForm.title },
+                          on: {
+                            input: function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.$set(
+                                _vm.editForm,
+                                "title",
+                                $event.target.value
+                              )
+                            }
+                          }
+                        })
+                      : _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.editForm.title,
+                              expression: "editForm.title"
+                            }
+                          ],
+                          staticClass:
+                            "shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline",
+                          attrs: {
+                            id: "edit-title",
+                            type: "text",
+                            placeholder: "Niveau de formation"
+                          },
+                          domProps: { value: _vm.editForm.title },
+                          on: {
+                            input: function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.$set(
+                                _vm.editForm,
+                                "title",
+                                $event.target.value
+                              )
+                            }
+                          }
+                        }),
+                    _vm._v(" "),
+                    _vm.$page.errors.titleEdit
+                      ? _c("p", { staticClass: "text-red-700 mt-2" }, [
+                          _vm._v(_vm._s(_vm.$page.errors.titleEdit[0]))
+                        ])
+                      : _vm._e()
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "mb-4" }, [
+                    _c(
+                      "label",
+                      {
+                        staticClass:
+                          "block text-gray-700 text-sm font-bold mb-2",
+                        attrs: { for: "edit-description" }
+                      },
+                      [
+                        _vm._v(
+                          "\n                    Description (optionnel)\n                "
+                        )
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _c("textarea", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.editForm.description,
+                          expression: "editForm.description"
+                        }
+                      ],
+                      staticClass:
+                        "shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline",
+                      attrs: {
+                        id: "edit-description",
+                        placeholder: "Description (optionnel)"
+                      },
+                      domProps: { value: _vm.editForm.description },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(
+                            _vm.editForm,
+                            "description",
+                            $event.target.value
+                          )
+                        }
+                      }
+                    }),
+                    _vm._v(" "),
+                    _vm.$page.errors.descriptionEdit
+                      ? _c("p", { staticClass: "text-red-700 mt-2" }, [
+                          _vm._v(_vm._s(_vm.$page.errors.descriptionEdit[0]))
+                        ])
+                      : _vm._e()
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "mb-4" }, [
+                    _c(
+                      "label",
+                      {
+                        staticClass:
+                          "block text-gray-700 text-sm font-bold mb-2"
+                      },
+                      [
+                        _vm._v(
+                          "\n                    Image (optionnel)\n                "
+                        )
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "header",
+                      {
+                        staticClass:
+                          "border-dashed border-2 border-gray-400 py-12 flex flex-col justify-center items-center mb-4"
+                      },
+                      [
+                        _c("input", {
+                          staticClass: "hidden",
+                          attrs: { id: "hidden-input-edit", type: "file" },
+                          on: { change: _vm.updateFileEdit }
+                        }),
+                        _vm._v(" "),
+                        _c(
+                          "button",
+                          {
+                            staticClass:
+                              "mt-2 rounded-sm text-sm px-3 py-1 bg-gray-200 hover:bg-gray-300 focus:shadow-outline focus:outline-none",
+                            attrs: { id: "button-edit" },
+                            on: {
+                              click: function($event) {
+                                $event.preventDefault()
+                                return _vm.selectFileEdit($event)
+                              }
+                            }
+                          },
+                          [
+                            _vm._v(
+                              "\n                        Télécharger une image\n                    "
+                            )
+                          ]
+                        )
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "ul",
+                      {
+                        staticClass: "flex flex-1 flex-wrap -m-1",
+                        attrs: { id: "gallery-edit" }
+                      },
+                      [
+                        !this.editImage
+                          ? _c(
+                              "li",
+                              {
+                                staticClass:
+                                  "h-full w-full text-center flex flex-col items-center justify-center items-center"
+                              },
+                              [
+                                _c("img", {
+                                  staticClass: "mx-auto w-32",
+                                  attrs: {
+                                    src: "/img/no-img.png",
+                                    alt: "Aucune image sélectionnée"
+                                  }
+                                }),
+                                _vm._v(" "),
+                                _c(
+                                  "span",
+                                  { staticClass: "text-sm text-gray-500" },
+                                  [_vm._v("Aucune image sélectionnée")]
+                                )
+                              ]
+                            )
+                          : _vm._e()
+                      ]
+                    ),
+                    _vm._v(" "),
+                    this.editImage
+                      ? _c("div", { staticClass: "pt-4" }, [
+                          this.editImage.name
+                            ? _c(
+                                "div",
+                                {
+                                  staticClass:
+                                    "font-semibold text-gray-700 text-sm"
+                                },
+                                [
+                                  _vm._v(
+                                    "\n                        " +
+                                      _vm._s(this.editImage.name) +
+                                      " - "
+                                  ),
+                                  _c(
+                                    "a",
+                                    {
+                                      staticClass:
+                                        "text-red-700 hover:underline",
+                                      attrs: { href: "#" },
+                                      on: {
+                                        click: function($event) {
+                                          $event.preventDefault()
+                                          return _vm.resetFileEdit($event)
+                                        }
+                                      }
+                                    },
+                                    [_vm._v("Supprimer")]
+                                  )
+                                ]
+                              )
+                            : _c(
+                                "div",
+                                {
+                                  staticClass:
+                                    "font-semibold text-gray-700 text-sm"
+                                },
+                                [
+                                  _vm._v(
+                                    "\n                        " +
+                                      _vm._s(this.editImage) +
+                                      " - "
+                                  ),
+                                  _c(
+                                    "a",
+                                    {
+                                      staticClass:
+                                        "text-red-700 hover:underline",
+                                      attrs: { href: "#" },
+                                      on: {
+                                        click: function($event) {
+                                          $event.preventDefault()
+                                          return _vm.resetFileEdit($event)
+                                        }
+                                      }
+                                    },
+                                    [_vm._v("Supprimer")]
+                                  )
+                                ]
+                              )
+                        ])
+                      : _vm._e(),
+                    _vm._v(" "),
+                    _vm.$page.errors.imageEdit
+                      ? _c("p", { staticClass: "text-red-700 mt-2" }, [
+                          _vm._v(_vm._s(_vm.$page.errors.imageEdit[0]))
+                        ])
+                      : _vm._e()
+                  ]),
+                  _vm._v(" "),
+                  _vm.$page.flash.successEdit
+                    ? _c("div", { staticClass: "text-green-700" }, [
+                        _vm._v(
+                          "\n                " +
+                            _vm._s(_vm.$page.flash.successEdit) +
+                            "\n            "
+                        )
+                      ])
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "mt-4" }, [
+                    _c("span", { staticClass: "flex w-full rounded" }, [
+                      _c(
+                        "button",
+                        {
+                          staticClass:
+                            "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline",
+                          attrs: { type: "submit" }
+                        },
+                        [
+                          _vm._v(
+                            "\n                        Enregistrer\n                    "
+                          )
+                        ]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "button",
+                        {
+                          staticClass:
+                            "ml-auto bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline",
+                          on: { click: _vm.closeModal }
+                        },
+                        [
+                          _vm._v(
+                            "\n                        Fermer\n                    "
+                          )
+                        ]
+                      )
+                    ])
+                  ])
+                ]
+              )
+            ]
+          )
+        : _vm._e()
     ],
     2
   )
