@@ -12,7 +12,7 @@
         <!-- TODO : Add Admin verification -->
         <div class="pt-4 max-w-7xl mx-auto sm:px-6 lg:px-8 right-0">
             <div class="flex flex-row-reverse">
-                <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" v-on:click="toggleAddLevel">
+                <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" v-on:click="toggleAddChapter">
                     Ajouter un chapitre
                 </button>
             </div>
@@ -204,7 +204,7 @@ export default {
     },
 
     methods: {
-        toggleAddLevel() {
+        toggleAddChapter() {
             this.addChapter = !this.addChapter;
 
             this.clearFormMessages();

@@ -12,6 +12,8 @@ class Course extends Model
 
     protected $hidden = ['id'];
 
+    protected $fillable = ['title', 'description', 'image'];
+
     public static function boot()
     {
         parent::boot();
