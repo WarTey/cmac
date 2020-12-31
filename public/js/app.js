@@ -3452,17 +3452,10 @@ __webpack_require__.r(__webpack_exports__);
     updateFileStore: function updateFileStore(event) {
       if (event.target.files[0].type.match("image.*")) {
         this.createForm.image = event.target.files[0];
-
-        if (this.createForm.image) {
-          document.getElementById("empty").classList.add("hidden");
-        } else {
-          document.getElementById("empty").classList.remove("hidden");
-        }
       }
     },
     resetFileStore: function resetFileStore() {
       this.createForm.image = null;
-      document.getElementById("empty").classList.remove("hidden");
     },
     selectFileStore: function selectFileStore() {
       document.getElementById("hidden-input").click();
@@ -3653,6 +3646,63 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
@@ -3668,12 +3718,19 @@ __webpack_require__.r(__webpack_exports__);
       levelTitle: this.level.title,
       levelUuid: this.level.uuid,
       addContent: false,
-      form: {
+      modalVisible: false,
+      createForm: {
         title: null,
         description: null,
         files: []
       },
-      files: []
+      files: [],
+      editForm: {
+        uuid: null,
+        title: null,
+        description: null
+      },
+      editFiles: null
     };
   },
   watch: {
@@ -3686,45 +3743,39 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   methods: {
-    submit: function submit() {
+    toggleAddContent: function toggleAddContent() {
+      this.addContent = !this.addContent;
+      this.clearFormMessages();
+    },
+    storeSubmit: function storeSubmit() {
       var formData = new FormData();
 
-      if (this.form.title) {
-        formData.append('title', this.form.title);
+      if (this.createForm.title) {
+        formData.append('titleStore', this.createForm.title);
       }
 
-      if (this.form.description) {
-        formData.append('description', this.form.description);
+      if (this.createForm.description) {
+        formData.append('descriptionStore', this.createForm.description);
       }
 
-      if (this.form.files.length > 0) {
-        this.form.files.forEach(function (element) {
-          return formData.append('files[]', element);
+      if (this.createForm.files.length > 0) {
+        this.createForm.files.forEach(function (element) {
+          return formData.append('filesStore[]', element);
         });
       }
 
       formData.append('courseUuid', this.courseUuid);
       this.$inertia.post('/content/store', formData);
     },
-    updateFile: function updateFile(event) {
+    updateFileStore: function updateFileStore(event) {
       if (event.target.files[0].type.match("application/pdf")) {
-        this.form.files.push(event.target.files[0]);
-
-        if (this.form.files.length > 0) {
-          document.getElementById("empty").classList.add("hidden");
-        } else {
-          document.getElementById("empty").classList.remove("hidden");
-        }
+        this.createForm.files.push(event.target.files[0]);
       }
     },
-    resetFile: function resetFile(index) {
-      this.form.files.splice(index, 1);
-
-      if (this.form.files.length === 0) {
-        document.getElementById("empty").classList.remove("hidden");
-      }
+    resetFileStore: function resetFileStore(index) {
+      this.createForm.files.splice(index, 1);
     },
-    selectFile: function selectFile() {
+    selectFileStore: function selectFileStore() {
       document.getElementById("hidden-input").click();
     },
     loadFile: function loadFile(url, uuid) {
@@ -3766,6 +3817,58 @@ __webpack_require__.r(__webpack_exports__);
       formData.append('uuid', uuid);
       formData.append('courseUuid', this.courseUuid);
       this.$inertia.post('/content/delete', formData);
+    },
+    showModal: function showModal(content) {
+      this.updateEditForm(content);
+      this.modalVisible = true;
+    },
+    closeModal: function closeModal() {
+      this.modalVisible = false;
+      this.updateEditForm(null);
+      this.clearFormMessages();
+    },
+    editSubmit: function editSubmit() {
+      var formData = new FormData();
+
+      if (this.editForm.uuid) {
+        formData.append('uuid', this.editForm.uuid);
+      }
+
+      if (this.editForm.title) {
+        formData.append('titleEdit', this.editForm.title);
+      }
+
+      if (this.editForm.description) {
+        formData.append('descriptionEdit', this.editForm.description);
+      }
+      /*if (this.editFiles) {
+          formData.append('filesEdit', this.editFiles);
+      }*/
+
+
+      formData.append('chapterUuid', this.chapterUuid);
+      this.$inertia.post('/content/edit', formData);
+    },
+    updateFileEdit: function updateFileEdit(event) {
+      if (event.target.files[0].type.match("application/pdf")) {
+        this.editFiles.push(event.target.files[0]);
+      }
+    },
+    resetFileEdit: function resetFileEdit(index) {
+      this.editFiles.splice(index, 1);
+    },
+    selectFileEdit: function selectFileEdit() {
+      document.getElementById("hidden-input-edit").click();
+    },
+    updateEditForm: function updateEditForm(content) {
+      this.editForm.uuid = content ? content.uuid : null;
+      this.editForm.title = content ? content.title : null;
+      this.editForm.description = content ? content.description : null;
+      this.editFiles = content ? content.files : null;
+    },
+    clearFormMessages: function clearFormMessages() {
+      this.$page.errors = {};
+      this.$page.flash = {};
     }
   }
 });
@@ -4013,17 +4116,10 @@ __webpack_require__.r(__webpack_exports__);
     updateFileStore: function updateFileStore(event) {
       if (event.target.files[0].type.match("image.*")) {
         this.createForm.image = event.target.files[0];
-
-        if (this.createForm.image) {
-          document.getElementById("empty").classList.add("hidden");
-        } else {
-          document.getElementById("empty").classList.remove("hidden");
-        }
       }
     },
     resetFileStore: function resetFileStore() {
       this.createForm.image = null;
-      document.getElementById("empty").classList.remove("hidden");
     },
     selectFileStore: function selectFileStore() {
       document.getElementById("hidden-input").click();
@@ -37916,29 +38012,30 @@ var render = function() {
                             attrs: { id: "gallery" }
                           },
                           [
-                            _c(
-                              "li",
-                              {
-                                staticClass:
-                                  "h-full w-full text-center flex flex-col items-center justify-center items-center",
-                                attrs: { id: "empty" }
-                              },
-                              [
-                                _c("img", {
-                                  staticClass: "mx-auto w-32",
-                                  attrs: {
-                                    src: "/img/no-img.png",
-                                    alt: "Aucune image sélectionnée"
-                                  }
-                                }),
-                                _vm._v(" "),
-                                _c(
-                                  "span",
-                                  { staticClass: "text-sm text-gray-500" },
-                                  [_vm._v("Aucune image sélectionnée")]
+                            !this.createForm.image
+                              ? _c(
+                                  "li",
+                                  {
+                                    staticClass:
+                                      "h-full w-full text-center flex flex-col items-center justify-center items-center"
+                                  },
+                                  [
+                                    _c("img", {
+                                      staticClass: "mx-auto w-32",
+                                      attrs: {
+                                        src: "/img/no-img.png",
+                                        alt: "Aucune image sélectionnée"
+                                      }
+                                    }),
+                                    _vm._v(" "),
+                                    _c(
+                                      "span",
+                                      { staticClass: "text-sm text-gray-500" },
+                                      [_vm._v("Aucune image sélectionnée")]
+                                    )
+                                  ]
                                 )
-                              ]
-                            )
+                              : _vm._e()
                           ]
                         ),
                         _vm._v(" "),
@@ -38610,11 +38707,7 @@ var render = function() {
               {
                 staticClass:
                   "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline",
-                on: {
-                  click: function($event) {
-                    _vm.addContent = !_vm.addContent
-                  }
-                }
+                on: { click: _vm.toggleAddContent }
               },
               [_vm._v("\n                Ajouter un contenu\n            ")]
             )
@@ -38635,7 +38728,7 @@ var render = function() {
                       on: {
                         submit: function($event) {
                           $event.preventDefault()
-                          return _vm.submit($event)
+                          return _vm.storeSubmit($event)
                         }
                       }
                     },
@@ -38655,14 +38748,14 @@ var render = function() {
                           ]
                         ),
                         _vm._v(" "),
-                        _vm.$page.errors.title
+                        _vm.$page.errors.titleStore
                           ? _c("input", {
                               directives: [
                                 {
                                   name: "model",
                                   rawName: "v-model",
-                                  value: _vm.form.title,
-                                  expression: "form.title"
+                                  value: _vm.createForm.title,
+                                  expression: "createForm.title"
                                 }
                               ],
                               staticClass:
@@ -38672,14 +38765,14 @@ var render = function() {
                                 type: "text",
                                 placeholder: "Contenu"
                               },
-                              domProps: { value: _vm.form.title },
+                              domProps: { value: _vm.createForm.title },
                               on: {
                                 input: function($event) {
                                   if ($event.target.composing) {
                                     return
                                   }
                                   _vm.$set(
-                                    _vm.form,
+                                    _vm.createForm,
                                     "title",
                                     $event.target.value
                                   )
@@ -38691,8 +38784,8 @@ var render = function() {
                                 {
                                   name: "model",
                                   rawName: "v-model",
-                                  value: _vm.form.title,
-                                  expression: "form.title"
+                                  value: _vm.createForm.title,
+                                  expression: "createForm.title"
                                 }
                               ],
                               staticClass:
@@ -38702,14 +38795,14 @@ var render = function() {
                                 type: "text",
                                 placeholder: "Contenu"
                               },
-                              domProps: { value: _vm.form.title },
+                              domProps: { value: _vm.createForm.title },
                               on: {
                                 input: function($event) {
                                   if ($event.target.composing) {
                                     return
                                   }
                                   _vm.$set(
-                                    _vm.form,
+                                    _vm.createForm,
                                     "title",
                                     $event.target.value
                                   )
@@ -38717,9 +38810,9 @@ var render = function() {
                               }
                             }),
                         _vm._v(" "),
-                        _vm.$page.errors.title
+                        _vm.$page.errors.titleStore
                           ? _c("p", { staticClass: "text-red-700 mt-2" }, [
-                              _vm._v(_vm._s(_vm.$page.errors.title[0]))
+                              _vm._v(_vm._s(_vm.$page.errors.titleStore[0]))
                             ])
                           : _vm._e()
                       ]),
@@ -38744,8 +38837,8 @@ var render = function() {
                             {
                               name: "model",
                               rawName: "v-model",
-                              value: _vm.form.description,
-                              expression: "form.description"
+                              value: _vm.createForm.description,
+                              expression: "createForm.description"
                             }
                           ],
                           staticClass:
@@ -38754,14 +38847,14 @@ var render = function() {
                             id: "description",
                             placeholder: "Description (optionnel)"
                           },
-                          domProps: { value: _vm.form.description },
+                          domProps: { value: _vm.createForm.description },
                           on: {
                             input: function($event) {
                               if ($event.target.composing) {
                                 return
                               }
                               _vm.$set(
-                                _vm.form,
+                                _vm.createForm,
                                 "description",
                                 $event.target.value
                               )
@@ -38769,9 +38862,11 @@ var render = function() {
                           }
                         }),
                         _vm._v(" "),
-                        _vm.$page.errors.description
+                        _vm.$page.errors.descriptionStore
                           ? _c("p", { staticClass: "text-red-700 mt-2" }, [
-                              _vm._v(_vm._s(_vm.$page.errors.description[0]))
+                              _vm._v(
+                                _vm._s(_vm.$page.errors.descriptionStore[0])
+                              )
                             ])
                           : _vm._e()
                       ]),
@@ -38807,7 +38902,7 @@ var render = function() {
                                   type: "file",
                                   multiple: ""
                                 },
-                                on: { change: _vm.updateFile }
+                                on: { change: _vm.updateFileStore }
                               }),
                               _vm._v(" "),
                               _c(
@@ -38819,7 +38914,7 @@ var render = function() {
                                   on: {
                                     click: function($event) {
                                       $event.preventDefault()
-                                      return _vm.selectFile($event)
+                                      return _vm.selectFileStore($event)
                                     }
                                   }
                                 },
@@ -38839,33 +38934,36 @@ var render = function() {
                               attrs: { id: "gallery" }
                             },
                             [
-                              _c(
-                                "li",
-                                {
-                                  staticClass:
-                                    "h-full w-full text-center flex flex-col items-center justify-center items-center",
-                                  attrs: { id: "empty" }
-                                },
-                                [
-                                  _c("img", {
-                                    staticClass: "mx-auto w-32",
-                                    attrs: {
-                                      src: "/img/no-img.png",
-                                      alt: "Aucune image sélectionnée"
-                                    }
-                                  }),
-                                  _vm._v(" "),
-                                  _c(
-                                    "span",
-                                    { staticClass: "text-sm text-gray-500" },
-                                    [_vm._v("Aucun PDF sélectionné")]
+                              this.createForm.files.length === 0
+                                ? _c(
+                                    "li",
+                                    {
+                                      staticClass:
+                                        "h-full w-full text-center flex flex-col items-center justify-center items-center"
+                                    },
+                                    [
+                                      _c("img", {
+                                        staticClass: "mx-auto w-32",
+                                        attrs: {
+                                          src: "/img/no-img.png",
+                                          alt: "Aucun PDF sélectionné"
+                                        }
+                                      }),
+                                      _vm._v(" "),
+                                      _c(
+                                        "span",
+                                        {
+                                          staticClass: "text-sm text-gray-500"
+                                        },
+                                        [_vm._v("Aucun PDF sélectionné")]
+                                      )
+                                    ]
                                   )
-                                ]
-                              )
+                                : _vm._e()
                             ]
                           ),
                           _vm._v(" "),
-                          _vm._l(this.form.files, function(file, index) {
+                          _vm._l(this.createForm.files, function(file, index) {
                             return _c(
                               "div",
                               { key: file.name, staticClass: "pt-4" },
@@ -38891,7 +38989,7 @@ var render = function() {
                                         on: {
                                           click: function($event) {
                                             $event.preventDefault()
-                                            return _vm.resetFile(index)
+                                            return _vm.resetFileStore(index)
                                           }
                                         }
                                       },
@@ -38901,7 +38999,7 @@ var render = function() {
                                 ),
                                 _vm._v(" "),
                                 _vm.$page.errors.hasOwnProperty(
-                                  "files." + index
+                                  "filesStore." + index
                                 )
                                   ? _c(
                                       "p",
@@ -38920,11 +39018,11 @@ var render = function() {
                         2
                       ),
                       _vm._v(" "),
-                      _vm.$page.flash.success
+                      _vm.$page.flash.successStore
                         ? _c("div", { staticClass: "text-green-700 mb-4" }, [
                             _vm._v(
                               "\n                            " +
-                                _vm._s(_vm.$page.flash.success) +
+                                _vm._s(_vm.$page.flash.successStore) +
                                 "\n                        "
                             )
                           ])
@@ -39024,11 +39122,17 @@ var render = function() {
                         "a",
                         {
                           staticClass:
-                            "text-blue-500 font-semibold text-justify hover:underline cursor-pointer"
+                            "text-blue-500 font-semibold text-justify hover:underline cursor-pointer",
+                          on: {
+                            click: function($event) {
+                              $event.preventDefault()
+                              return _vm.showModal(content)
+                            }
+                          }
                         },
                         [
                           _vm._v(
-                            "\n                            Enregistrer les modifications\n                        "
+                            "\n                            Éditer le contenu\n                        "
                           )
                         ]
                       ),
@@ -39047,7 +39151,7 @@ var render = function() {
                         },
                         [
                           _vm._v(
-                            "\n                            Retirer le contenu\n                        "
+                            "\n                            Retirer le cours\n                        "
                           )
                         ]
                       )
@@ -39059,7 +39163,351 @@ var render = function() {
             )
           ])
         ])
-      })
+      }),
+      _vm._v(" "),
+      _vm.modalVisible
+        ? _c(
+            "div",
+            {
+              staticClass:
+                "fixed overflow-hidden top-0 left-0 flex items-center justify-center w-full h-full bg-black bg-opacity-50"
+            },
+            [
+              _c(
+                "form",
+                {
+                  staticClass:
+                    "bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 md:max-w-xl w-full",
+                  on: {
+                    submit: function($event) {
+                      $event.preventDefault()
+                      return _vm.editSubmit($event)
+                    }
+                  }
+                },
+                [
+                  _c("div", { staticClass: "mb-4" }, [
+                    _c(
+                      "label",
+                      {
+                        staticClass:
+                          "block text-gray-700 text-sm font-bold mb-2",
+                        attrs: { for: "edit-title" }
+                      },
+                      [
+                        _vm._v(
+                          "\n                    Contenu\n                "
+                        )
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _vm.$page.errors.titleEdit
+                      ? _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.editForm.title,
+                              expression: "editForm.title"
+                            }
+                          ],
+                          staticClass:
+                            "shadow appearance-none border border-red-700 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline",
+                          attrs: {
+                            id: "edit-title",
+                            type: "text",
+                            placeholder: "Contenu"
+                          },
+                          domProps: { value: _vm.editForm.title },
+                          on: {
+                            input: function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.$set(
+                                _vm.editForm,
+                                "title",
+                                $event.target.value
+                              )
+                            }
+                          }
+                        })
+                      : _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.editForm.title,
+                              expression: "editForm.title"
+                            }
+                          ],
+                          staticClass:
+                            "shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline",
+                          attrs: {
+                            id: "edit-title",
+                            type: "text",
+                            placeholder: "Contenu"
+                          },
+                          domProps: { value: _vm.editForm.title },
+                          on: {
+                            input: function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.$set(
+                                _vm.editForm,
+                                "title",
+                                $event.target.value
+                              )
+                            }
+                          }
+                        }),
+                    _vm._v(" "),
+                    _vm.$page.errors.titleEdit
+                      ? _c("p", { staticClass: "text-red-700 mt-2" }, [
+                          _vm._v(_vm._s(_vm.$page.errors.titleEdit[0]))
+                        ])
+                      : _vm._e()
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "mb-4" }, [
+                    _c(
+                      "label",
+                      {
+                        staticClass:
+                          "block text-gray-700 text-sm font-bold mb-2",
+                        attrs: { for: "edit-description" }
+                      },
+                      [
+                        _vm._v(
+                          "\n                    Description (optionnel)\n                "
+                        )
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _c("textarea", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.editForm.description,
+                          expression: "editForm.description"
+                        }
+                      ],
+                      staticClass:
+                        "shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline",
+                      attrs: {
+                        id: "edit-description",
+                        placeholder: "Description (optionnel)"
+                      },
+                      domProps: { value: _vm.editForm.description },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(
+                            _vm.editForm,
+                            "description",
+                            $event.target.value
+                          )
+                        }
+                      }
+                    }),
+                    _vm._v(" "),
+                    _vm.$page.errors.descriptionEdit
+                      ? _c("p", { staticClass: "text-red-700 mt-2" }, [
+                          _vm._v(_vm._s(_vm.$page.errors.descriptionEdit[0]))
+                        ])
+                      : _vm._e()
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    { staticClass: "mb-4" },
+                    [
+                      _c(
+                        "label",
+                        {
+                          staticClass:
+                            "block text-gray-700 text-sm font-bold mb-2"
+                        },
+                        [
+                          _vm._v(
+                            "\n                    PDF (optionnel)\n                "
+                          )
+                        ]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "header",
+                        {
+                          staticClass:
+                            "border-dashed border-2 border-gray-400 py-12 flex flex-col justify-center items-center mb-4"
+                        },
+                        [
+                          _c("input", {
+                            staticClass: "hidden",
+                            attrs: {
+                              id: "hidden-input-edit",
+                              type: "file",
+                              multiple: ""
+                            },
+                            on: { change: _vm.updateFileEdit }
+                          }),
+                          _vm._v(" "),
+                          _c(
+                            "button",
+                            {
+                              staticClass:
+                                "mt-2 rounded-sm text-sm px-3 py-1 bg-gray-200 hover:bg-gray-300 focus:shadow-outline focus:outline-none",
+                              attrs: { id: "button-edit" },
+                              on: {
+                                click: function($event) {
+                                  $event.preventDefault()
+                                  return _vm.selectFileEdit($event)
+                                }
+                              }
+                            },
+                            [
+                              _vm._v(
+                                "\n                        Télécharger un PDF\n                    "
+                              )
+                            ]
+                          )
+                        ]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "ul",
+                        {
+                          staticClass: "flex flex-1 flex-wrap -m-1",
+                          attrs: { id: "gallery-edit" }
+                        },
+                        [
+                          this.editFiles.length === 0
+                            ? _c(
+                                "li",
+                                {
+                                  staticClass:
+                                    "h-full w-full text-center flex flex-col items-center justify-center items-center"
+                                },
+                                [
+                                  _c("img", {
+                                    staticClass: "mx-auto w-32",
+                                    attrs: {
+                                      src: "/img/no-img.png",
+                                      alt: "Aucun PDF sélectionné"
+                                    }
+                                  }),
+                                  _vm._v(" "),
+                                  _c(
+                                    "span",
+                                    { staticClass: "text-sm text-gray-500" },
+                                    [_vm._v("Aucun PDF sélectionné")]
+                                  )
+                                ]
+                              )
+                            : _vm._e()
+                        ]
+                      ),
+                      _vm._v(" "),
+                      _vm._l(this.editFiles, function(file, index) {
+                        return _c(
+                          "div",
+                          { key: file.name, staticClass: "pt-4" },
+                          [
+                            _c(
+                              "div",
+                              {
+                                staticClass:
+                                  "font-semibold text-gray-700 text-sm"
+                              },
+                              [
+                                _vm._v(
+                                  "\n                        " +
+                                    _vm._s(file.name) +
+                                    " - "
+                                ),
+                                _c(
+                                  "a",
+                                  {
+                                    staticClass: "text-red-700 hover:underline",
+                                    attrs: { href: "#" },
+                                    on: {
+                                      click: function($event) {
+                                        $event.preventDefault()
+                                        return _vm.resetFileEdit(index)
+                                      }
+                                    }
+                                  },
+                                  [_vm._v("Supprimer")]
+                                )
+                              ]
+                            ),
+                            _vm._v(" "),
+                            _vm.$page.errors.hasOwnProperty(
+                              "filesEdit." + index
+                            )
+                              ? _c("p", { staticClass: "text-red-700 mt-2" }, [
+                                  _vm._v(
+                                    "\n                        Format du fichier ou taille incorrect.\n                    "
+                                  )
+                                ])
+                              : _vm._e()
+                          ]
+                        )
+                      })
+                    ],
+                    2
+                  ),
+                  _vm._v(" "),
+                  _vm.$page.flash.successEdit
+                    ? _c("div", { staticClass: "text-green-700" }, [
+                        _vm._v(
+                          "\n                " +
+                            _vm._s(_vm.$page.flash.successEdit) +
+                            "\n            "
+                        )
+                      ])
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "mt-4" }, [
+                    _c("span", { staticClass: "flex w-full rounded" }, [
+                      _c(
+                        "button",
+                        {
+                          staticClass:
+                            "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline",
+                          attrs: { type: "submit" }
+                        },
+                        [
+                          _vm._v(
+                            "\n                        Enregistrer\n                    "
+                          )
+                        ]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "button",
+                        {
+                          staticClass:
+                            "ml-auto bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline",
+                          on: { click: _vm.closeModal }
+                        },
+                        [
+                          _vm._v(
+                            "\n                        Fermer\n                    "
+                          )
+                        ]
+                      )
+                    ])
+                  ])
+                ]
+              )
+            ]
+          )
+        : _vm._e()
     ],
     2
   )
@@ -39370,29 +39818,30 @@ var render = function() {
                             attrs: { id: "gallery" }
                           },
                           [
-                            _c(
-                              "li",
-                              {
-                                staticClass:
-                                  "h-full w-full text-center flex flex-col items-center justify-center items-center",
-                                attrs: { id: "empty" }
-                              },
-                              [
-                                _c("img", {
-                                  staticClass: "mx-auto w-32",
-                                  attrs: {
-                                    src: "/img/no-img.png",
-                                    alt: "Aucune image sélectionnée"
-                                  }
-                                }),
-                                _vm._v(" "),
-                                _c(
-                                  "span",
-                                  { staticClass: "text-sm text-gray-500" },
-                                  [_vm._v("Aucune image sélectionnée")]
+                            !this.createForm.image
+                              ? _c(
+                                  "li",
+                                  {
+                                    staticClass:
+                                      "h-full w-full text-center flex flex-col items-center justify-center items-center"
+                                  },
+                                  [
+                                    _c("img", {
+                                      staticClass: "mx-auto w-32",
+                                      attrs: {
+                                        src: "/img/no-img.png",
+                                        alt: "Aucune image sélectionnée"
+                                      }
+                                    }),
+                                    _vm._v(" "),
+                                    _c(
+                                      "span",
+                                      { staticClass: "text-sm text-gray-500" },
+                                      [_vm._v("Aucune image sélectionnée")]
+                                    )
+                                  ]
                                 )
-                              ]
-                            )
+                              : _vm._e()
                           ]
                         ),
                         _vm._v(" "),

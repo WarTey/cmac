@@ -12,6 +12,8 @@ class Content extends Model
 
     protected $hidden = ['id'];
 
+    protected $fillable = ['title', 'description'];
+
     public static function boot()
     {
         parent::boot();

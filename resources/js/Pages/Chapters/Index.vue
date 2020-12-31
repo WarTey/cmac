@@ -48,7 +48,7 @@
                                     </button>
                                 </header>
                                 <ul id="gallery" class="flex flex-1 flex-wrap -m-1">
-                                    <li id="empty" class="h-full w-full text-center flex flex-col items-center justify-center items-center">
+                                    <li v-if="!this.createForm.image" class="h-full w-full text-center flex flex-col items-center justify-center items-center">
                                         <img class="mx-auto w-32" :src="'/img/no-img.png'" alt="Aucune image sélectionnée">
                                         <span class="text-sm text-gray-500">Aucune image sélectionnée</span>
                                     </li>
@@ -229,19 +229,11 @@ export default {
         updateFileStore(event) {
             if (event.target.files[0].type.match("image.*")) {
                 this.createForm.image = event.target.files[0];
-
-                if (this.createForm.image) {
-                    document.getElementById("empty").classList.add("hidden");
-                } else {
-                    document.getElementById("empty").classList.remove("hidden");
-                }
             }
         },
 
         resetFileStore() {
             this.createForm.image = null;
-
-            document.getElementById("empty").classList.remove("hidden");
         },
 
         selectFileStore() {

@@ -20,7 +20,7 @@
         <!-- TODO : Add Admin verification -->
         <div class="pt-4 max-w-7xl mx-auto sm:px-6 lg:px-8 right-0">
             <div class="flex flex-row-reverse">
-                <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" v-on:click="addContent = !addContent">
+                <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" v-on:click="toggleAddContent">
                     Ajouter un contenu
                 </button>
             </div>
@@ -29,49 +29,49 @@
             <div class="py-4" v-if="addContent">
                 <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                     <div class="w-full">
-                        <form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" @submit.prevent="submit">
+                        <form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" @submit.prevent="storeSubmit">
                             <div class="mb-4">
                                 <label class="block text-gray-700 text-sm font-bold mb-2" for="title">
                                     Contenu
                                 </label>
-                                <input v-if="$page.errors.title" class="shadow appearance-none border border-red-700 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="title" type="text" v-model="form.title" placeholder="Contenu">
-                                <input v-else class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="title" type="text" v-model="form.title" placeholder="Contenu">
-                                <p class="text-red-700 mt-2" v-if="$page.errors.title">{{ $page.errors.title[0] }}</p>
+                                <input v-if="$page.errors.titleStore" class="shadow appearance-none border border-red-700 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="title" type="text" v-model="createForm.title" placeholder="Contenu">
+                                <input v-else class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="title" type="text" v-model="createForm.title" placeholder="Contenu">
+                                <p class="text-red-700 mt-2" v-if="$page.errors.titleStore">{{ $page.errors.titleStore[0] }}</p>
                             </div>
                             <div class="mb-4">
                                 <label class="block text-gray-700 text-sm font-bold mb-2" for="description">
                                     Description (optionnel)
                                 </label>
-                                <textarea class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="description" v-model="form.description" placeholder="Description (optionnel)"></textarea>
-                                <p class="text-red-700 mt-2" v-if="$page.errors.description">{{ $page.errors.description[0] }}</p>
+                                <textarea class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="description" v-model="createForm.description" placeholder="Description (optionnel)"></textarea>
+                                <p class="text-red-700 mt-2" v-if="$page.errors.descriptionStore">{{ $page.errors.descriptionStore[0] }}</p>
                             </div>
                             <div class="mb-4">
                                 <label class="block text-gray-700 text-sm font-bold mb-2">
                                     PDF (optionnel)
                                 </label>
                                 <header class="border-dashed border-2 border-gray-400 py-12 flex flex-col justify-center items-center mb-4">
-                                    <input id="hidden-input" type="file" multiple class="hidden" v-on:change="updateFile">
-                                    <button id="button" class="mt-2 rounded-sm text-sm px-3 py-1 bg-gray-200 hover:bg-gray-300 focus:shadow-outline focus:outline-none" @click.prevent="selectFile">
+                                    <input id="hidden-input" type="file" multiple class="hidden" v-on:change="updateFileStore">
+                                    <button id="button" class="mt-2 rounded-sm text-sm px-3 py-1 bg-gray-200 hover:bg-gray-300 focus:shadow-outline focus:outline-none" @click.prevent="selectFileStore">
                                         Télécharger un PDF
                                     </button>
                                 </header>
                                 <ul id="gallery" class="flex flex-1 flex-wrap -m-1">
-                                    <li id="empty" class="h-full w-full text-center flex flex-col items-center justify-center items-center">
-                                        <img class="mx-auto w-32" :src="'/img/no-img.png'" alt="Aucune image sélectionnée">
+                                    <li v-if="this.createForm.files.length === 0" class="h-full w-full text-center flex flex-col items-center justify-center items-center">
+                                        <img class="mx-auto w-32" :src="'/img/no-img.png'" alt="Aucun PDF sélectionné">
                                         <span class="text-sm text-gray-500">Aucun PDF sélectionné</span>
                                     </li>
                                 </ul>
-                                <div class="pt-4" v-for="(file, index) in this.form.files" v-bind:key="file.name">
+                                <div class="pt-4" v-for="(file, index) in this.createForm.files" v-bind:key="file.name">
                                     <div class="font-semibold text-gray-700 text-sm">
-                                        {{ file.name }} - <a href="#" v-on:click.prevent="resetFile(index)" class="text-red-700 hover:underline">Supprimer</a>
+                                        {{ file.name }} - <a href="#" v-on:click.prevent="resetFileStore(index)" class="text-red-700 hover:underline">Supprimer</a>
                                     </div>
-                                    <p class="text-red-700 mt-2" v-if="$page.errors.hasOwnProperty('files.' + index)">
+                                    <p class="text-red-700 mt-2" v-if="$page.errors.hasOwnProperty('filesStore.' + index)">
                                         Format du fichier ou taille incorrect.
                                     </p>
                                 </div>
                             </div>
-                            <div class="text-green-700 mb-4" v-if="$page.flash.success">
-                                {{ $page.flash.success }}
+                            <div class="text-green-700 mb-4" v-if="$page.flash.successStore">
+                                {{ $page.flash.successStore }}
                             </div>
                             <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
                                 Ajouter le contenu
@@ -97,16 +97,73 @@
                             <canvas class="w-full rounded border" :id="file.uuid">{{ loadFile(file.title, file.uuid) }}</canvas>
                         </div>
                         <div class="mt-2 flex">
-                            <a class="text-blue-500 font-semibold text-justify hover:underline cursor-pointer">
-                                Enregistrer les modifications
+                            <a class="text-blue-500 font-semibold text-justify hover:underline cursor-pointer" v-on:click.prevent="showModal(content)">
+                                Éditer le contenu
                             </a>
                             <a class="text-red-500 font-semibold text-justify hover:underline cursor-pointer ml-auto" v-on:click.prevent="removeContent(content.uuid)">
-                                Retirer le contenu
+                                Retirer le cours
                             </a>
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
+        <div v-if="modalVisible" class="fixed overflow-hidden top-0 left-0 flex items-center justify-center w-full h-full bg-black bg-opacity-50">
+            <form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 md:max-w-xl w-full" @submit.prevent="editSubmit">
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="edit-title">
+                        Contenu
+                    </label>
+                    <input v-if="$page.errors.titleEdit" class="shadow appearance-none border border-red-700 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="edit-title" type="text" v-model="editForm.title" placeholder="Contenu">
+                    <input v-else class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="edit-title" type="text" v-model="editForm.title" placeholder="Contenu">
+                    <p class="text-red-700 mt-2" v-if="$page.errors.titleEdit">{{ $page.errors.titleEdit[0] }}</p>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="edit-description">
+                        Description (optionnel)
+                    </label>
+                    <textarea class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="edit-description" v-model="editForm.description" placeholder="Description (optionnel)"></textarea>
+                    <p class="text-red-700 mt-2" v-if="$page.errors.descriptionEdit">{{ $page.errors.descriptionEdit[0] }}</p>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2">
+                        PDF (optionnel)
+                    </label>
+                    <header class="border-dashed border-2 border-gray-400 py-12 flex flex-col justify-center items-center mb-4">
+                        <input id="hidden-input-edit" type="file" multiple class="hidden" v-on:change="updateFileEdit">
+                        <button id="button-edit" class="mt-2 rounded-sm text-sm px-3 py-1 bg-gray-200 hover:bg-gray-300 focus:shadow-outline focus:outline-none" @click.prevent="selectFileEdit">
+                            Télécharger un PDF
+                        </button>
+                    </header>
+                    <ul id="gallery-edit" class="flex flex-1 flex-wrap -m-1">
+                        <li v-if="this.editFiles.length === 0" class="h-full w-full text-center flex flex-col items-center justify-center items-center">
+                            <img class="mx-auto w-32" :src="'/img/no-img.png'" alt="Aucun PDF sélectionné">
+                            <span class="text-sm text-gray-500">Aucun PDF sélectionné</span>
+                        </li>
+                    </ul>
+                    <div class="pt-4" v-for="(file, index) in this.editFiles" v-bind:key="file.name">
+                        <div class="font-semibold text-gray-700 text-sm">
+                            {{ file.name }} - <a href="#" v-on:click.prevent="resetFileEdit(index)" class="text-red-700 hover:underline">Supprimer</a>
+                        </div>
+                        <p class="text-red-700 mt-2" v-if="$page.errors.hasOwnProperty('filesEdit.' + index)">
+                            Format du fichier ou taille incorrect.
+                        </p>
+                    </div>
+                </div>
+                <div class="text-green-700" v-if="$page.flash.successEdit">
+                    {{ $page.flash.successEdit }}
+                </div>
+                <div class="mt-4">
+                    <span class="flex w-full rounded">
+                        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
+                            Enregistrer
+                        </button>
+                        <button v-on:click="closeModal" class="ml-auto bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                            Fermer
+                        </button>
+                    </span>
+                </div>
+            </form>
         </div>
     </app-layout>
 </template>
@@ -130,12 +187,19 @@ export default {
             levelTitle: this.level.title,
             levelUuid: this.level.uuid,
             addContent: false,
-            form: {
+            modalVisible: false,
+            createForm: {
                 title: null,
                 description: null,
                 files: []
             },
-            files: []
+            files: [],
+            editForm: {
+                uuid: null,
+                title: null,
+                description: null
+            },
+            editFiles: null
         }
     },
 
@@ -150,17 +214,23 @@ export default {
     },
 
     methods: {
-        submit() {
+        toggleAddContent() {
+            this.addContent = !this.addContent;
+
+            this.clearFormMessages();
+        },
+
+        storeSubmit() {
             const formData = new FormData();
-            if (this.form.title) {
-                formData.append('title', this.form.title);
+            if (this.createForm.title) {
+                formData.append('titleStore', this.createForm.title);
             }
-            if (this.form.description) {
-                formData.append('description', this.form.description);
+            if (this.createForm.description) {
+                formData.append('descriptionStore', this.createForm.description);
             }
-            if (this.form.files.length > 0) {
-                this.form.files.forEach(element =>
-                    formData.append('files[]', element)
+            if (this.createForm.files.length > 0) {
+                this.createForm.files.forEach(element =>
+                    formData.append('filesStore[]', element)
                 );
             }
             formData.append('courseUuid', this.courseUuid);
@@ -168,27 +238,17 @@ export default {
             this.$inertia.post('/content/store', formData);
         },
 
-        updateFile(event) {
+        updateFileStore(event) {
             if (event.target.files[0].type.match("application/pdf")) {
-                this.form.files.push(event.target.files[0]);
-
-                if (this.form.files.length > 0) {
-                    document.getElementById("empty").classList.add("hidden");
-                } else {
-                    document.getElementById("empty").classList.remove("hidden");
-                }
+                this.createForm.files.push(event.target.files[0]);
             }
         },
 
-        resetFile(index) {
-            this.form.files.splice(index, 1);
-
-            if (this.form.files.length === 0) {
-                document.getElementById("empty").classList.remove("hidden");
-            }
+        resetFileStore(index) {
+            this.createForm.files.splice(index, 1);
         },
 
-        selectFile() {
+        selectFileStore() {
             document.getElementById("hidden-input").click();
         },
 
@@ -233,6 +293,64 @@ export default {
             formData.append('courseUuid', this.courseUuid);
 
             this.$inertia.post('/content/delete', formData);
+        },
+
+        showModal(content) {
+            this.updateEditForm(content);
+
+            this.modalVisible = true;
+        },
+
+        closeModal() {
+            this.modalVisible = false;
+
+            this.updateEditForm(null);
+            this.clearFormMessages();
+        },
+
+        editSubmit() {
+            const formData = new FormData();
+            if (this.editForm.uuid) {
+                formData.append('uuid', this.editForm.uuid);
+            }
+            if (this.editForm.title) {
+                formData.append('titleEdit', this.editForm.title);
+            }
+            if (this.editForm.description) {
+                formData.append('descriptionEdit', this.editForm.description);
+            }
+            /*if (this.editFiles) {
+                formData.append('filesEdit', this.editFiles);
+            }*/
+            formData.append('chapterUuid', this.chapterUuid);
+
+            this.$inertia.post('/content/edit', formData);
+        },
+
+        updateFileEdit(event) {
+            if (event.target.files[0].type.match("application/pdf")) {
+                this.editFiles.push(event.target.files[0]);
+            }
+        },
+
+        resetFileEdit(index) {
+            this.editFiles.splice(index, 1);
+        },
+
+        selectFileEdit() {
+            document.getElementById("hidden-input-edit").click();
+        },
+
+        updateEditForm(content) {
+            this.editForm.uuid = content ? content.uuid : null;
+            this.editForm.title = content ? content.title : null;
+            this.editForm.description = content ? content.description : null;
+            this.editFiles = content ? content.files : null;
+        },
+
+        clearFormMessages() {
+            this.$page.errors = {};
+            this.$page.flash = {};
         }
     }
 }
