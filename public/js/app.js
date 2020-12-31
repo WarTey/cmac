@@ -3711,6 +3711,14 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
@@ -3798,6 +3806,7 @@ __webpack_require__.r(__webpack_exports__);
         disableStream: true
       }).promise.then(function (pdf) {
         _this.files.push({
+          uuid: uuid,
           pdf: pdf,
           pages: pdf.numPages,
           currentPage: 1
@@ -3820,6 +3829,39 @@ __webpack_require__.r(__webpack_exports__);
       page.render({
         canvasContext: context,
         viewport: viewport
+      });
+    },
+    getPageStatus: function getPageStatus(uuid) {
+      this.files.forEach(function (element) {
+        if (element.uuid === uuid) {
+          return element.currentPage + " / " + element.pages;
+        }
+      });
+    },
+    nextPage: function nextPage(uuid) {
+      var _this2 = this;
+
+      if (this.files.length > 0) {
+        this.files.forEach(function (element) {
+          if (element.uuid === uuid && element.currentPage < element.pages) {
+            element.currentPage += 1;
+            element.pdf.getPage(element.currentPage).then(function (page) {
+              return _this2.renderFile(page, uuid);
+            });
+          }
+        });
+      }
+    },
+    previousPage: function previousPage(uuid) {
+      var _this3 = this;
+
+      this.files.forEach(function (element) {
+        if (element.uuid === uuid && element.currentPage > 0) {
+          element.currentPage -= 1;
+          element.pdf.getPage(element.currentPage).then(function (page) {
+            return _this3.renderFile(page, uuid);
+          });
+        }
       });
     },
     removeContent: function removeContent(uuid) {
@@ -3889,7 +3931,7 @@ __webpack_require__.r(__webpack_exports__);
       document.getElementById("hidden-input-edit").click();
     },
     updateEditForm: function updateEditForm(content) {
-      var _this2 = this;
+      var _this4 = this;
 
       this.editForm.uuid = content ? content.uuid : null;
       this.editForm.title = content ? content.title : null;
@@ -3897,7 +3939,7 @@ __webpack_require__.r(__webpack_exports__);
 
       if (content && content.files.length > 0) {
         content.files.forEach(function (element) {
-          return _this2.saveFiles.push(element);
+          return _this4.saveFiles.push(element);
         });
       } else {
         this.saveFiles = [];
@@ -39151,12 +39193,52 @@ var render = function() {
                                 _vm._s(_vm.loadFile(file.title, file.uuid))
                               )
                             ]
-                          )
+                          ),
+                          _vm._v(" "),
+                          _c("div", { staticClass: "mt-2 flex" }, [
+                            _c(
+                              "a",
+                              {
+                                staticClass:
+                                  "text-blue-500 font-semibold text-justify hover:underline cursor-pointer",
+                                on: {
+                                  click: function($event) {
+                                    $event.preventDefault()
+                                    return _vm.previousPage(file.uuid)
+                                  }
+                                }
+                              },
+                              [
+                                _vm._v(
+                                  "\n                                Page précédente\n                            "
+                                )
+                              ]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "a",
+                              {
+                                staticClass:
+                                  "text-blue-500 font-semibold text-justify hover:underline cursor-pointer ml-auto",
+                                on: {
+                                  click: function($event) {
+                                    $event.preventDefault()
+                                    return _vm.nextPage(file.uuid)
+                                  }
+                                }
+                              },
+                              [
+                                _vm._v(
+                                  "\n                                Page suivante\n                            "
+                                )
+                              ]
+                            )
+                          ])
                         ]
                       )
                     }),
                     _vm._v(" "),
-                    _c("div", { staticClass: "mt-2 flex" }, [
+                    _c("div", { staticClass: "mt-4 flex" }, [
                       _c(
                         "a",
                         {

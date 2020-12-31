@@ -95,8 +95,16 @@
                         </div>
                         <div class="mt-6 text-gray-700 text-justify cursor-pointer hover:underline" v-for="file in content.files" v-bind:key="file.uuid">
                             <canvas class="w-full rounded border" :id="file.uuid">{{ loadFile(file.title, file.uuid) }}</canvas>
+                            <div class="mt-2 flex">
+                                <a class="text-blue-500 font-semibold text-justify hover:underline cursor-pointer" v-on:click.prevent="previousPage(file.uuid)">
+                                    Page précédente
+                                </a>
+                                <a class="text-blue-500 font-semibold text-justify hover:underline cursor-pointer ml-auto" v-on:click.prevent="nextPage(file.uuid)">
+                                    Page suivante
+                                </a>
+                            </div>
                         </div>
-                        <div class="mt-2 flex">
+                        <div class="mt-4 flex">
                             <a class="text-blue-500 font-semibold text-justify hover:underline cursor-pointer" v-on:click.prevent="showModal(content)">
                                 Éditer le contenu
                             </a>
@@ -271,6 +279,7 @@ export default {
             }).promise.then(pdf => {
 
                 this.files.push({
+                    uuid: uuid,
                     pdf: pdf,
                     pages: pdf.numPages,
                     currentPage: 1
@@ -294,6 +303,34 @@ export default {
             page.render({
                 canvasContext: context,
                 viewport: viewport
+            });
+        },
+
+        getPageStatus(uuid) {
+            this.files.forEach(element => {
+                if (element.uuid === uuid) {
+                    return element.currentPage + " / " + element.pages;
+                }
+            });
+        },
+
+        nextPage(uuid) {
+            if (this.files.length > 0) {
+                this.files.forEach(element => {
+                    if (element.uuid === uuid && element.currentPage < element.pages) {
+                        element.currentPage += 1;
+                        element.pdf.getPage(element.currentPage).then(page => this.renderFile(page, uuid));
+                    }
+                });
+            }
+        },
+
+        previousPage(uuid) {
+            this.files.forEach(element => {
+                if (element.uuid === uuid && element.currentPage > 0) {
+                    element.currentPage -= 1;
+                    element.pdf.getPage(element.currentPage).then(page => this.renderFile(page, uuid));
+                }
             });
         },
 
