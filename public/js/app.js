@@ -3703,6 +3703,14 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
@@ -3730,7 +3738,9 @@ __webpack_require__.r(__webpack_exports__);
         title: null,
         description: null
       },
-      editFiles: null
+      delFiles: [],
+      addFiles: [],
+      saveFiles: []
     };
   },
   watch: {
@@ -3841,30 +3851,59 @@ __webpack_require__.r(__webpack_exports__);
       if (this.editForm.description) {
         formData.append('descriptionEdit', this.editForm.description);
       }
-      /*if (this.editFiles) {
-          formData.append('filesEdit', this.editFiles);
-      }*/
 
+      if (this.saveFiles.length > 0) {
+        this.saveFiles.forEach(function (element) {
+          return formData.append('filesSave[]', element);
+        });
+      }
 
-      formData.append('chapterUuid', this.chapterUuid);
+      if (this.delFiles.length > 0) {
+        this.delFiles.forEach(function (element) {
+          return formData.append('filesDel[]', element);
+        });
+      }
+
+      if (this.addFiles.length > 0) {
+        this.addFiles.forEach(function (element) {
+          return formData.append('filesAdd[]', element);
+        });
+      }
+
+      formData.append('courseUuid', this.courseUuid);
       this.$inertia.post('/content/edit', formData);
     },
     updateFileEdit: function updateFileEdit(event) {
       if (event.target.files[0].type.match("application/pdf")) {
-        this.editFiles.push(event.target.files[0]);
+        this.addFiles.push(event.target.files[0]);
       }
     },
-    resetFileEdit: function resetFileEdit(index) {
-      this.editFiles.splice(index, 1);
+    resetFileSave: function resetFileSave(index) {
+      this.delFiles.push(this.saveFiles[index].uuid);
+      this.saveFiles.splice(index, 1);
+    },
+    resetFileAdd: function resetFileAdd(index) {
+      this.addFiles.splice(index, 1);
     },
     selectFileEdit: function selectFileEdit() {
       document.getElementById("hidden-input-edit").click();
     },
     updateEditForm: function updateEditForm(content) {
+      var _this2 = this;
+
       this.editForm.uuid = content ? content.uuid : null;
       this.editForm.title = content ? content.title : null;
       this.editForm.description = content ? content.description : null;
-      this.editFiles = content ? content.files : null;
+
+      if (content && content.files.length > 0) {
+        content.files.forEach(function (element) {
+          return _this2.saveFiles.push(element);
+        });
+      } else {
+        this.saveFiles = [];
+        this.addFiles = null;
+        this.delFiles = null;
+      }
     },
     clearFormMessages: function clearFormMessages() {
       this.$page.errors = {};
@@ -38966,7 +39005,7 @@ var render = function() {
                           _vm._l(this.createForm.files, function(file, index) {
                             return _c(
                               "div",
-                              { key: file.name, staticClass: "pt-4" },
+                              { key: file.name + index, staticClass: "pt-4" },
                               [
                                 _c(
                                   "div",
@@ -39385,7 +39424,8 @@ var render = function() {
                           attrs: { id: "gallery-edit" }
                         },
                         [
-                          this.editFiles.length === 0
+                          this.saveFiles.length === 0 &&
+                          this.addFiles.length === 0
                             ? _c(
                                 "li",
                                 {
@@ -39412,10 +39452,10 @@ var render = function() {
                         ]
                       ),
                       _vm._v(" "),
-                      _vm._l(this.editFiles, function(file, index) {
+                      _vm._l(this.saveFiles, function(file, index) {
                         return _c(
                           "div",
-                          { key: file.name, staticClass: "pt-4" },
+                          { key: file.name + index, staticClass: "pt-4" },
                           [
                             _c(
                               "div",
@@ -39437,7 +39477,7 @@ var render = function() {
                                     on: {
                                       click: function($event) {
                                         $event.preventDefault()
-                                        return _vm.resetFileEdit(index)
+                                        return _vm.resetFileSave(index)
                                       }
                                     }
                                   },
@@ -39447,8 +39487,53 @@ var render = function() {
                             ),
                             _vm._v(" "),
                             _vm.$page.errors.hasOwnProperty(
-                              "filesEdit." + index
+                              "filesSave." + index
                             )
+                              ? _c("p", { staticClass: "text-red-700 mt-2" }, [
+                                  _vm._v(
+                                    "\n                        Format du fichier ou taille incorrect.\n                    "
+                                  )
+                                ])
+                              : _vm._e()
+                          ]
+                        )
+                      }),
+                      _vm._v(" "),
+                      _vm._l(this.addFiles, function(file, index) {
+                        return _c(
+                          "div",
+                          { key: file.name + index, staticClass: "pt-4" },
+                          [
+                            _c(
+                              "div",
+                              {
+                                staticClass:
+                                  "font-semibold text-gray-700 text-sm"
+                              },
+                              [
+                                _vm._v(
+                                  "\n                        " +
+                                    _vm._s(file.name) +
+                                    " - "
+                                ),
+                                _c(
+                                  "a",
+                                  {
+                                    staticClass: "text-red-700 hover:underline",
+                                    attrs: { href: "#" },
+                                    on: {
+                                      click: function($event) {
+                                        $event.preventDefault()
+                                        return _vm.resetFileAdd(index)
+                                      }
+                                    }
+                                  },
+                                  [_vm._v("Supprimer")]
+                                )
+                              ]
+                            ),
+                            _vm._v(" "),
+                            _vm.$page.errors.hasOwnProperty("filesAdd." + index)
                               ? _c("p", { staticClass: "text-red-700 mt-2" }, [
                                   _vm._v(
                                     "\n                        Format du fichier ou taille incorrect.\n                    "

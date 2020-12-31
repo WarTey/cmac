@@ -61,7 +61,7 @@
                                         <span class="text-sm text-gray-500">Aucun PDF sélectionné</span>
                                     </li>
                                 </ul>
-                                <div class="pt-4" v-for="(file, index) in this.createForm.files" v-bind:key="file.name">
+                                <div class="pt-4" v-for="(file, index) in this.createForm.files" v-bind:key="file.name + index">
                                     <div class="font-semibold text-gray-700 text-sm">
                                         {{ file.name }} - <a href="#" v-on:click.prevent="resetFileStore(index)" class="text-red-700 hover:underline">Supprimer</a>
                                     </div>
@@ -136,16 +136,24 @@
                         </button>
                     </header>
                     <ul id="gallery-edit" class="flex flex-1 flex-wrap -m-1">
-                        <li v-if="this.editFiles.length === 0" class="h-full w-full text-center flex flex-col items-center justify-center items-center">
+                        <li v-if="this.saveFiles.length === 0 && this.addFiles.length === 0" class="h-full w-full text-center flex flex-col items-center justify-center items-center">
                             <img class="mx-auto w-32" :src="'/img/no-img.png'" alt="Aucun PDF sélectionné">
                             <span class="text-sm text-gray-500">Aucun PDF sélectionné</span>
                         </li>
                     </ul>
-                    <div class="pt-4" v-for="(file, index) in this.editFiles" v-bind:key="file.name">
+                    <div class="pt-4" v-for="(file, index) in this.saveFiles" v-bind:key="file.name + index">
                         <div class="font-semibold text-gray-700 text-sm">
-                            {{ file.name }} - <a href="#" v-on:click.prevent="resetFileEdit(index)" class="text-red-700 hover:underline">Supprimer</a>
+                            {{ file.name }} - <a href="#" v-on:click.prevent="resetFileSave(index)" class="text-red-700 hover:underline">Supprimer</a>
                         </div>
-                        <p class="text-red-700 mt-2" v-if="$page.errors.hasOwnProperty('filesEdit.' + index)">
+                        <p class="text-red-700 mt-2" v-if="$page.errors.hasOwnProperty('filesSave.' + index)">
+                            Format du fichier ou taille incorrect.
+                        </p>
+                    </div>
+                    <div class="pt-4" v-for="(file, index) in this.addFiles" v-bind:key="file.name + index">
+                        <div class="font-semibold text-gray-700 text-sm">
+                            {{ file.name }} - <a href="#" v-on:click.prevent="resetFileAdd(index)" class="text-red-700 hover:underline">Supprimer</a>
+                        </div>
+                        <p class="text-red-700 mt-2" v-if="$page.errors.hasOwnProperty('filesAdd.' + index)">
                             Format du fichier ou taille incorrect.
                         </p>
                     </div>
@@ -199,7 +207,9 @@ export default {
                 title: null,
                 description: null
             },
-            editFiles: null
+            delFiles: [],
+            addFiles: [],
+            saveFiles: []
         }
     },
 
@@ -319,22 +329,39 @@ export default {
             if (this.editForm.description) {
                 formData.append('descriptionEdit', this.editForm.description);
             }
-            /*if (this.editFiles) {
-                formData.append('filesEdit', this.editFiles);
-            }*/
-            formData.append('chapterUuid', this.chapterUuid);
+            if (this.saveFiles.length > 0) {
+                this.saveFiles.forEach(element =>
+                    formData.append('filesSave[]', element)
+                );
+            }
+            if (this.delFiles.length > 0) {
+                this.delFiles.forEach(element =>
+                    formData.append('filesDel[]', element)
+                );
+            }
+            if (this.addFiles.length > 0) {
+                this.addFiles.forEach(element =>
+                    formData.append('filesAdd[]', element)
+                );
+            }
+            formData.append('courseUuid', this.courseUuid);
 
             this.$inertia.post('/content/edit', formData);
         },
 
         updateFileEdit(event) {
             if (event.target.files[0].type.match("application/pdf")) {
-                this.editFiles.push(event.target.files[0]);
+                this.addFiles.push(event.target.files[0]);
             }
         },
 
-        resetFileEdit(index) {
-            this.editFiles.splice(index, 1);
+        resetFileSave(index) {
+            this.delFiles.push(this.saveFiles[index].uuid);
+            this.saveFiles.splice(index, 1);
+        },
+
+        resetFileAdd(index) {
+            this.addFiles.splice(index, 1);
         },
 
         selectFileEdit() {
@@ -345,7 +372,15 @@ export default {
             this.editForm.uuid = content ? content.uuid : null;
             this.editForm.title = content ? content.title : null;
             this.editForm.description = content ? content.description : null;
-            this.editFiles = content ? content.files : null;
+            if (content && content.files.length > 0) {
+                content.files.forEach(element =>
+                    this.saveFiles.push(element)
+                );
+            } else {
+                this.saveFiles = [];
+                this.addFiles = null;
+                this.delFiles = null;
+            }
         },
 
         clearFormMessages() {

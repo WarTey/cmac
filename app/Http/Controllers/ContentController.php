@@ -8,6 +8,7 @@ use App\Models\Course;
 use App\Models\File;
 use App\Models\Level;
 use Illuminate\Http\Request;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Validation\Rule;
 use Inertia\Inertia;
@@ -48,19 +49,11 @@ class ContentController extends Controller
 
         $content->save();
 
-        if ($request->file()) {
-            foreach ($request->file()["filesStore"] as $file) {
-                if ($file->getError() == 0) {
-                    $path = $file->store('public/files');
-                    $fileName = $file->getClientOriginalName();
-
-                    $file = new File();
-                    $file->title = basename($path);
-                    $file->name = $fileName;
-                    $file->content_id = Content::where('uuid', $content->uuid)->first()->id;
-
-                    $file->save();
-                }
+        if ($request->file())
+        {
+            foreach ($request->file()["filesStore"] as $file)
+            {
+                $this->uploadFile($file, $content->uuid);
             }
         }
 
@@ -76,10 +69,28 @@ class ContentController extends Controller
                 'max:100'
             ],
             'descriptionEdit' => 'nullable|max:2048',
+            'filesSave.*' => 'nullable|string',
+            'filesAdd.*' => 'nullable|file|mimes:pdf|max:2048',
             'courseUuid' => 'required'
         ]);
 
         $content = Content::where('uuid', $request->post('uuid'))->first();
+
+        if ($request->post('filesDel'))
+        {
+            foreach ($request->post('filesDel') as $file)
+            {
+                File::where('uuid', $file)->first()->delete();
+            }
+        }
+
+        if ($request->file())
+        {
+            foreach ($request->file()["filesAdd"] as $file)
+            {
+                $this->uploadFile($file, $content->uuid);
+            }
+        }
 
         $content->update([
             'title' => $request->post('titleEdit'),
@@ -87,6 +98,22 @@ class ContentController extends Controller
         ]);
 
         return Redirect::route('contents.index', ['uuid' => $request->post('courseUuid')])->with('successEdit', 'Contenu en ligne.');
+    }
+
+    private function uploadFile(UploadedFile $file, string $uuid)
+    {
+        if ($file->getError() == 0)
+        {
+            $path = $file->store('public/files');
+            $fileName = $file->getClientOriginalName();
+
+            $file = new File();
+            $file->title = basename($path);
+            $file->name = $fileName;
+            $file->content_id = Content::where('uuid', $uuid)->first()->id;
+
+            $file->save();
+        }
     }
 
     public function delete(Request $request)
