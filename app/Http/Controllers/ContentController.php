@@ -34,7 +34,7 @@ class ContentController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'title' => 'required|unique:contents|max:100',
+            'title' => 'required|unique:contents,title|max:100',
             'description' => 'nullable',
             'files.*' => 'nullable|file|mimes:pdf|max:2048',
             'courseUuid' => 'required'
@@ -63,7 +63,7 @@ class ContentController extends Controller
             }
         }
 
-        return Redirect::route('contents.index', ['uuid' => $request->post('courseUuid')])->with('success', 'Contenu en ligne.');
+        return Redirect::route('contents.index', ['uuid' => $request->post('courseUuid')])->with('successStore', 'Contenu en ligne.');
     }
 
     public function delete(Request $request)

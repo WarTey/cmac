@@ -94,7 +94,7 @@
                             {{ content.description }}
                         </div>
                         <div class="mt-6 text-gray-700 text-justify cursor-pointer hover:underline" v-for="file in content.files" v-bind:key="file.uuid">
-                            <canvas class="w-full rounded border" :id="file.uuid">{{ showFile(file.title, file.uuid) }}</canvas>
+                            <canvas class="w-full rounded border" :id="file.uuid">{{ loadFile(file.title, file.uuid) }}</canvas>
                         </div>
                         <div class="mt-2 flex">
                             <a class="text-blue-500 font-semibold text-justify hover:underline cursor-pointer">
@@ -135,6 +135,7 @@ export default {
                 description: null,
                 files: []
             },
+            files: []
         }
     },
 
@@ -164,7 +165,7 @@ export default {
             }
             formData.append('courseUuid', this.courseUuid);
 
-            this.$inertia.post('/contents', formData);
+            this.$inertia.post('/content/store', formData);
         },
 
         updateFile(event) {
@@ -191,26 +192,38 @@ export default {
             document.getElementById("hidden-input").click();
         },
 
-        showFile(url, uuid) {
+        loadFile(url, uuid) {
             pdfjsLib.disableWorker = true;
-            pdfjsLib.getDocument("/storage/files/" + url).promise.then(pdf => {
-                console.log("NB Pages : " + pdf._pdfInfo.numPages + " pages");
-                pdf.getPage(1).then(page => {
-                    const canvas = document.getElementById(uuid);
-                    const context = canvas.getContext('2d');
-                    const viewport = page.getViewport({
-                        scale: 2,
-                        rotation: 0
-                    });
+            pdfjsLib.getDocument({
+                url : "/storage/files/" + url,
+                disableAutoFetch: true,
+                disableStream: true
+            }).promise.then(pdf => {
 
-                    canvas.height = viewport.height;
-                    canvas.width = viewport.width;
-
-                    page.render({
-                        canvasContext: context,
-                        viewport: viewport
-                    });
+                this.files.push({
+                    pdf: pdf,
+                    pages: pdf.numPages,
+                    currentPage: 1
                 });
+
+                pdf.getPage(1).then(page => this.renderFile(page, uuid));
+            });
+        },
+
+        renderFile(page, uuid) {
+            const canvas = document.getElementById(uuid);
+            const context = canvas.getContext('2d');
+            const viewport = page.getViewport({
+                scale: 2,
+                rotation: 0
+            });
+
+            canvas.height = viewport.height;
+            canvas.width = viewport.width;
+
+            page.render({
+                canvasContext: context,
+                viewport: viewport
             });
         },
 

@@ -3672,7 +3672,8 @@ __webpack_require__.r(__webpack_exports__);
         title: null,
         description: null,
         files: []
-      }
+      },
+      files: []
     };
   },
   watch: {
@@ -3703,7 +3704,7 @@ __webpack_require__.r(__webpack_exports__);
       }
 
       formData.append('courseUuid', this.courseUuid);
-      this.$inertia.post('/contents', formData);
+      this.$inertia.post('/content/store', formData);
     },
     updateFile: function updateFile(event) {
       if (event.target.files[0].type.match("application/pdf")) {
@@ -3726,24 +3727,38 @@ __webpack_require__.r(__webpack_exports__);
     selectFile: function selectFile() {
       document.getElementById("hidden-input").click();
     },
-    showFile: function showFile(url, uuid) {
+    loadFile: function loadFile(url, uuid) {
+      var _this = this;
+
       pdfjsLib.disableWorker = true;
-      pdfjsLib.getDocument("/storage/files/" + url).promise.then(function (pdf) {
-        console.log("NB Pages : " + pdf._pdfInfo.numPages + " pages");
-        pdf.getPage(1).then(function (page) {
-          var canvas = document.getElementById(uuid);
-          var context = canvas.getContext('2d');
-          var viewport = page.getViewport({
-            scale: 2,
-            rotation: 0
-          });
-          canvas.height = viewport.height;
-          canvas.width = viewport.width;
-          page.render({
-            canvasContext: context,
-            viewport: viewport
-          });
+      pdfjsLib.getDocument({
+        url: "/storage/files/" + url,
+        disableAutoFetch: true,
+        disableStream: true
+      }).promise.then(function (pdf) {
+        _this.files.push({
+          pdf: pdf,
+          pages: pdf.numPages,
+          currentPage: 1
         });
+
+        pdf.getPage(1).then(function (page) {
+          return _this.renderFile(page, uuid);
+        });
+      });
+    },
+    renderFile: function renderFile(page, uuid) {
+      var canvas = document.getElementById(uuid);
+      var context = canvas.getContext('2d');
+      var viewport = page.getViewport({
+        scale: 2,
+        rotation: 0
+      });
+      canvas.height = viewport.height;
+      canvas.width = viewport.width;
+      page.render({
+        canvasContext: context,
+        viewport: viewport
       });
     },
     removeContent: function removeContent(uuid) {
@@ -3993,7 +4008,7 @@ __webpack_require__.r(__webpack_exports__);
       }
 
       formData.append('chapterUuid', this.chapterUuid);
-      this.$inertia.post('/courses', formData);
+      this.$inertia.post('/course/store', formData);
     },
     updateFileStore: function updateFileStore(event) {
       if (event.target.files[0].type.match("image.*")) {
@@ -38996,7 +39011,7 @@ var render = function() {
                             },
                             [
                               _vm._v(
-                                _vm._s(_vm.showFile(file.title, file.uuid))
+                                _vm._s(_vm.loadFile(file.title, file.uuid))
                               )
                             ]
                           )

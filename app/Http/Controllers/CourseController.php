@@ -30,7 +30,7 @@ class CourseController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'titleStore' => 'required|unique:courses|max:100',
+            'titleStore' => 'required|unique:courses,title|max:100',
             'descriptionStore' => 'nullable|max:2048',
             'imageStore' => 'nullable|image|mimes:jpg,png,jpeg|max:2048',
             'chapterUuid' => 'required'
@@ -50,7 +50,7 @@ class CourseController extends Controller
 
         $course->save();
 
-        return Redirect::route('courses.index', ['uuid' => $request->post('chapterUuid')])->with('success', 'Cours en ligne.');
+        return Redirect::route('courses.index', ['uuid' => $request->post('chapterUuid')])->with('successStore', 'Cours en ligne.');
     }
 
     public function edit(Request $request) {

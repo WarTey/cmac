@@ -26,7 +26,7 @@ class ChapterController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'titleStore' => 'required|unique:chapters|max:100',
+            'titleStore' => 'required|unique:chapters,title|max:100',
             'descriptionStore' => 'nullable|max:2048',
             'imageStore' => 'nullable|image|mimes:jpg,png,jpeg|max:2048',
             'levelUuid' => 'required'

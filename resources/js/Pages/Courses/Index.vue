@@ -229,7 +229,7 @@ export default {
             }
             formData.append('chapterUuid', this.chapterUuid);
 
-            this.$inertia.post('/courses', formData);
+            this.$inertia.post('/course/store', formData);
         },
 
         updateFileStore(event) {
