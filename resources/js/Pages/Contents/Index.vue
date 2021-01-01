@@ -88,6 +88,11 @@
                 </div>
             </div>
         </transition>
+        <div class="pt-4">
+            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+                <progress-bar :links="$page.contents.links" />
+            </div>
+        </div>
         <div class="py-4" v-for="content in $page.contents.data" v-bind:key="content.uuid">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white overflow-hidden shadow-lg hover:shadow-xl sm:rounded-lg transition duration-500 ease-in-out">
@@ -121,11 +126,11 @@
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="py-5 text-center">
-                <inertia-link :href="link.url" class="font-semibold text-blue-500 border-gray-500 p-2" v-for="link in $page.contents.links" v-bind:key="link.label">
-                    <span v-bind:class="{'text-red-500' : link.active}" v-html="link.label"></span>
-                </inertia-link>
+                <div class="py-5 text-center">
+                    <inertia-link class="font-semibold text-blue-500 border-gray-500 p-2" v-for="link in $page.contents.links" :href="link.url" v-bind:key="link.label">
+                        <span v-bind:class="{'text-red-500' : link.active}" v-html="link.label"></span>
+                    </inertia-link>
+                </div>
             </div>
         </div>
         <div v-if="modalVisible" class="fixed overflow-hidden top-0 left-0 flex items-center justify-center w-full h-full bg-black bg-opacity-50">
@@ -205,10 +210,12 @@
 
 <script>
 import AppLayout from "@/Layouts/AppLayout";
+import ProgressBar from "@/Pages/Contents/ProgressBar";
 
 export default {
     components: {
-        AppLayout
+        AppLayout,
+        ProgressBar
     },
 
     props: ['contents', 'course', 'chapter', 'level'],
