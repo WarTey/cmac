@@ -92,7 +92,7 @@
                             </div>
                         </div>
                         <div v-if="level.description" class="mt-6 text-gray-500 text-justify">
-                            {{ level.description }}
+                            <span v-html="level.description"></span>
                         </div>
                         <div class="mt-4 flex">
                             <a class="text-blue-500 font-semibold text-justify hover:underline cursor-pointer" v-on:click.prevent="showModal(level)">
@@ -263,6 +263,7 @@
             },
 
             showModal(level) {
+                console.log(this.levels);
                 this.updateEditForm(level);
 
                 this.modalVisible = true;

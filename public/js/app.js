@@ -3758,6 +3758,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
@@ -4638,6 +4643,7 @@ __webpack_require__.r(__webpack_exports__);
       this.$inertia.post('/formation/delete', formData);
     },
     showModal: function showModal(level) {
+      console.log(this.levels);
       this.updateEditForm(level);
       this.modalVisible = true;
     },
@@ -38425,11 +38431,11 @@ var render = function() {
                           "div",
                           { staticClass: "mt-6 text-gray-500 text-justify" },
                           [
-                            _vm._v(
-                              "\n                        " +
-                                _vm._s(chapter.description) +
-                                "\n                    "
-                            )
+                            _c("span", {
+                              domProps: {
+                                innerHTML: _vm._s(chapter.description)
+                              }
+                            })
                           ]
                         )
                       : _vm._e(),
@@ -39395,7 +39401,7 @@ var render = function() {
           : _vm._e()
       ]),
       _vm._v(" "),
-      _vm._l(_vm.$page.contents, function(content) {
+      _vm._l(_vm.$page.contents.data, function(content) {
         return _c("div", { key: content.uuid, staticClass: "py-4" }, [
           _c("div", { staticClass: "max-w-7xl mx-auto sm:px-6 lg:px-8" }, [
             _c(
@@ -39430,11 +39436,9 @@ var render = function() {
                       "div",
                       { staticClass: "mt-6 text-gray-500 text-justify" },
                       [
-                        _vm._v(
-                          "\n                        " +
-                            _vm._s(content.description) +
-                            "\n                    "
-                        )
+                        _c("span", {
+                          domProps: { innerHTML: _vm._s(content.description) }
+                        })
                       ]
                     ),
                     _vm._v(" "),
@@ -39543,7 +39547,30 @@ var render = function() {
                 )
               ]
             )
-          ])
+          ]),
+          _vm._v(" "),
+          _c(
+            "div",
+            { staticClass: "py-5 text-center" },
+            _vm._l(_vm.$page.contents.links, function(link) {
+              return _c(
+                "inertia-link",
+                {
+                  key: link.label,
+                  staticClass:
+                    "font-semibold text-blue-500 border-gray-500 p-2",
+                  attrs: { href: link.url }
+                },
+                [
+                  _c("span", {
+                    class: { "text-red-500": link.active },
+                    domProps: { innerHTML: _vm._s(link.label) }
+                  })
+                ]
+              )
+            }),
+            1
+          )
         ])
       }),
       _vm._v(" "),
@@ -40528,11 +40555,9 @@ var render = function() {
                       "div",
                       { staticClass: "mt-6 text-gray-500 text-justify" },
                       [
-                        _vm._v(
-                          "\n                        " +
-                            _vm._s(course.description) +
-                            "\n                    "
-                        )
+                        _c("span", {
+                          domProps: { innerHTML: _vm._s(course.description) }
+                        })
                       ]
                     ),
                     _vm._v(" "),
@@ -41536,11 +41561,9 @@ var render = function() {
                           "div",
                           { staticClass: "mt-6 text-gray-500 text-justify" },
                           [
-                            _vm._v(
-                              "\n                        " +
-                                _vm._s(level.description) +
-                                "\n                    "
-                            )
+                            _c("span", {
+                              domProps: { innerHTML: _vm._s(level.description) }
+                            })
                           ]
                         )
                       : _vm._e(),

@@ -88,7 +88,7 @@
                 </div>
             </div>
         </transition>
-        <div class="py-4" v-for="content in $page.contents" v-bind:key="content.uuid">
+        <div class="py-4" v-for="content in $page.contents.data" v-bind:key="content.uuid">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white overflow-hidden shadow-lg hover:shadow-xl sm:rounded-lg transition duration-500 ease-in-out">
                     <div class="p-6 sm:px-20 bg-white border-b border-gray-200">
@@ -98,7 +98,7 @@
                             </div>
                         </div>
                         <div class="mt-6 text-gray-500 text-justify">
-                            {{ content.description }}
+                            <span v-html="content.description"></span>
                         </div>
                         <div class="mt-6" v-for="file in content.files" v-bind:key="file.uuid">
                             <canvas class="w-full rounded border" :id="file.uuid">{{ loadFile(file.title, file.uuid) }}</canvas>
@@ -121,6 +121,11 @@
                         </div>
                     </div>
                 </div>
+            </div>
+            <div class="py-5 text-center">
+                <inertia-link :href="link.url" class="font-semibold text-blue-500 border-gray-500 p-2" v-for="link in $page.contents.links" v-bind:key="link.label">
+                    <span v-bind:class="{'text-red-500' : link.active}" v-html="link.label"></span>
+                </inertia-link>
             </div>
         </div>
         <div v-if="modalVisible" class="fixed overflow-hidden top-0 left-0 flex items-center justify-center w-full h-full bg-black bg-opacity-50">

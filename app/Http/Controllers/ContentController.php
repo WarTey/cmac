@@ -19,7 +19,7 @@ class ContentController extends Controller
     {
         $course = Course::where('uuid', $uuid)->first();
 
-        $contents = Content::where('course_id', $course->id)->orderBy('position')->with('files')->get();
+        $contents = Content::where('course_id', $course->id)->orderBy('position')->with('files')->paginate(1);
 
         $chapter = Chapter::where('id', $course->chapter_id)->first();
 

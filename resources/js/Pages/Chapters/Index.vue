@@ -95,7 +95,7 @@
                             </div>
                         </div>
                         <div v-if="chapter.description" class="mt-6 text-gray-500 text-justify">
-                            {{ chapter.description }}
+                            <span v-html="chapter.description"></span>
                         </div>
                         <div class="mt-4 flex">
                             <a class="text-blue-500 font-semibold text-justify hover:underline cursor-pointer" v-on:click.prevent="showModal(chapter)">
