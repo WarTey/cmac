@@ -12,7 +12,7 @@ class LevelController extends Controller
 {
     public function index()
     {
-        $levels = Level::withCount('chapters')->get();
+        $levels = Level::orderBy('position')->withCount('chapters')->get();
 
         return Inertia::render('Levels/Index', [
             'levels' => $levels
@@ -24,12 +24,14 @@ class LevelController extends Controller
         $request->validate([
             'titleStore' => 'required|unique:levels,title|max:100',
             'descriptionStore' => 'nullable|max:2048',
+            'positionStore' => 'required|integer|min:0',
             'imageStore' => 'nullable|image|mimes:jpg,png,jpeg|max:2048'
         ]);
 
         $level = new Level();
         $level->title = $request->post('titleStore');
         $level->description = $request->post('descriptionStore');
+        $level->position = $request->post('positionStore');
 
         if ($request->file('imageStore'))
         {
@@ -52,7 +54,8 @@ class LevelController extends Controller
                 Rule::unique('levels', 'title')->ignore($request->post('uuid'), 'uuid'),
                 'max:100'
             ],
-            'descriptionEdit' => 'nullable|max:2048'
+            'descriptionEdit' => 'nullable|max:2048',
+            'positionEdit' => 'required|integer|min:0'
         ]);
 
         $level = Level::where('uuid', $request->post('uuid'))->first();
@@ -75,6 +78,8 @@ class LevelController extends Controller
                 'image' => null
             ]);
         }
+
+        $level->position = $request->post('positionEdit');
 
         $level->update([
             'title' => $request->post('titleEdit'),

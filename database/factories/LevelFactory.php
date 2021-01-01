@@ -24,7 +24,8 @@ class LevelFactory extends Factory
         return [
             'uuid' => $this->faker->uuid,
             'title' => $this->faker->sentence(),
-            'description' => $this->faker->paragraphs(2, true)
+            'description' => $this->faker->paragraphs(2, true),
+            'position' => $this->faker->numberBetween(0, 100)
         ];
     }
 }

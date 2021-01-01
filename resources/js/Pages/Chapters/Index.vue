@@ -38,6 +38,13 @@
                                 <p class="text-red-700 mt-2" v-if="$page.errors.descriptionStore">{{ $page.errors.descriptionStore[0] }}</p>
                             </div>
                             <div class="mb-4">
+                                <label class="block text-gray-700 text-sm font-bold mb-2" for="position">
+                                    Position
+                                </label>
+                                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="position" v-model="createForm.position" type="number" min="0" placeholder="0">
+                                <p class="text-red-700 mt-2" v-if="$page.errors.positionStore">{{ $page.errors.positionStore[0] }}</p>
+                            </div>
+                            <div class="mb-4">
                                 <label class="block text-gray-700 text-sm font-bold mb-2">
                                     Image (optionnel)
                                 </label>
@@ -90,7 +97,7 @@
                         <div v-if="chapter.description" class="mt-6 text-gray-500 text-justify">
                             {{ chapter.description }}
                         </div>
-                        <div class="mt-2 flex">
+                        <div class="mt-4 flex">
                             <a class="text-blue-500 font-semibold text-justify hover:underline cursor-pointer" v-on:click.prevent="showModal(chapter)">
                                 Éditer le chapitre
                             </a>
@@ -118,6 +125,13 @@
                     </label>
                     <textarea class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="edit-description" v-model="editForm.description" placeholder="Description (optionnel)"></textarea>
                     <p class="text-red-700 mt-2" v-if="$page.errors.descriptionEdit">{{ $page.errors.descriptionEdit[0] }}</p>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="position">
+                        Position
+                    </label>
+                    <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="edit-position" v-model="editForm.position" type="number" min="0" placeholder="0">
+                    <p class="text-red-700 mt-2" v-if="$page.errors.positionEdit">{{ $page.errors.positionEdit[0] }}</p>
                 </div>
                 <div class="mb-4">
                     <label class="block text-gray-700 text-sm font-bold mb-2">
@@ -182,12 +196,14 @@ export default {
             createForm: {
                 title: null,
                 description: null,
+                position: null,
                 image: null
             },
             editForm: {
                 uuid: null,
                 title: null,
-                description: null
+                description: null,
+                position: null
             },
             editImage: null
         }
@@ -218,12 +234,15 @@ export default {
             if (this.createForm.description) {
                 formData.append('descriptionStore', this.createForm.description);
             }
+            if (this.createForm.position) {
+                formData.append('positionStore', this.createForm.position);
+            }
             if (this.createForm.image) {
                 formData.append('imageStore', this.createForm.image);
             }
             formData.append('levelUuid', this.levelUuid);
 
-            this.$inertia.post('/chapters', formData);
+            this.$inertia.post('/chapter/store', formData);
         },
 
         updateFileStore(event) {
@@ -272,6 +291,9 @@ export default {
             if (this.editForm.description) {
                 formData.append('descriptionEdit', this.editForm.description);
             }
+            if (this.editForm.position) {
+                formData.append('positionEdit', this.editForm.position);
+            }
             if (this.editImage) {
                 formData.append('imageEdit', this.editImage);
             }
@@ -298,6 +320,7 @@ export default {
             this.editForm.uuid = chapter ? chapter.uuid : null;
             this.editForm.title = chapter ? chapter.title : null;
             this.editForm.description = chapter ? chapter.description : null;
+            this.editForm.position = chapter ? chapter.position : null;
             this.editImage = chapter ? chapter.image : null;
         },
 

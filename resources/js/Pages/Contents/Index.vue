@@ -46,6 +46,13 @@
                                 <p class="text-red-700 mt-2" v-if="$page.errors.descriptionStore">{{ $page.errors.descriptionStore[0] }}</p>
                             </div>
                             <div class="mb-4">
+                                <label class="block text-gray-700 text-sm font-bold mb-2" for="position">
+                                    Position
+                                </label>
+                                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="position" v-model="createForm.position" type="number" min="0" placeholder="0">
+                                <p class="text-red-700 mt-2" v-if="$page.errors.positionStore">{{ $page.errors.positionStore[0] }}</p>
+                            </div>
+                            <div class="mb-4">
                                 <label class="block text-gray-700 text-sm font-bold mb-2">
                                     PDF (optionnel)
                                 </label>
@@ -93,7 +100,7 @@
                         <div class="mt-6 text-gray-500 text-justify">
                             {{ content.description }}
                         </div>
-                        <div class="mt-6 text-gray-700 text-justify cursor-pointer hover:underline" v-for="file in content.files" v-bind:key="file.uuid">
+                        <div class="mt-6" v-for="file in content.files" v-bind:key="file.uuid">
                             <canvas class="w-full rounded border" :id="file.uuid">{{ loadFile(file.title, file.uuid) }}</canvas>
                             <div class="mt-2 flex">
                                 <a class="text-blue-500 font-semibold text-justify hover:underline cursor-pointer" v-on:click.prevent="previousPage(file.uuid)">
@@ -132,6 +139,13 @@
                     </label>
                     <textarea class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="edit-description" v-model="editForm.description" placeholder="Description (optionnel)"></textarea>
                     <p class="text-red-700 mt-2" v-if="$page.errors.descriptionEdit">{{ $page.errors.descriptionEdit[0] }}</p>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="position">
+                        Position
+                    </label>
+                    <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="edit-position" v-model="editForm.position" type="number" min="0" placeholder="0">
+                    <p class="text-red-700 mt-2" v-if="$page.errors.positionEdit">{{ $page.errors.positionEdit[0] }}</p>
                 </div>
                 <div class="mb-4">
                     <label class="block text-gray-700 text-sm font-bold mb-2">
@@ -207,13 +221,15 @@ export default {
             createForm: {
                 title: null,
                 description: null,
+                position: null,
                 files: []
             },
             files: [],
             editForm: {
                 uuid: null,
                 title: null,
-                description: null
+                description: null,
+                position: null
             },
             delFiles: [],
             addFiles: [],
@@ -245,6 +261,9 @@ export default {
             }
             if (this.createForm.description) {
                 formData.append('descriptionStore', this.createForm.description);
+            }
+            if (this.createForm.position) {
+                formData.append('positionStore', this.createForm.position);
             }
             if (this.createForm.files.length > 0) {
                 this.createForm.files.forEach(element =>
@@ -366,6 +385,9 @@ export default {
             if (this.editForm.description) {
                 formData.append('descriptionEdit', this.editForm.description);
             }
+            if (this.editForm.position) {
+                formData.append('positionEdit', this.editForm.position);
+            }
             if (this.saveFiles.length > 0) {
                 this.saveFiles.forEach(element =>
                     formData.append('filesSave[]', element)
@@ -409,14 +431,15 @@ export default {
             this.editForm.uuid = content ? content.uuid : null;
             this.editForm.title = content ? content.title : null;
             this.editForm.description = content ? content.description : null;
+            this.editForm.position = content ? content.position : null;
             if (content && content.files.length > 0) {
                 content.files.forEach(element =>
                     this.saveFiles.push(element)
                 );
             } else {
                 this.saveFiles = [];
-                this.addFiles = null;
-                this.delFiles = null;
+                this.addFiles = [];
+                this.delFiles = [];
             }
         },
 

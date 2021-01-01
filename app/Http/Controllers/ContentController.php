@@ -19,7 +19,7 @@ class ContentController extends Controller
     {
         $course = Course::where('uuid', $uuid)->first();
 
-        $contents = Content::where('course_id', $course->id)->with('files')->get();
+        $contents = Content::where('course_id', $course->id)->orderBy('position')->with('files')->get();
 
         $chapter = Chapter::where('id', $course->chapter_id)->first();
 
@@ -38,6 +38,7 @@ class ContentController extends Controller
         $request->validate([
             'titleStore' => 'required|unique:contents,title|max:100',
             'descriptionStore' => 'nullable',
+            'positionStore' => 'required|integer|min:0',
             'filesStore.*' => 'nullable|file|mimes:pdf|max:2048',
             'courseUuid' => 'required'
         ]);
@@ -45,6 +46,7 @@ class ContentController extends Controller
         $content = new Content();
         $content->title = $request->post('titleStore');
         $content->description = $request->post('descriptionStore');
+        $content->position = $request->post('positionStore');
         $content->course_id = Course::where('uuid', $request->post('courseUuid'))->first()->id;
 
         $content->save();
@@ -69,6 +71,7 @@ class ContentController extends Controller
                 'max:100'
             ],
             'descriptionEdit' => 'nullable|max:2048',
+            'positionEdit' => 'required|integer|min:0',
             'filesSave.*' => 'nullable|string',
             'filesAdd.*' => 'nullable|file|mimes:pdf|max:2048',
             'courseUuid' => 'required'
@@ -91,6 +94,8 @@ class ContentController extends Controller
                 $this->uploadFile($file, $content->uuid);
             }
         }
+
+        $content->position = $request->post('positionEdit');
 
         $content->update([
             'title' => $request->post('titleEdit'),

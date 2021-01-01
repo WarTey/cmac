@@ -15,7 +15,7 @@ class ChapterController extends Controller
     {
         $level = Level::where('uuid', $uuid)->first();
 
-        $chapters = Chapter::where('level_id', $level->id)->withCount('courses')->get();
+        $chapters = Chapter::where('level_id', $level->id)->orderBy('position')->withCount('courses')->get();
 
         return Inertia::render('Chapters/Index', [
             'chapters' => $chapters,
@@ -28,6 +28,7 @@ class ChapterController extends Controller
         $request->validate([
             'titleStore' => 'required|unique:chapters,title|max:100',
             'descriptionStore' => 'nullable|max:2048',
+            'positionStore' => 'required|integer|min:0',
             'imageStore' => 'nullable|image|mimes:jpg,png,jpeg|max:2048',
             'levelUuid' => 'required'
         ]);
@@ -35,7 +36,8 @@ class ChapterController extends Controller
         $chapter = new Chapter();
         $chapter->title = $request->post('titleStore');
         $chapter->description = $request->post('descriptionStore');
-        $chapter->level_id = Level::where('uuid', $request->post('levelUuidStore'))->first()->id;
+        $chapter->position = $request->post('positionStore');
+        $chapter->level_id = Level::where('uuid', $request->post('levelUuid'))->first()->id;
 
         if ($request->file('imageStore'))
         {
@@ -59,6 +61,7 @@ class ChapterController extends Controller
                 'max:100'
             ],
             'descriptionEdit' => 'nullable|max:2048',
+            'positionEdit' => 'required|integer|min:0',
             'levelUuid' => 'required'
         ]);
 
@@ -82,6 +85,8 @@ class ChapterController extends Controller
                 'image' => null
             ]);
         }
+
+        $chapter->position = $request->post('positionEdit');
 
         $chapter->update([
             'title' => $request->post('titleEdit'),

@@ -16,7 +16,7 @@ class CourseController extends Controller
     {
         $chapter = Chapter::where('uuid', $uuid)->first();
 
-        $courses = Course::where('chapter_id', $chapter->id)->withCount('contents')->get();
+        $courses = Course::where('chapter_id', $chapter->id)->orderBy('position')->withCount('contents')->get();
 
         $level = Level::where('id', $chapter->level_id)->first();
 
@@ -32,6 +32,7 @@ class CourseController extends Controller
         $request->validate([
             'titleStore' => 'required|unique:courses,title|max:100',
             'descriptionStore' => 'nullable|max:2048',
+            'positionStore' => 'required|integer|min:0',
             'imageStore' => 'nullable|image|mimes:jpg,png,jpeg|max:2048',
             'chapterUuid' => 'required'
         ]);
@@ -39,6 +40,7 @@ class CourseController extends Controller
         $course = new Course();
         $course->title = $request->post('titleStore');
         $course->description = $request->post('descriptionStore');
+        $course->position = $request->post('positionStore');
         $course->chapter_id = Chapter::where('uuid', $request->post('chapterUuid'))->first()->id;
 
         if ($request->file('imageStore'))
@@ -62,6 +64,7 @@ class CourseController extends Controller
                 'max:100'
             ],
             'descriptionEdit' => 'nullable|max:2048',
+            'positionEdit' => 'required|integer|min:0',
             'chapterUuid' => 'required'
         ]);
 
@@ -85,6 +88,8 @@ class CourseController extends Controller
                 'image' => null
             ]);
         }
+
+        $course->position = $request->post('positionEdit');
 
         $course->update([
             'title' => $request->post('titleEdit'),

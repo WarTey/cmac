@@ -19,6 +19,7 @@ class CreateCoursesTable extends Migration
             $table->string('title')->unique();
             $table->text('description')->nullable();
             $table->string('image')->nullable();
+            $table->integer('position');
             $table->foreignId('chapter_id')->constrained()->cascadeOnDelete();
             $table->timestamps();
         });

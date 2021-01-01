@@ -26,6 +26,7 @@ class ContentFactory extends Factory
             'uuid' => $this->faker->uuid,
             'title' => $this->faker->sentence(),
             'description' => $this->faker->paragraphs(2, true),
+            'position' => $this->faker->numberBetween(0, 100),
             'course_id' => Course::all()->random()->id
         ];
     }

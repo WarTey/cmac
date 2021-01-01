@@ -3392,6 +3392,20 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
@@ -3407,12 +3421,14 @@ __webpack_require__.r(__webpack_exports__);
       createForm: {
         title: null,
         description: null,
+        position: null,
         image: null
       },
       editForm: {
         uuid: null,
         title: null,
-        description: null
+        description: null,
+        position: null
       },
       editImage: null
     };
@@ -3442,12 +3458,16 @@ __webpack_require__.r(__webpack_exports__);
         formData.append('descriptionStore', this.createForm.description);
       }
 
+      if (this.createForm.position) {
+        formData.append('positionStore', this.createForm.position);
+      }
+
       if (this.createForm.image) {
         formData.append('imageStore', this.createForm.image);
       }
 
       formData.append('levelUuid', this.levelUuid);
-      this.$inertia.post('/chapters', formData);
+      this.$inertia.post('/chapter/store', formData);
     },
     updateFileStore: function updateFileStore(event) {
       if (event.target.files[0].type.match("image.*")) {
@@ -3490,6 +3510,10 @@ __webpack_require__.r(__webpack_exports__);
         formData.append('descriptionEdit', this.editForm.description);
       }
 
+      if (this.editForm.position) {
+        formData.append('positionEdit', this.editForm.position);
+      }
+
       if (this.editImage) {
         formData.append('imageEdit', this.editImage);
       }
@@ -3512,6 +3536,7 @@ __webpack_require__.r(__webpack_exports__);
       this.editForm.uuid = chapter ? chapter.uuid : null;
       this.editForm.title = chapter ? chapter.title : null;
       this.editForm.description = chapter ? chapter.description : null;
+      this.editForm.position = chapter ? chapter.position : null;
       this.editImage = chapter ? chapter.image : null;
     },
     clearFormMessages: function clearFormMessages() {
@@ -3719,6 +3744,20 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
@@ -3738,13 +3777,15 @@ __webpack_require__.r(__webpack_exports__);
       createForm: {
         title: null,
         description: null,
+        position: null,
         files: []
       },
       files: [],
       editForm: {
         uuid: null,
         title: null,
-        description: null
+        description: null,
+        position: null
       },
       delFiles: [],
       addFiles: [],
@@ -3774,6 +3815,10 @@ __webpack_require__.r(__webpack_exports__);
 
       if (this.createForm.description) {
         formData.append('descriptionStore', this.createForm.description);
+      }
+
+      if (this.createForm.position) {
+        formData.append('positionStore', this.createForm.position);
       }
 
       if (this.createForm.files.length > 0) {
@@ -3894,6 +3939,10 @@ __webpack_require__.r(__webpack_exports__);
         formData.append('descriptionEdit', this.editForm.description);
       }
 
+      if (this.editForm.position) {
+        formData.append('positionEdit', this.editForm.position);
+      }
+
       if (this.saveFiles.length > 0) {
         this.saveFiles.forEach(function (element) {
           return formData.append('filesSave[]', element);
@@ -3936,6 +3985,7 @@ __webpack_require__.r(__webpack_exports__);
       this.editForm.uuid = content ? content.uuid : null;
       this.editForm.title = content ? content.title : null;
       this.editForm.description = content ? content.description : null;
+      this.editForm.position = content ? content.position : null;
 
       if (content && content.files.length > 0) {
         content.files.forEach(function (element) {
@@ -3943,8 +3993,8 @@ __webpack_require__.r(__webpack_exports__);
         });
       } else {
         this.saveFiles = [];
-        this.addFiles = null;
-        this.delFiles = null;
+        this.addFiles = [];
+        this.delFiles = [];
       }
     },
     clearFormMessages: function clearFormMessages() {
@@ -4135,6 +4185,20 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
@@ -4152,12 +4216,14 @@ __webpack_require__.r(__webpack_exports__);
       createForm: {
         title: null,
         description: null,
+        position: null,
         image: null
       },
       editForm: {
         uuid: null,
         title: null,
-        description: null
+        description: null,
+        position: null
       },
       editImage: null
     };
@@ -4185,6 +4251,10 @@ __webpack_require__.r(__webpack_exports__);
 
       if (this.createForm.description) {
         formData.append('descriptionStore', this.createForm.description);
+      }
+
+      if (this.createForm.position) {
+        formData.append('positionStore', this.createForm.position);
       }
 
       if (this.createForm.image) {
@@ -4235,6 +4305,10 @@ __webpack_require__.r(__webpack_exports__);
         formData.append('descriptionEdit', this.editForm.description);
       }
 
+      if (this.editForm.position) {
+        formData.append('positionEdit', this.editForm.position);
+      }
+
       if (this.editImage) {
         formData.append('imageEdit', this.editImage);
       }
@@ -4257,6 +4331,7 @@ __webpack_require__.r(__webpack_exports__);
       this.editForm.uuid = course ? course.uuid : null;
       this.editForm.title = course ? course.title : null;
       this.editForm.description = course ? course.description : null;
+      this.editForm.position = course ? course.position : null;
       this.editImage = course ? course.image : null;
     },
     clearFormMessages: function clearFormMessages() {
@@ -4307,6 +4382,21 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Layouts_AppLayout__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @/Layouts/AppLayout */ "./resources/js/Layouts/AppLayout.vue");
+/* harmony import */ var _Jetstream_Input__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @/Jetstream/Input */ "./resources/js/Jetstream/Input.vue");
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -4470,8 +4560,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
+    Input: _Jetstream_Input__WEBPACK_IMPORTED_MODULE_1__["default"],
     AppLayout: _Layouts_AppLayout__WEBPACK_IMPORTED_MODULE_0__["default"]
   },
   props: ['levels'],
@@ -4482,12 +4574,14 @@ __webpack_require__.r(__webpack_exports__);
       createForm: {
         title: null,
         description: null,
+        position: null,
         image: null
       },
       editForm: {
         uuid: null,
         title: null,
-        description: null
+        description: null,
+        position: null
       },
       editImage: null
     };
@@ -4515,6 +4609,10 @@ __webpack_require__.r(__webpack_exports__);
 
       if (this.createForm.description) {
         formData.append('descriptionStore', this.createForm.description);
+      }
+
+      if (this.createForm.position) {
+        formData.append('positionStore', this.createForm.position);
       }
 
       if (this.createForm.image) {
@@ -4563,6 +4661,10 @@ __webpack_require__.r(__webpack_exports__);
         formData.append('descriptionEdit', this.editForm.description);
       }
 
+      if (this.editForm.position) {
+        formData.append('positionEdit', this.editForm.position);
+      }
+
       if (this.editImage) {
         formData.append('imageEdit', this.editImage);
       }
@@ -4584,6 +4686,7 @@ __webpack_require__.r(__webpack_exports__);
       this.editForm.uuid = level ? level.uuid : null;
       this.editForm.title = level ? level.title : null;
       this.editForm.description = level ? level.description : null;
+      this.editForm.position = level ? level.position : null;
       this.editImage = level ? level.image : null;
     },
     clearFormMessages: function clearFormMessages() {
@@ -38042,6 +38145,60 @@ var render = function() {
                           "label",
                           {
                             staticClass:
+                              "block text-gray-700 text-sm font-bold mb-2",
+                            attrs: { for: "position" }
+                          },
+                          [
+                            _vm._v(
+                              "\n                                Position\n                            "
+                            )
+                          ]
+                        ),
+                        _vm._v(" "),
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.createForm.position,
+                              expression: "createForm.position"
+                            }
+                          ],
+                          staticClass:
+                            "shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline",
+                          attrs: {
+                            id: "position",
+                            type: "number",
+                            min: "0",
+                            placeholder: "0"
+                          },
+                          domProps: { value: _vm.createForm.position },
+                          on: {
+                            input: function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.$set(
+                                _vm.createForm,
+                                "position",
+                                $event.target.value
+                              )
+                            }
+                          }
+                        }),
+                        _vm._v(" "),
+                        _vm.$page.errors.positionStore
+                          ? _c("p", { staticClass: "text-red-700 mt-2" }, [
+                              _vm._v(_vm._s(_vm.$page.errors.positionStore[0]))
+                            ])
+                          : _vm._e()
+                      ]),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "mb-4" }, [
+                        _c(
+                          "label",
+                          {
+                            staticClass:
                               "block text-gray-700 text-sm font-bold mb-2"
                           },
                           [
@@ -38277,7 +38434,7 @@ var render = function() {
                         )
                       : _vm._e(),
                     _vm._v(" "),
-                    _c("div", { staticClass: "mt-2 flex" }, [
+                    _c("div", { staticClass: "mt-4 flex" }, [
                       _c(
                         "a",
                         {
@@ -38477,6 +38634,60 @@ var render = function() {
                     _vm.$page.errors.descriptionEdit
                       ? _c("p", { staticClass: "text-red-700 mt-2" }, [
                           _vm._v(_vm._s(_vm.$page.errors.descriptionEdit[0]))
+                        ])
+                      : _vm._e()
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "mb-4" }, [
+                    _c(
+                      "label",
+                      {
+                        staticClass:
+                          "block text-gray-700 text-sm font-bold mb-2",
+                        attrs: { for: "position" }
+                      },
+                      [
+                        _vm._v(
+                          "\n                    Position\n                "
+                        )
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.editForm.position,
+                          expression: "editForm.position"
+                        }
+                      ],
+                      staticClass:
+                        "shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline",
+                      attrs: {
+                        id: "edit-position",
+                        type: "number",
+                        min: "0",
+                        placeholder: "0"
+                      },
+                      domProps: { value: _vm.editForm.position },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(
+                            _vm.editForm,
+                            "position",
+                            $event.target.value
+                          )
+                        }
+                      }
+                    }),
+                    _vm._v(" "),
+                    _vm.$page.errors.positionEdit
+                      ? _c("p", { staticClass: "text-red-700 mt-2" }, [
+                          _vm._v(_vm._s(_vm.$page.errors.positionEdit[0]))
                         ])
                       : _vm._e()
                   ]),
@@ -38952,6 +39163,60 @@ var render = function() {
                           : _vm._e()
                       ]),
                       _vm._v(" "),
+                      _c("div", { staticClass: "mb-4" }, [
+                        _c(
+                          "label",
+                          {
+                            staticClass:
+                              "block text-gray-700 text-sm font-bold mb-2",
+                            attrs: { for: "position" }
+                          },
+                          [
+                            _vm._v(
+                              "\n                                Position\n                            "
+                            )
+                          ]
+                        ),
+                        _vm._v(" "),
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.createForm.position,
+                              expression: "createForm.position"
+                            }
+                          ],
+                          staticClass:
+                            "shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline",
+                          attrs: {
+                            id: "position",
+                            type: "number",
+                            min: "0",
+                            placeholder: "0"
+                          },
+                          domProps: { value: _vm.createForm.position },
+                          on: {
+                            input: function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.$set(
+                                _vm.createForm,
+                                "position",
+                                $event.target.value
+                              )
+                            }
+                          }
+                        }),
+                        _vm._v(" "),
+                        _vm.$page.errors.positionStore
+                          ? _c("p", { staticClass: "text-red-700 mt-2" }, [
+                              _vm._v(_vm._s(_vm.$page.errors.positionStore[0]))
+                            ])
+                          : _vm._e()
+                      ]),
+                      _vm._v(" "),
                       _c(
                         "div",
                         { staticClass: "mb-4" },
@@ -39176,11 +39441,7 @@ var render = function() {
                     _vm._l(content.files, function(file) {
                       return _c(
                         "div",
-                        {
-                          key: file.uuid,
-                          staticClass:
-                            "mt-6 text-gray-700 text-justify cursor-pointer hover:underline"
-                        },
+                        { key: file.uuid, staticClass: "mt-6" },
                         [
                           _c(
                             "canvas",
@@ -39439,6 +39700,60 @@ var render = function() {
                     _vm.$page.errors.descriptionEdit
                       ? _c("p", { staticClass: "text-red-700 mt-2" }, [
                           _vm._v(_vm._s(_vm.$page.errors.descriptionEdit[0]))
+                        ])
+                      : _vm._e()
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "mb-4" }, [
+                    _c(
+                      "label",
+                      {
+                        staticClass:
+                          "block text-gray-700 text-sm font-bold mb-2",
+                        attrs: { for: "position" }
+                      },
+                      [
+                        _vm._v(
+                          "\n                    Position\n                "
+                        )
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.editForm.position,
+                          expression: "editForm.position"
+                        }
+                      ],
+                      staticClass:
+                        "shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline",
+                      attrs: {
+                        id: "edit-position",
+                        type: "number",
+                        min: "0",
+                        placeholder: "0"
+                      },
+                      domProps: { value: _vm.editForm.position },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(
+                            _vm.editForm,
+                            "position",
+                            $event.target.value
+                          )
+                        }
+                      }
+                    }),
+                    _vm._v(" "),
+                    _vm.$page.errors.positionEdit
+                      ? _c("p", { staticClass: "text-red-700 mt-2" }, [
+                          _vm._v(_vm._s(_vm.$page.errors.positionEdit[0]))
                         ])
                       : _vm._e()
                   ]),
@@ -39934,6 +40249,60 @@ var render = function() {
                           "label",
                           {
                             staticClass:
+                              "block text-gray-700 text-sm font-bold mb-2",
+                            attrs: { for: "position" }
+                          },
+                          [
+                            _vm._v(
+                              "\n                                Position\n                            "
+                            )
+                          ]
+                        ),
+                        _vm._v(" "),
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.createForm.position,
+                              expression: "createForm.position"
+                            }
+                          ],
+                          staticClass:
+                            "shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline",
+                          attrs: {
+                            id: "position",
+                            type: "number",
+                            min: "0",
+                            placeholder: "0"
+                          },
+                          domProps: { value: _vm.createForm.position },
+                          on: {
+                            input: function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.$set(
+                                _vm.createForm,
+                                "position",
+                                $event.target.value
+                              )
+                            }
+                          }
+                        }),
+                        _vm._v(" "),
+                        _vm.$page.errors.positionStore
+                          ? _c("p", { staticClass: "text-red-700 mt-2" }, [
+                              _vm._v(_vm._s(_vm.$page.errors.positionStore[0]))
+                            ])
+                          : _vm._e()
+                      ]),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "mb-4" }, [
+                        _c(
+                          "label",
+                          {
+                            staticClass:
                               "block text-gray-700 text-sm font-bold mb-2"
                           },
                           [
@@ -40167,7 +40536,7 @@ var render = function() {
                       ]
                     ),
                     _vm._v(" "),
-                    _c("div", { staticClass: "mt-2 flex" }, [
+                    _c("div", { staticClass: "mt-4 flex" }, [
                       _c(
                         "a",
                         {
@@ -40363,6 +40732,60 @@ var render = function() {
                     _vm.$page.errors.descriptionEdit
                       ? _c("p", { staticClass: "text-red-700 mt-2" }, [
                           _vm._v(_vm._s(_vm.$page.errors.descriptionEdit[0]))
+                        ])
+                      : _vm._e()
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "mb-4" }, [
+                    _c(
+                      "label",
+                      {
+                        staticClass:
+                          "block text-gray-700 text-sm font-bold mb-2",
+                        attrs: { for: "position" }
+                      },
+                      [
+                        _vm._v(
+                          "\n                    Position\n                "
+                        )
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.editForm.position,
+                          expression: "editForm.position"
+                        }
+                      ],
+                      staticClass:
+                        "shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline",
+                      attrs: {
+                        id: "edit-position",
+                        type: "number",
+                        min: "0",
+                        placeholder: "0"
+                      },
+                      domProps: { value: _vm.editForm.position },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(
+                            _vm.editForm,
+                            "position",
+                            $event.target.value
+                          )
+                        }
+                      }
+                    }),
+                    _vm._v(" "),
+                    _vm.$page.errors.positionEdit
+                      ? _c("p", { staticClass: "text-red-700 mt-2" }, [
+                          _vm._v(_vm._s(_vm.$page.errors.positionEdit[0]))
                         ])
                       : _vm._e()
                   ]),
@@ -40833,6 +41256,60 @@ var render = function() {
                           "label",
                           {
                             staticClass:
+                              "block text-gray-700 text-sm font-bold mb-2",
+                            attrs: { for: "position" }
+                          },
+                          [
+                            _vm._v(
+                              "\n                                Position\n                            "
+                            )
+                          ]
+                        ),
+                        _vm._v(" "),
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.createForm.position,
+                              expression: "createForm.position"
+                            }
+                          ],
+                          staticClass:
+                            "shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline",
+                          attrs: {
+                            id: "position",
+                            type: "number",
+                            min: "0",
+                            placeholder: "0"
+                          },
+                          domProps: { value: _vm.createForm.position },
+                          on: {
+                            input: function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.$set(
+                                _vm.createForm,
+                                "position",
+                                $event.target.value
+                              )
+                            }
+                          }
+                        }),
+                        _vm._v(" "),
+                        _vm.$page.errors.positionStore
+                          ? _c("p", { staticClass: "text-red-700 mt-2" }, [
+                              _vm._v(_vm._s(_vm.$page.errors.positionStore[0]))
+                            ])
+                          : _vm._e()
+                      ]),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "mb-4" }, [
+                        _c(
+                          "label",
+                          {
+                            staticClass:
                               "block text-gray-700 text-sm font-bold mb-2"
                           },
                           [
@@ -41068,7 +41545,7 @@ var render = function() {
                         )
                       : _vm._e(),
                     _vm._v(" "),
-                    _c("div", { staticClass: "mt-2 flex" }, [
+                    _c("div", { staticClass: "mt-4 flex" }, [
                       _c(
                         "a",
                         {
@@ -41268,6 +41745,60 @@ var render = function() {
                     _vm.$page.errors.descriptionEdit
                       ? _c("p", { staticClass: "text-red-700 mt-2" }, [
                           _vm._v(_vm._s(_vm.$page.errors.descriptionEdit[0]))
+                        ])
+                      : _vm._e()
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "mb-4" }, [
+                    _c(
+                      "label",
+                      {
+                        staticClass:
+                          "block text-gray-700 text-sm font-bold mb-2",
+                        attrs: { for: "position" }
+                      },
+                      [
+                        _vm._v(
+                          "\n                    Position\n                "
+                        )
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.editForm.position,
+                          expression: "editForm.position"
+                        }
+                      ],
+                      staticClass:
+                        "shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline",
+                      attrs: {
+                        id: "edit-position",
+                        type: "number",
+                        min: "0",
+                        placeholder: "0"
+                      },
+                      domProps: { value: _vm.editForm.position },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(
+                            _vm.editForm,
+                            "position",
+                            $event.target.value
+                          )
+                        }
+                      }
+                    }),
+                    _vm._v(" "),
+                    _vm.$page.errors.positionEdit
+                      ? _c("p", { staticClass: "text-red-700 mt-2" }, [
+                          _vm._v(_vm._s(_vm.$page.errors.positionEdit[0]))
                         ])
                       : _vm._e()
                   ]),
