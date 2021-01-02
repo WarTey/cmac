@@ -37,4 +37,9 @@ class Content extends Model
     {
         return $this->hasMany(File::class);
     }
+
+    public function users()
+    {
+        return $this->belongsToMany(User::class)->where('user_id', auth()->user()->id);
+    }
 }

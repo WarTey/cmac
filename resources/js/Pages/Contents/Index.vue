@@ -90,22 +90,22 @@
         </transition>
         <div class="pt-4">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                <progress-bar :links="$page.contents.links" />
+                <progress-bar :name="$page.contents[contentIndex].title" :contents="$page.contents" :contentIndex="contentIndex" @updateContentIndex="updateContentIndex" />
             </div>
         </div>
-        <div class="py-4" v-for="content in $page.contents.data" v-bind:key="content.uuid">
+        <div class="py-4">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white overflow-hidden shadow-lg hover:shadow-xl sm:rounded-lg transition duration-500 ease-in-out">
                     <div class="p-6 sm:px-20 bg-white border-b border-gray-200">
                         <div class="flex justify-between items-center">
                             <div class="text-2xl">
-                                {{ content.title }}
+                                {{ $page.contents[contentIndex].title }}
                             </div>
                         </div>
                         <div class="mt-6 text-gray-500 text-justify">
-                            <span v-html="content.description"></span>
+                            <span v-html="$page.contents[contentIndex].description"></span>
                         </div>
-                        <div class="mt-6" v-for="file in content.files" v-bind:key="file.uuid">
+                        <div class="mt-6" v-for="file in $page.contents[contentIndex].files" v-bind:key="file.uuid">
                             <canvas class="w-full rounded border" :id="file.uuid">{{ loadFile(file.title, file.uuid) }}</canvas>
                             <div class="mt-2 flex">
                                 <a class="text-blue-500 font-semibold text-justify hover:underline cursor-pointer" v-on:click.prevent="previousPage(file.uuid)">
@@ -117,19 +117,32 @@
                             </div>
                         </div>
                         <div class="mt-4 flex">
-                            <a class="text-blue-500 font-semibold text-justify hover:underline cursor-pointer" v-on:click.prevent="showModal(content)">
+                            <a class="text-blue-500 font-semibold text-justify hover:underline cursor-pointer" v-on:click.prevent="showModal($page.contents[contentIndex])">
                                 Éditer le contenu
                             </a>
-                            <a class="text-red-500 font-semibold text-justify hover:underline cursor-pointer ml-auto" v-on:click.prevent="removeContent(content.uuid)">
+                            <a class="text-red-500 font-semibold text-justify hover:underline cursor-pointer ml-auto" v-on:click.prevent="removeContent($page.contents[contentIndex].uuid)">
                                 Retirer le cours
                             </a>
                         </div>
                     </div>
                 </div>
-                <div class="py-5 text-center">
-                    <inertia-link class="font-semibold text-blue-500 border-gray-500 p-2" v-for="link in $page.contents.links" :href="link.url" v-bind:key="link.label">
-                        <span v-bind:class="{'text-red-500' : link.active}" v-html="link.label"></span>
-                    </inertia-link>
+                <div class="pt-5 text-center flex">
+                    <button v-if="$page.contents[contentIndex].users_count === 0" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline ml-auto" v-on:click="editCompleted($page.contents[contentIndex])">
+                        J'ai terminé
+                    </button>
+                    <button v-else class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline ml-auto" v-on:click="editCompleted($page.contents[contentIndex])">
+                        Je n'ai pas terminé
+                    </button>
+                </div>
+                <div class="py-5 text-center flex">
+                    <button v-if="contentIndex > 0" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" v-on:click="contentIndex -= 1">
+                        <i class="fas fa-chevron-left fa-xs"></i>
+                        Contenu précédent
+                    </button>
+                    <button v-if="contentIndex < $page.contents.length - 1" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline ml-auto" v-on:click="contentIndex += 1">
+                        Contenu suivant
+                        <i class="fas fa-chevron-right fa-xs"></i>
+                    </button>
                 </div>
             </div>
         </div>
@@ -218,7 +231,7 @@ export default {
         ProgressBar
     },
 
-    props: ['contents', 'course', 'chapter', 'level'],
+    props: ['contents', 'course', 'chapter', 'level', 'progression'],
 
     data() {
         return {
@@ -230,19 +243,20 @@ export default {
             levelUuid: this.level.uuid,
             addContent: false,
             modalVisible: false,
+            contentIndex: 0,
             createForm: {
                 title: null,
                 description: null,
                 position: null,
                 files: []
             },
-            files: [],
             editForm: {
                 uuid: null,
                 title: null,
                 description: null,
                 position: null
             },
+            files: [],
             delFiles: [],
             addFiles: [],
             saveFiles: []
@@ -458,6 +472,22 @@ export default {
         clearFormMessages() {
             this.$page.errors = {};
             this.$page.flash = {};
+        },
+
+        updateContentIndex(index) {
+            this.contentIndex = index;
+        },
+
+        editCompleted(content) {
+            const formData = new FormData();
+            formData.append('contentUuid', content.uuid);
+            formData.append('courseUuid', this.courseUuid);
+
+            if (content.users_count > 0) {
+                this.$inertia.post('/completed/delete', formData);
+            } else {
+                this.$inertia.post('/completed/edit', formData);
+            }
         }
     }
 }

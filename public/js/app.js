@@ -3769,6 +3769,19 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -3776,7 +3789,7 @@ __webpack_require__.r(__webpack_exports__);
     AppLayout: _Layouts_AppLayout__WEBPACK_IMPORTED_MODULE_0__["default"],
     ProgressBar: _Pages_Contents_ProgressBar__WEBPACK_IMPORTED_MODULE_1__["default"]
   },
-  props: ['contents', 'course', 'chapter', 'level'],
+  props: ['contents', 'course', 'chapter', 'level', 'progression'],
   data: function data() {
     return {
       courseTitle: this.course.title,
@@ -3787,19 +3800,20 @@ __webpack_require__.r(__webpack_exports__);
       levelUuid: this.level.uuid,
       addContent: false,
       modalVisible: false,
+      contentIndex: 0,
       createForm: {
         title: null,
         description: null,
         position: null,
         files: []
       },
-      files: [],
       editForm: {
         uuid: null,
         title: null,
         description: null,
         position: null
       },
+      files: [],
       delFiles: [],
       addFiles: [],
       saveFiles: []
@@ -4013,6 +4027,20 @@ __webpack_require__.r(__webpack_exports__);
     clearFormMessages: function clearFormMessages() {
       this.$page.errors = {};
       this.$page.flash = {};
+    },
+    updateContentIndex: function updateContentIndex(index) {
+      this.contentIndex = index;
+    },
+    editCompleted: function editCompleted(content) {
+      var formData = new FormData();
+      formData.append('contentUuid', content.uuid);
+      formData.append('courseUuid', this.courseUuid);
+
+      if (content.users_count > 0) {
+        this.$inertia.post('/completed/delete', formData);
+      } else {
+        this.$inertia.post('/completed/edit', formData);
+      }
     }
   }
 });
@@ -4036,15 +4064,21 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "ProgressBar",
-  props: ['links'],
+  props: ['name', 'contents', 'contentIndex'],
+  data: function data() {
+    return {
+      contentName: this.name
+    };
+  },
   computed: {
     percentage: function percentage() {
-      var link = this.links.slice(1, this.links.length - 1).find(function (link) {
-        return link['active'];
+      var completed = this.contents.filter(function (content) {
+        return content.users_count > 0;
       });
-      return Math.round(link['label'] / (this.links.length - 2) * 100);
+      return Math.round(completed.length / this.contents.length * 100);
     }
   }
 });
@@ -39445,183 +39479,254 @@ var render = function() {
         _c(
           "div",
           { staticClass: "max-w-7xl mx-auto sm:px-6 lg:px-8" },
-          [_c("progress-bar", { attrs: { links: _vm.$page.contents.links } })],
+          [
+            _c("progress-bar", {
+              attrs: {
+                name: _vm.$page.contents[_vm.contentIndex].title,
+                contents: _vm.$page.contents,
+                contentIndex: _vm.contentIndex
+              },
+              on: { updateContentIndex: _vm.updateContentIndex }
+            })
+          ],
           1
         )
       ]),
       _vm._v(" "),
-      _vm._l(_vm.$page.contents.data, function(content) {
-        return _c("div", { key: content.uuid, staticClass: "py-4" }, [
-          _c("div", { staticClass: "max-w-7xl mx-auto sm:px-6 lg:px-8" }, [
-            _c(
-              "div",
-              {
-                staticClass:
-                  "bg-white overflow-hidden shadow-lg hover:shadow-xl sm:rounded-lg transition duration-500 ease-in-out"
-              },
-              [
-                _c(
-                  "div",
-                  {
-                    staticClass:
-                      "p-6 sm:px-20 bg-white border-b border-gray-200"
-                  },
-                  [
-                    _c(
-                      "div",
-                      { staticClass: "flex justify-between items-center" },
-                      [
-                        _c("div", { staticClass: "text-2xl" }, [
-                          _vm._v(
-                            "\n                            " +
-                              _vm._s(content.title) +
-                              "\n                        "
+      _c("div", { staticClass: "py-4" }, [
+        _c("div", { staticClass: "max-w-7xl mx-auto sm:px-6 lg:px-8" }, [
+          _c(
+            "div",
+            {
+              staticClass:
+                "bg-white overflow-hidden shadow-lg hover:shadow-xl sm:rounded-lg transition duration-500 ease-in-out"
+            },
+            [
+              _c(
+                "div",
+                {
+                  staticClass: "p-6 sm:px-20 bg-white border-b border-gray-200"
+                },
+                [
+                  _c(
+                    "div",
+                    { staticClass: "flex justify-between items-center" },
+                    [
+                      _c("div", { staticClass: "text-2xl" }, [
+                        _vm._v(
+                          "\n                            " +
+                            _vm._s(_vm.$page.contents[_vm.contentIndex].title) +
+                            "\n                        "
+                        )
+                      ])
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    { staticClass: "mt-6 text-gray-500 text-justify" },
+                    [
+                      _c("span", {
+                        domProps: {
+                          innerHTML: _vm._s(
+                            _vm.$page.contents[_vm.contentIndex].description
                           )
-                        ])
-                      ]
-                    ),
-                    _vm._v(" "),
-                    _c(
-                      "div",
-                      { staticClass: "mt-6 text-gray-500 text-justify" },
-                      [
-                        _c("span", {
-                          domProps: { innerHTML: _vm._s(content.description) }
-                        })
-                      ]
-                    ),
-                    _vm._v(" "),
-                    _vm._l(content.files, function(file) {
-                      return _c(
-                        "div",
-                        { key: file.uuid, staticClass: "mt-6" },
-                        [
-                          _c(
-                            "canvas",
-                            {
-                              staticClass: "w-full rounded border",
-                              attrs: { id: file.uuid }
-                            },
-                            [
-                              _vm._v(
-                                _vm._s(_vm.loadFile(file.title, file.uuid))
-                              )
-                            ]
-                          ),
-                          _vm._v(" "),
-                          _c("div", { staticClass: "mt-2 flex" }, [
-                            _c(
-                              "a",
-                              {
-                                staticClass:
-                                  "text-blue-500 font-semibold text-justify hover:underline cursor-pointer",
-                                on: {
-                                  click: function($event) {
-                                    $event.preventDefault()
-                                    return _vm.previousPage(file.uuid)
-                                  }
-                                }
-                              },
-                              [
-                                _vm._v(
-                                  "\n                                Page précédente\n                            "
-                                )
-                              ]
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "a",
-                              {
-                                staticClass:
-                                  "text-blue-500 font-semibold text-justify hover:underline cursor-pointer ml-auto",
-                                on: {
-                                  click: function($event) {
-                                    $event.preventDefault()
-                                    return _vm.nextPage(file.uuid)
-                                  }
-                                }
-                              },
-                              [
-                                _vm._v(
-                                  "\n                                Page suivante\n                            "
-                                )
-                              ]
-                            )
-                          ])
-                        ]
-                      )
-                    }),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "mt-4 flex" }, [
+                        }
+                      })
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _vm._l(_vm.$page.contents[_vm.contentIndex].files, function(
+                    file
+                  ) {
+                    return _c("div", { key: file.uuid, staticClass: "mt-6" }, [
                       _c(
-                        "a",
+                        "canvas",
                         {
-                          staticClass:
-                            "text-blue-500 font-semibold text-justify hover:underline cursor-pointer",
-                          on: {
-                            click: function($event) {
-                              $event.preventDefault()
-                              return _vm.showModal(content)
-                            }
-                          }
+                          staticClass: "w-full rounded border",
+                          attrs: { id: file.uuid }
                         },
-                        [
-                          _vm._v(
-                            "\n                            Éditer le contenu\n                        "
-                          )
-                        ]
+                        [_vm._v(_vm._s(_vm.loadFile(file.title, file.uuid)))]
                       ),
                       _vm._v(" "),
-                      _c(
-                        "a",
-                        {
-                          staticClass:
-                            "text-red-500 font-semibold text-justify hover:underline cursor-pointer ml-auto",
-                          on: {
-                            click: function($event) {
-                              $event.preventDefault()
-                              return _vm.removeContent(content.uuid)
+                      _c("div", { staticClass: "mt-2 flex" }, [
+                        _c(
+                          "a",
+                          {
+                            staticClass:
+                              "text-blue-500 font-semibold text-justify hover:underline cursor-pointer",
+                            on: {
+                              click: function($event) {
+                                $event.preventDefault()
+                                return _vm.previousPage(file.uuid)
+                              }
                             }
-                          }
-                        },
-                        [
-                          _vm._v(
-                            "\n                            Retirer le cours\n                        "
-                          )
-                        ]
-                      )
+                          },
+                          [
+                            _vm._v(
+                              "\n                                Page précédente\n                            "
+                            )
+                          ]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "a",
+                          {
+                            staticClass:
+                              "text-blue-500 font-semibold text-justify hover:underline cursor-pointer ml-auto",
+                            on: {
+                              click: function($event) {
+                                $event.preventDefault()
+                                return _vm.nextPage(file.uuid)
+                              }
+                            }
+                          },
+                          [
+                            _vm._v(
+                              "\n                                Page suivante\n                            "
+                            )
+                          ]
+                        )
+                      ])
                     ])
-                  ],
-                  2
-                )
-              ]
-            ),
-            _vm._v(" "),
-            _c(
-              "div",
-              { staticClass: "py-5 text-center" },
-              _vm._l(_vm.$page.contents.links, function(link) {
-                return _c(
-                  "inertia-link",
+                  }),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "mt-4 flex" }, [
+                    _c(
+                      "a",
+                      {
+                        staticClass:
+                          "text-blue-500 font-semibold text-justify hover:underline cursor-pointer",
+                        on: {
+                          click: function($event) {
+                            $event.preventDefault()
+                            return _vm.showModal(
+                              _vm.$page.contents[_vm.contentIndex]
+                            )
+                          }
+                        }
+                      },
+                      [
+                        _vm._v(
+                          "\n                            Éditer le contenu\n                        "
+                        )
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "a",
+                      {
+                        staticClass:
+                          "text-red-500 font-semibold text-justify hover:underline cursor-pointer ml-auto",
+                        on: {
+                          click: function($event) {
+                            $event.preventDefault()
+                            return _vm.removeContent(
+                              _vm.$page.contents[_vm.contentIndex].uuid
+                            )
+                          }
+                        }
+                      },
+                      [
+                        _vm._v(
+                          "\n                            Retirer le cours\n                        "
+                        )
+                      ]
+                    )
+                  ])
+                ],
+                2
+              )
+            ]
+          ),
+          _vm._v(" "),
+          _c("div", { staticClass: "pt-5 text-center flex" }, [
+            _vm.$page.contents[_vm.contentIndex].users_count === 0
+              ? _c(
+                  "button",
                   {
-                    key: link.label,
                     staticClass:
-                      "font-semibold text-blue-500 border-gray-500 p-2",
-                    attrs: { href: link.url }
+                      "bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline ml-auto",
+                    on: {
+                      click: function($event) {
+                        return _vm.editCompleted(
+                          _vm.$page.contents[_vm.contentIndex]
+                        )
+                      }
+                    }
                   },
                   [
-                    _c("span", {
-                      class: { "text-red-500": link.active },
-                      domProps: { innerHTML: _vm._s(link.label) }
-                    })
+                    _vm._v(
+                      "\n                    J'ai terminé\n                "
+                    )
                   ]
                 )
-              }),
-              1
-            )
+              : _c(
+                  "button",
+                  {
+                    staticClass:
+                      "bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline ml-auto",
+                    on: {
+                      click: function($event) {
+                        return _vm.editCompleted(
+                          _vm.$page.contents[_vm.contentIndex]
+                        )
+                      }
+                    }
+                  },
+                  [
+                    _vm._v(
+                      "\n                    Je n'ai pas terminé\n                "
+                    )
+                  ]
+                )
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "py-5 text-center flex" }, [
+            _vm.contentIndex > 0
+              ? _c(
+                  "button",
+                  {
+                    staticClass:
+                      "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline",
+                    on: {
+                      click: function($event) {
+                        _vm.contentIndex -= 1
+                      }
+                    }
+                  },
+                  [
+                    _c("i", { staticClass: "fas fa-chevron-left fa-xs" }),
+                    _vm._v(
+                      "\n                    Contenu précédent\n                "
+                    )
+                  ]
+                )
+              : _vm._e(),
+            _vm._v(" "),
+            _vm.contentIndex < _vm.$page.contents.length - 1
+              ? _c(
+                  "button",
+                  {
+                    staticClass:
+                      "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline ml-auto",
+                    on: {
+                      click: function($event) {
+                        _vm.contentIndex += 1
+                      }
+                    }
+                  },
+                  [
+                    _vm._v(
+                      "\n                    Contenu suivant\n                    "
+                    ),
+                    _c("i", { staticClass: "fas fa-chevron-right fa-xs" })
+                  ]
+                )
+              : _vm._e()
           ])
         ])
-      }),
+      ]),
       _vm._v(" "),
       _vm.modalVisible
         ? _c(
@@ -40067,7 +40172,7 @@ var render = function() {
           )
         : _vm._e()
     ],
-    2
+    1
   )
 }
 var staticRenderFns = []
@@ -40092,14 +40197,35 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "bg-gray-200 w-full rounded" }, [
+  return _c("div", { staticClass: "w-full text-center" }, [
+    _vm._v("\n    " + _vm._s(_vm.contentName) + "\n    "),
     _c(
       "div",
-      {
-        staticClass: "bg-green-500 text-white text-center rounded",
-        style: "width: " + _vm.percentage + "%"
-      },
-      [_vm._v("\n        " + _vm._s(_vm.percentage) + "%\n    ")]
+      { staticClass: "flex items-center h-4 pt-2" },
+      _vm._l(_vm.contents, function(content, index) {
+        return _c("div", {
+          key: content.uuid,
+          staticClass:
+            "bg-gray-400 text-white text-center w-full cursor-pointer h-3 transition-all duration-300",
+          class: {
+            "mr-1": index < _vm.contents.length - 1,
+            "bg-green-400": content.users_count > 0,
+            "h-4": _vm.contentIndex === index
+          },
+          on: {
+            mouseover: function($event) {
+              _vm.contentName = content.title
+            },
+            mouseleave: function($event) {
+              _vm.contentName = _vm.name
+            },
+            click: function($event) {
+              return _vm.$emit("updateContentIndex", index)
+            }
+          }
+        })
+      }),
+      0
     )
   ])
 }

@@ -28,6 +28,9 @@ Route::group(['auth:sanctum', 'verified'], function () {
     Route::get('/chapter/{uuid}', 'App\Http\Controllers\CourseController@index')->name('courses.index');
     Route::get('/course/{uuid}', 'App\Http\Controllers\ContentController@index')->name('contents.index');
 
+    Route::post('/completed/edit', 'App\Http\Controllers\ContentUserController@store')->name('contentUser.edit');
+    Route::post('/completed/delete', 'App\Http\Controllers\ContentUserController@delete')->name('contentUser.delete');
+
     // TODO : Add middleware for Admin
     Route::post('/formation/store', 'App\Http\Controllers\LevelController@store')->name('levels.store');
     Route::post('/chapter/store', 'App\Http\Controllers\ChapterController@store')->name('chapters.store');

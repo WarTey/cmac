@@ -7,6 +7,7 @@ use App\Models\Content;
 use App\Models\Course;
 use App\Models\File;
 use App\Models\Level;
+use App\Models\Progression;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Redirect;
@@ -19,7 +20,7 @@ class ContentController extends Controller
     {
         $course = Course::where('uuid', $uuid)->first();
 
-        $contents = Content::where('course_id', $course->id)->orderBy('position')->with('files')->paginate(1);
+        $contents = Content::where('course_id', $course->id)->orderBy('position')->with('files')->withCount('users')->get();
 
         $chapter = Chapter::where('id', $course->chapter_id)->first();
 
