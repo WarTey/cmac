@@ -92,7 +92,7 @@
                             </div>
                         </div>
                         <div v-if="level.description" class="mt-6 text-gray-500 text-justify">
-                            <span v-html="level.description"></span>
+                            {{ level.description }}
                         </div>
                         <div class="mt-4 flex">
                             <a class="text-blue-500 font-semibold text-justify hover:underline cursor-pointer" v-on:click.prevent="showModal(level)">

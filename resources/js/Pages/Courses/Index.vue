@@ -99,7 +99,7 @@
                             </div>
                         </div>
                         <div class="mt-6 text-gray-500 text-justify">
-                            <span v-html="course.description"></span>
+                            {{ course.description }}
                         </div>
                         <div class="mt-4 flex">
                             <a class="text-blue-500 font-semibold text-justify hover:underline cursor-pointer" v-on:click.prevent="showModal(course)">

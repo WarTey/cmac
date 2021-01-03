@@ -38965,11 +38965,11 @@ var render = function() {
                           "div",
                           { staticClass: "mt-6 text-gray-500 text-justify" },
                           [
-                            _c("span", {
-                              domProps: {
-                                innerHTML: _vm._s(chapter.description)
-                              }
-                            })
+                            _vm._v(
+                              "\n                        " +
+                                _vm._s(chapter.description) +
+                                "\n                    "
+                            )
                           ]
                         )
                       : _vm._e(),
@@ -41217,9 +41217,11 @@ var render = function() {
                       "div",
                       { staticClass: "mt-6 text-gray-500 text-justify" },
                       [
-                        _c("span", {
-                          domProps: { innerHTML: _vm._s(course.description) }
-                        })
+                        _vm._v(
+                          "\n                        " +
+                            _vm._s(course.description) +
+                            "\n                    "
+                        )
                       ]
                     ),
                     _vm._v(" "),
@@ -42223,9 +42225,11 @@ var render = function() {
                           "div",
                           { staticClass: "mt-6 text-gray-500 text-justify" },
                           [
-                            _c("span", {
-                              domProps: { innerHTML: _vm._s(level.description) }
-                            })
+                            _vm._v(
+                              "\n                        " +
+                                _vm._s(level.description) +
+                                "\n                    "
+                            )
                           ]
                         )
                       : _vm._e(),
