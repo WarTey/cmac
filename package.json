@@ -30,6 +30,7 @@
     "dependencies": {
         "@fortawesome/fontawesome-free": "^5.15.1",
         "@tinymce/tinymce-vue": "^3.2.7",
+        "pdfjs-dist": "^2.5.207",
         "toastr": "^2.1.4",
         "vue-truncate-filter": "^1.1.7"
     }

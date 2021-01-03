@@ -118,15 +118,7 @@
                             <span v-html="$page.contents[contentIndex].description"></span>
                         </div>
                         <div class="mt-6" v-for="file in $page.contents[contentIndex].files" v-bind:key="file.uuid">
-                            <canvas class="w-full rounded border" :id="file.uuid">{{ loadFile(file.title, file.uuid) }}</canvas>
-                            <div class="mt-2 flex">
-                                <a class="text-blue-500 font-semibold text-justify hover:underline cursor-pointer" v-on:click.prevent="previousPage(file.uuid)">
-                                    Page précédente
-                                </a>
-                                <a class="text-blue-500 font-semibold text-justify hover:underline cursor-pointer ml-auto" v-on:click.prevent="nextPage(file.uuid)">
-                                    Page suivante
-                                </a>
-                            </div>
+                            <PdfViewer :url-file="'/storage/files/' + file.title" :file="file" />
                         </div>
                         <div class="mt-4 flex">
                             <a class="text-blue-500 font-semibold text-justify hover:underline cursor-pointer" v-on:click.prevent="showModal($page.contents[contentIndex])">
@@ -253,13 +245,15 @@
 <script>
 import AppLayout from "@/Layouts/AppLayout";
 import ProgressBar from "@/Pages/Contents/ProgressBar";
-import Editor from '@tinymce/tinymce-vue'
+import Editor from '@tinymce/tinymce-vue';
+import PdfViewer from "@/Pages/Contents/PdfViewer";
 
 export default {
     components: {
         AppLayout,
         ProgressBar,
-        editor: Editor
+        editor: Editor,
+        PdfViewer
     },
 
     props: ['contents', 'course', 'chapter', 'level', 'progression'],
@@ -287,7 +281,6 @@ export default {
                 description: null,
                 position: null
             },
-            files: [],
             delFiles: [],
             addFiles: [],
             saveFiles: []
@@ -346,51 +339,7 @@ export default {
             document.getElementById("hidden-input").click();
         },
 
-        loadFile(url, uuid) {
-            pdfjsLib.disableWorker = true;
-            pdfjsLib.getDocument({
-                url : "/storage/files/" + url,
-                disableAutoFetch: true,
-                disableStream: true
-            }).promise.then(pdf => {
-
-                this.files.push({
-                    uuid: uuid,
-                    pdf: pdf,
-                    pages: pdf.numPages,
-                    currentPage: 1
-                });
-
-                pdf.getPage(1).then(page => this.renderFile(page, uuid));
-            });
-        },
-
-        renderFile(page, uuid) {
-            const canvas = document.getElementById(uuid);
-            const context = canvas.getContext('2d');
-            const viewport = page.getViewport({
-                scale: 2,
-                rotation: 0
-            });
-
-            canvas.height = viewport.height;
-            canvas.width = viewport.width;
-
-            page.render({
-                canvasContext: context,
-                viewport: viewport
-            });
-        },
-
-        getPageStatus(uuid) {
-            this.files.forEach(element => {
-                if (element.uuid === uuid) {
-                    return element.currentPage + " / " + element.pages;
-                }
-            });
-        },
-
-        nextPage(uuid) {
+        /*nextPage(uuid) {
             if (this.files.length > 0) {
                 this.files.forEach(element => {
                     if (element.uuid === uuid && element.currentPage < element.pages) {
@@ -408,7 +357,7 @@ export default {
                     element.pdf.getPage(element.currentPage).then(page => this.renderFile(page, uuid));
                 }
             });
-        },
+        },*/
 
         removeContent(uuid) {
             const formData = new FormData();
@@ -508,6 +457,10 @@ export default {
         updateContentIndex(index) {
             this.contentIndex = index;
         },
+
+        /*updateFiles(file) {
+            this.files.push(file);
+        },*/
 
         editCompleted(content) {
             const formData = new FormData();

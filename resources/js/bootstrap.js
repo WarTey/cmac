@@ -18,6 +18,9 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
 window.toastr = require('toastr');
 
+window.pdfjsLib = require('pdfjs-dist');
+pdfjsLib.GlobalWorkerOptions.workerSrc = require('pdfjs-dist/build/pdf.worker.entry');
+
 // import Echo from 'laravel-echo';
 
 // window.Pusher = require('pusher-js');
