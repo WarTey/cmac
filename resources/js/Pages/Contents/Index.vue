@@ -42,7 +42,24 @@
                                 <label class="block text-gray-700 text-sm font-bold mb-2" for="description">
                                     Description (optionnel)
                                 </label>
-                                <textarea class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="description" v-model="createForm.description" placeholder="Description (optionnel)"></textarea>
+                                <editor id="description" v-model="createForm.description" placeholder="Description (optionnel)"
+                                    apiKey="528024vvgynnj3f3bkog3rccyp4a597mjw1nt6bs69bxvg1p"
+                                    :init="{
+                                        height: 200,
+                                        menubar: true,
+                                        plugins: [
+                                            'advlist autolink lists link image charmap',
+                                            'searchreplace visualblocks code fullscreen',
+                                            'print preview anchor insertdatetime media',
+                                            'paste code help wordcount table'
+                                        ],
+                                        toolbar:
+                                            'undo redo | formatselect | bold italic underline | \
+                                            fontsizeselect forecolor | \
+                                            alignleft aligncenter alignright | \
+                                            bullist numlist outdent indent | help'
+                                    }">
+                                </editor>
                                 <p class="text-red-700 mt-2" v-if="$page.errors.descriptionStore">{{ $page.errors.descriptionStore[0] }}</p>
                             </div>
                             <div class="mb-4">
@@ -97,12 +114,7 @@
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white overflow-hidden shadow-lg hover:shadow-xl sm:rounded-lg transition duration-500 ease-in-out">
                     <div class="p-6 sm:px-20 bg-white border-b border-gray-200">
-                        <div class="flex justify-between items-center">
-                            <div class="text-2xl">
-                                {{ $page.contents[contentIndex].title }}
-                            </div>
-                        </div>
-                        <div class="mt-6 text-gray-500 text-justify">
+                        <div class="text-gray-500 text-justify">
                             <span v-html="$page.contents[contentIndex].description"></span>
                         </div>
                         <div class="mt-6" v-for="file in $page.contents[contentIndex].files" v-bind:key="file.uuid">
@@ -160,7 +172,24 @@
                     <label class="block text-gray-700 text-sm font-bold mb-2" for="edit-description">
                         Description (optionnel)
                     </label>
-                    <textarea class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="edit-description" v-model="editForm.description" placeholder="Description (optionnel)"></textarea>
+                    <editor id="edit-description" v-model="editForm.description" placeholder="Description (optionnel)"
+                        apiKey="528024vvgynnj3f3bkog3rccyp4a597mjw1nt6bs69bxvg1p"
+                        :init="{
+                            height: 200,
+                            menubar: true,
+                            plugins: [
+                                'advlist autolink lists link image charmap',
+                                'searchreplace visualblocks code fullscreen',
+                                'print preview anchor insertdatetime media',
+                                'paste code help wordcount table'
+                            ],
+                            toolbar:
+                                'undo redo | formatselect | bold italic underline | \
+                                fontsizeselect forecolor | \
+                                alignleft aligncenter alignright | \
+                                bullist numlist outdent indent | help'
+                        }">
+                    </editor>
                     <p class="text-red-700 mt-2" v-if="$page.errors.descriptionEdit">{{ $page.errors.descriptionEdit[0] }}</p>
                 </div>
                 <div class="mb-4">
@@ -224,11 +253,13 @@
 <script>
 import AppLayout from "@/Layouts/AppLayout";
 import ProgressBar from "@/Pages/Contents/ProgressBar";
+import Editor from '@tinymce/tinymce-vue'
 
 export default {
     components: {
         AppLayout,
-        ProgressBar
+        ProgressBar,
+        editor: Editor
     },
 
     props: ['contents', 'course', 'chapter', 'level', 'progression'],
