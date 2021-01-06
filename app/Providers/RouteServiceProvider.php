@@ -17,6 +17,7 @@ class RouteServiceProvider extends ServiceProvider
      *
      * @var string
      */
+    // TODO : Change redirection
     public const HOME = '/formations';
 
     /**
