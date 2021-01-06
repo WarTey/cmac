@@ -1,5 +1,5 @@
 <template>
-    <app-layout>
+    <app-layout :showingHeader="true">
         <template #header>
             <h2 class="font-semibold text-gray-800 leading-tight">
                 <a :href="route('levels.index')" class="hover:underline">
@@ -10,7 +10,7 @@
                     {{ levelTitle | truncate(30) }}
                 </a>
                 <i class="fas fa-chevron-right fa-xs"></i>
-                <a :href="'/chapter/' + chapterUuid" class="hover:underline">
+                <a :href="'/chapitre/' + chapterUuid" class="hover:underline">
                     {{ chapterTitle | truncate(30) }}
                 </a>
                 <i class="fas fa-chevron-right fa-xs"></i>
@@ -112,7 +112,7 @@
         </div>
         <div class="py-4">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                <div class="bg-white overflow-hidden shadow-lg hover:shadow-xl sm:rounded-lg transition duration-500 ease-in-out">
+                <div class="bg-white overflow-hidden shadow-lg hover:shadow-xl rounded-lg transition duration-500 ease-in-out">
                     <div class="p-6 sm:px-20 bg-white border-b border-gray-200">
                         <div class="text-gray-500 text-justify">
                             <span v-html="$page.contents[contentIndex].description"></span>
@@ -339,26 +339,6 @@ export default {
             document.getElementById("hidden-input").click();
         },
 
-        /*nextPage(uuid) {
-            if (this.files.length > 0) {
-                this.files.forEach(element => {
-                    if (element.uuid === uuid && element.currentPage < element.pages) {
-                        element.currentPage += 1;
-                        element.pdf.getPage(element.currentPage).then(page => this.renderFile(page, uuid));
-                    }
-                });
-            }
-        },
-
-        previousPage(uuid) {
-            this.files.forEach(element => {
-                if (element.uuid === uuid && element.currentPage > 0) {
-                    element.currentPage -= 1;
-                    element.pdf.getPage(element.currentPage).then(page => this.renderFile(page, uuid));
-                }
-            });
-        },*/
-
         removeContent(uuid) {
             const formData = new FormData();
             formData.append('uuid', uuid);
@@ -457,10 +437,6 @@ export default {
         updateContentIndex(index) {
             this.contentIndex = index;
         },
-
-        /*updateFiles(file) {
-            this.files.push(file);
-        },*/
 
         editCompleted(content) {
             const formData = new FormData();

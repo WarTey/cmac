@@ -1,5 +1,5 @@
 <template>
-    <app-layout>
+    <app-layout :showingHeader="true">
         <template #header>
             <h2 class="font-semibold text-gray-800 leading-tight">
                 Dashboard

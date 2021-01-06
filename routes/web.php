@@ -17,6 +17,10 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/test', function() {
+    return Inertia\Inertia::render('Showcase/Home');
+})->name('home');
+
 Route::get('/formations', 'App\Http\Controllers\LevelController@index')->name('levels.index');
 
 Route::group(['auth:sanctum', 'verified'], function () {
@@ -25,8 +29,8 @@ Route::group(['auth:sanctum', 'verified'], function () {
     })->name('dashboard');
 
     Route::get('/formation/{uuid}', 'App\Http\Controllers\ChapterController@index')->name('chapters.index');
-    Route::get('/chapter/{uuid}', 'App\Http\Controllers\CourseController@index')->name('courses.index');
-    Route::get('/course/{uuid}', 'App\Http\Controllers\ContentController@index')->name('contents.index');
+    Route::get('/chapitre/{uuid}', 'App\Http\Controllers\CourseController@index')->name('courses.index');
+    Route::get('/cours/{uuid}', 'App\Http\Controllers\ContentController@index')->name('contents.index');
 
     Route::post('/completed/edit', 'App\Http\Controllers\ContentUserController@store')->name('contentUser.edit');
     Route::post('/completed/delete', 'App\Http\Controllers\ContentUserController@delete')->name('contentUser.delete');
