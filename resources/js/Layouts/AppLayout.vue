@@ -155,6 +155,32 @@
             </div>
         </nav>
 
+        <!-- Side Heading -->
+        <div v-if="showingNavigationSide" class="fixed overflow-hidden top-0 left-0 flex items-center justify-center w-full h-full bg-black bg-opacity-50"></div>
+        <div class="flex flex-wrap h-full fixed bg-white content-center cursor-pointer text-2xl" v-if="!showingNavigationSide">
+            <i class="fas fa-angle-double-right fa-lg text-gray-500 hover:text-gray-700 fixed pl-4" v-on:click="showingNavigationSide = !showingNavigationSide"></i>
+        </div>
+        <aside class="flex flex-col z-30 rounded-r-lg transform top-0 left-0 w-64 bg-white fixed h-full overflow-auto ease-in-out transition-all duration-300" :class="showingNavigationSide ? 'translate-x-0' : '-translate-x-full'">
+            <div class="flex flex-col items-center mb-2 w-10/12 mx-auto">
+                <input class="mt-4 border-b-2 border-gray-300 h-10 focus:outline-none" placeholder="Recherche">
+            </div>
+            <div class="flex-grow">
+            <span class="flex items-center py-2 pl-4 text-base" v-for="index in 35" :key="index">
+                <span class="mr-2">
+                    <i class="fas fa-chevron-right text-gray-500 hover:text-gray-700 cursor-pointer"></i>
+                </span>
+                <span class="text-gray-500 hover:text-gray-700 cursor-pointer">
+                    Test 1
+                </span>
+            </span>
+            </div>
+            <div class="flex flex-col items-center">
+                <button class="bg-red-500 hover:bg-red-700 mt-2 mb-4 w-10/12 rounded focus:outline-none focus:shadow-outline text-white font-bold py-2 px-4" v-on:click="showingNavigationSide = !showingNavigationSide">
+                    Fermer
+                </button>
+            </div>
+        </aside>
+
         <!-- Page Heading -->
         <header v-if="showingHeader">
             <div class="max-w-7xl mx-auto py-4 sm:px-6 lg:px-8">
@@ -257,6 +283,7 @@ import JetDropdown from '@/Jetstream/Dropdown'
 import JetDropdownLink from '@/Jetstream/DropdownLink'
 import JetNavLink from '@/Jetstream/NavLink'
 import JetResponsiveNavLink from '@/Jetstream/ResponsiveNavLink'
+import JetButton from '@/Jetstream/Button'
 
 export default {
     components: {
@@ -265,6 +292,7 @@ export default {
         JetDropdownLink,
         JetNavLink,
         JetResponsiveNavLink,
+        JetButton
     },
 
     props: ['showingHeader'],
@@ -272,6 +300,7 @@ export default {
     data() {
         return {
             showingNavigationDropdown: false,
+            showingNavigationSide: false,
         }
     },
 

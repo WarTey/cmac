@@ -13,7 +13,7 @@ class ChapterController extends Controller
 {
     public function index(string $uuid)
     {
-        $level = Level::where('uuid', $uuid)->first();
+        $level = Level::select('id', 'uuid', 'title')->where('uuid', $uuid)->first();
 
         $chapters = Chapter::where('level_id', $level->id)->orderBy('position')->withCount('courses')->get();
 

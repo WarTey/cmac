@@ -17,13 +17,13 @@ class ContentController extends Controller
 {
     public function index(string $uuid)
     {
-        $course = Course::where('uuid', $uuid)->first();
+        $course = Course::select('id', 'uuid', 'title', 'chapter_id')->where('uuid', $uuid)->first();
 
         $contents = Content::where('course_id', $course->id)->orderBy('position')->with('files')->withCount('users')->get();
 
-        $chapter = Chapter::where('id', $course->chapter_id)->first();
+        $chapter = Chapter::select('uuid', 'title', 'level_id')->where('id', $course->chapter_id)->first();
 
-        $level = Level::where('id', $chapter->level_id)->first();
+        $level = Level::select('uuid', 'title')->where('id', $chapter->level_id)->first();
 
         return Inertia::render('Contents/Index', [
             'contents' => $contents,

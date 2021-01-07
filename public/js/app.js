@@ -3146,6 +3146,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Jetstream_DropdownLink__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @/Jetstream/DropdownLink */ "./resources/js/Jetstream/DropdownLink.vue");
 /* harmony import */ var _Jetstream_NavLink__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @/Jetstream/NavLink */ "./resources/js/Jetstream/NavLink.vue");
 /* harmony import */ var _Jetstream_ResponsiveNavLink__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @/Jetstream/ResponsiveNavLink */ "./resources/js/Jetstream/ResponsiveNavLink.vue");
+/* harmony import */ var _Jetstream_Button__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @/Jetstream/Button */ "./resources/js/Jetstream/Button.vue");
 //
 //
 //
@@ -3399,6 +3400,33 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
 
 
 
@@ -3410,12 +3438,14 @@ __webpack_require__.r(__webpack_exports__);
     JetDropdown: _Jetstream_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"],
     JetDropdownLink: _Jetstream_DropdownLink__WEBPACK_IMPORTED_MODULE_2__["default"],
     JetNavLink: _Jetstream_NavLink__WEBPACK_IMPORTED_MODULE_3__["default"],
-    JetResponsiveNavLink: _Jetstream_ResponsiveNavLink__WEBPACK_IMPORTED_MODULE_4__["default"]
+    JetResponsiveNavLink: _Jetstream_ResponsiveNavLink__WEBPACK_IMPORTED_MODULE_4__["default"],
+    JetButton: _Jetstream_Button__WEBPACK_IMPORTED_MODULE_5__["default"]
   },
   props: ['showingHeader'],
   data: function data() {
     return {
-      showingNavigationDropdown: false
+      showingNavigationDropdown: false,
+      showingNavigationSide: false
     };
   },
   methods: {
@@ -99550,6 +99580,91 @@ var render = function() {
         )
       ]),
       _vm._v(" "),
+      _vm.showingNavigationSide
+        ? _c("div", {
+            staticClass:
+              "fixed overflow-hidden top-0 left-0 flex items-center justify-center w-full h-full bg-black bg-opacity-50"
+          })
+        : _vm._e(),
+      _vm._v(" "),
+      !_vm.showingNavigationSide
+        ? _c(
+            "div",
+            {
+              staticClass:
+                "flex flex-wrap h-full fixed bg-white content-center cursor-pointer text-2xl"
+            },
+            [
+              _c("i", {
+                staticClass:
+                  "fas fa-angle-double-right fa-lg text-gray-500 hover:text-gray-700 fixed pl-4",
+                on: {
+                  click: function($event) {
+                    _vm.showingNavigationSide = !_vm.showingNavigationSide
+                  }
+                }
+              })
+            ]
+          )
+        : _vm._e(),
+      _vm._v(" "),
+      _c(
+        "aside",
+        {
+          staticClass:
+            "flex flex-col z-30 rounded-r-lg transform top-0 left-0 w-64 bg-white fixed h-full overflow-auto ease-in-out transition-all duration-300",
+          class: _vm.showingNavigationSide
+            ? "translate-x-0"
+            : "-translate-x-full"
+        },
+        [
+          _vm._m(0),
+          _vm._v(" "),
+          _c(
+            "div",
+            { staticClass: "flex-grow" },
+            _vm._l(35, function(index) {
+              return _c(
+                "span",
+                {
+                  key: index,
+                  staticClass: "flex items-center py-2 pl-4 text-base"
+                },
+                [
+                  _vm._m(1, true),
+                  _vm._v(" "),
+                  _c(
+                    "span",
+                    {
+                      staticClass:
+                        "text-gray-500 hover:text-gray-700 cursor-pointer"
+                    },
+                    [_vm._v("\n                Test 1\n            ")]
+                  )
+                ]
+              )
+            }),
+            0
+          ),
+          _vm._v(" "),
+          _c("div", { staticClass: "flex flex-col items-center" }, [
+            _c(
+              "button",
+              {
+                staticClass:
+                  "bg-red-500 hover:bg-red-700 mt-2 mb-4 w-10/12 rounded focus:outline-none focus:shadow-outline text-white font-bold py-2 px-4",
+                on: {
+                  click: function($event) {
+                    _vm.showingNavigationSide = !_vm.showingNavigationSide
+                  }
+                }
+              },
+              [_vm._v("\n                Fermer\n            ")]
+            )
+          ])
+        ]
+      ),
+      _vm._v(" "),
       _vm.showingHeader
         ? _c("header", [
             _c(
@@ -99644,7 +99759,7 @@ var render = function() {
                   )
                 ]),
                 _vm._v(" "),
-                _vm._m(0),
+                _vm._m(2),
                 _vm._v(" "),
                 _c("div", [
                   _c(
@@ -99829,6 +99944,33 @@ var render = function() {
   )
 }
 var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "div",
+      { staticClass: "flex flex-col items-center mb-2 w-10/12 mx-auto" },
+      [
+        _c("input", {
+          staticClass:
+            "mt-4 border-b-2 border-gray-300 h-10 focus:outline-none",
+          attrs: { placeholder: "Recherche" }
+        })
+      ]
+    )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("span", { staticClass: "mr-2" }, [
+      _c("i", {
+        staticClass:
+          "fas fa-chevron-right text-gray-500 hover:text-gray-700 cursor-pointer"
+      })
+    ])
+  },
   function() {
     var _vm = this
     var _h = _vm.$createElement

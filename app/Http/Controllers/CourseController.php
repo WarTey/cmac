@@ -14,11 +14,11 @@ class CourseController extends Controller
 {
     public function index(string $uuid)
     {
-        $chapter = Chapter::where('uuid', $uuid)->first();
+        $chapter = Chapter::select('id', 'uuid', 'title', 'level_id')->where('uuid', $uuid)->first();
 
         $courses = Course::where('chapter_id', $chapter->id)->orderBy('position')->withCount('contents')->get();
 
-        $level = Level::where('id', $chapter->level_id)->first();
+        $level = Level::select('uuid', 'title')->where('id', $chapter->level_id)->first();
 
         return Inertia::render('Courses/Index', [
             'courses' => $courses,
