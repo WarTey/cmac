@@ -23,7 +23,8 @@ class CourseController extends Controller
         return Inertia::render('Courses/Index', [
             'courses' => $courses,
             'chapter' => $chapter,
-            'level' => $level
+            'level' => $level,
+            'sidebarItems' => $this->sidebar()
         ]);
     }
 

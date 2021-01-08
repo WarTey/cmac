@@ -10,7 +10,7 @@ class Chapter extends Model
 {
     use HasFactory;
 
-    protected $hidden = ['id'];
+    protected $hidden = ['id', 'level_id'];
 
     protected $fillable = ['title', 'description', 'image'];
 

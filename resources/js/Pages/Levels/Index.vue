@@ -1,5 +1,5 @@
 <template>
-    <app-layout :showingHeader="true">
+    <app-layout :showingHeader="true" :sidebarItems="sidebarItems">
         <template #header>
             <h2 class="font-semibold text-gray-800 leading-tight">
                 Les formations
@@ -184,7 +184,7 @@
             AppLayout
         },
 
-        props: ['levels'],
+        props: ['levels', 'sidebarItems'],
 
         data() {
             return {

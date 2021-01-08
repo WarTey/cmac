@@ -15,7 +15,8 @@ class LevelController extends Controller
         $levels = Level::orderBy('position')->withCount('chapters')->get();
 
         return Inertia::render('Levels/Index', [
-            'levels' => $levels
+            'levels' => $levels,
+            'sidebarItems' => $this->sidebar()
         ]);
     }
 

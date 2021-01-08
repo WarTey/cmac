@@ -156,23 +156,67 @@
         </nav>
 
         <!-- Side Heading -->
-        <div v-if="showingNavigationSide" class="fixed overflow-hidden top-0 left-0 flex items-center justify-center w-full h-full bg-black bg-opacity-50"></div>
-        <div class="flex flex-wrap h-full fixed bg-white content-center cursor-pointer text-2xl" v-if="!showingNavigationSide">
-            <i class="fas fa-angle-double-right fa-lg text-gray-500 hover:text-gray-700 fixed pl-4" v-on:click="showingNavigationSide = !showingNavigationSide"></i>
+        <div v-if="sidebarItems && showingNavigationSide" class="fixed overflow-hidden top-0 left-0 flex items-center justify-center w-full h-full bg-black bg-opacity-50"></div>
+        <div class="flex flex-wrap h-full fixed bg-white content-center cursor-pointer text-2xl" v-if="!showingNavigationSide && sidebarItems">
+            <i class="fas fa-angle-double-right fa-lg text-gray-500 hover:text-gray-700 fixed pl-4 bg-white pr-2 py-2 rounded-r shadow-md hover:shadow-lg" v-on:click="showingNavigationSide = !showingNavigationSide"></i>
         </div>
-        <aside class="flex flex-col z-30 rounded-r-lg transform top-0 left-0 w-64 bg-white fixed h-full overflow-auto ease-in-out transition-all duration-300" :class="showingNavigationSide ? 'translate-x-0' : '-translate-x-full'">
-            <div class="flex flex-col items-center mb-2 w-10/12 mx-auto">
+        <aside v-if="sidebarItems" class="flex flex-col z-30 rounded-r-lg transform top-0 left-0 w-64 bg-white fixed h-full overflow-auto ease-in-out transition-all duration-300" :class="showingNavigationSide ? 'translate-x-0' : '-translate-x-full'">
+            <div class="flex flex-col items-center mb-3 w-10/12 mx-auto">
                 <input class="mt-4 border-b-2 border-gray-300 h-10 focus:outline-none" placeholder="Recherche">
             </div>
             <div class="flex-grow">
-            <span class="flex items-center py-2 pl-4 text-base" v-for="index in 35" :key="index">
-                <span class="mr-2">
-                    <i class="fas fa-chevron-right text-gray-500 hover:text-gray-700 cursor-pointer"></i>
-                </span>
-                <span class="text-gray-500 hover:text-gray-700 cursor-pointer">
-                    Test 1
-                </span>
-            </span>
+                <div v-for="(level, index) in copySidebarItems" :key="index">
+                    <span class="flex items-center py-1 px-2 mx-auto text-base">
+                        <span class="mr-2" v-if="level['chapters'] && level['chapters'].length > 0">
+                            <i v-if="!level['unrolled']" class="fas fa-chevron-right text-gray-500 hover:text-gray-700 cursor-pointer" v-on:click="dropMenu(level)"></i>
+                            <i v-else class="fas fa-chevron-down text-gray-500 hover:text-gray-700 cursor-pointer" v-on:click="dropMenu(level)"></i>
+                        </span>
+                        <span class="mr-2" v-else>
+                            <i class="fas fa-caret-right fa-lg text-gray-500"></i>
+                        </span>
+                        <a :href="'/formation/' + level.uuid" class="text-gray-500 hover:text-gray-700 cursor-pointer hover:underline">
+                            {{ level.title }}
+                        </a>
+                    </span>
+                    <div v-if="level['unrolled']" v-for="(chapter, index) in level['chapters']" :key="index">
+                        <span class="flex items-center py-1 pr-2 pl-8 mx-auto text-base">
+                            <span class="mr-2" v-if="chapter['courses'] && chapter['courses'].length > 0">
+                                <i v-if="!chapter['unrolled']" class="fas fa-chevron-right text-gray-500 hover:text-gray-700 cursor-pointer" v-on:click="dropMenu(chapter)"></i>
+                                <i v-else class="fas fa-chevron-down text-gray-500 hover:text-gray-700 cursor-pointer" v-on:click="dropMenu(chapter)"></i>
+                            </span>
+                            <span class="mr-2" v-else>
+                                <i class="fas fa-caret-right fa-lg text-gray-500"></i>
+                            </span>
+                            <a :href="'/chapitre/' + chapter.uuid" class="text-gray-500 hover:text-gray-700 cursor-pointer hover:underline">
+                                {{ chapter.title }}
+                            </a>
+                        </span>
+                        <div v-if="chapter['unrolled']" v-for="(course, index) in chapter['courses']" :key="index">
+                            <span class="flex items-center py-1 pr-2 pl-14 mx-auto text-base">
+                                <span class="mr-2" v-if="course['contents'] && course['contents'].length > 0">
+                                    <i v-if="!course['unrolled']" class="fas fa-chevron-right text-gray-500 hover:text-gray-700 cursor-pointer" v-on:click="dropMenu(course)"></i>
+                                    <i v-else class="fas fa-chevron-down text-gray-500 hover:text-gray-700 cursor-pointer" v-on:click="dropMenu(course)"></i>
+                                </span>
+                                <span class="mr-2" v-else>
+                                    <i class="fas fa-caret-right fa-lg text-gray-500"></i>
+                                </span>
+                                <a :href="'/cours/' + course.uuid" class="text-gray-500 hover:text-gray-700 cursor-pointer hover:underline">
+                                    {{ course.title }}
+                                </a>
+                            </span>
+                            <div v-if="course['unrolled']" v-for="(content, index) in course['contents']" :key="index">
+                                <span class="flex items-center py-1 pr-2 pl-20 mx-auto text-base">
+                                    <span class="mr-2">
+                                        <i class="fas fa-caret-right fa-lg text-gray-500"></i>
+                                    </span>
+                                    <span class="text-gray-500 hover:text-gray-700 cursor-pointer hover:underline">
+                                        {{ content.title }}
+                                    </span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="flex flex-col items-center">
                 <button class="bg-red-500 hover:bg-red-700 mt-2 mb-4 w-10/12 rounded focus:outline-none focus:shadow-outline text-white font-bold py-2 px-4" v-on:click="showingNavigationSide = !showingNavigationSide">
@@ -295,12 +339,30 @@ export default {
         JetButton
     },
 
-    props: ['showingHeader'],
+    props: ['showingHeader', 'sidebarItems'],
 
     data() {
         return {
             showingNavigationDropdown: false,
             showingNavigationSide: false,
+            copySidebarItems: this.sidebarItems,
+            levelsChevronActivated: [],
+            chaptersChevronActivated: [],
+            contentsChevronActivated: []
+        }
+    },
+
+    mounted() {
+        if (this.copySidebarItems) {
+            this.copySidebarItems.forEach(element => {
+                element['unrolled'] = false;
+                element['chapters'].forEach(element => {
+                    element['unrolled'] = false;
+                    element['courses'].forEach(element => {
+                        element['unrolled'] = false;
+                    });
+                });
+            });
         }
     },
 
@@ -310,6 +372,16 @@ export default {
                 window.location = '/';
             })
         },
+
+        dropMenu(item) {
+            item['unrolled'] = !item['unrolled'];
+            this.refreshSidebar();
+        },
+
+        refreshSidebar() {
+            this.showingNavigationSide = !this.showingNavigationSide;
+            this.showingNavigationSide = !this.showingNavigationSide;
+        }
     }
 }
 </script>

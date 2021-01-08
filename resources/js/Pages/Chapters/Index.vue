@@ -1,5 +1,5 @@
 <template>
-    <app-layout :showingHeader="true">
+    <app-layout :showingHeader="true" :sidebarItems="sidebarItems">
         <template #header>
             <h2 class="font-semibold text-gray-800 leading-tight">
                 <a :href="route('levels.index')" class="hover:underline">
@@ -185,7 +185,7 @@ export default {
         AppLayout
     },
 
-    props: ['chapters', 'level'],
+    props: ['chapters', 'level', 'sidebarItems'],
 
     data() {
         return {

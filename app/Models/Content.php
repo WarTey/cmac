@@ -10,7 +10,7 @@ class Content extends Model
 {
     use HasFactory;
 
-    protected $hidden = ['id'];
+    protected $hidden = ['id', 'course_id'];
 
     protected $fillable = ['title', 'description'];
 

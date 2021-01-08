@@ -19,7 +19,8 @@ class ChapterController extends Controller
 
         return Inertia::render('Chapters/Index', [
             'chapters' => $chapters,
-            'level' => $level
+            'level' => $level,
+            'sidebarItems' => $this->sidebar()
         ]);
     }
 

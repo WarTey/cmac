@@ -10,7 +10,7 @@ class Course extends Model
 {
     use HasFactory;
 
-    protected $hidden = ['id'];
+    protected $hidden = ['id', 'chapter_id'];
 
     protected $fillable = ['title', 'description', 'image'];
 

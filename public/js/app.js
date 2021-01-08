@@ -3426,6 +3426,50 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -3441,18 +3485,43 @@ __webpack_require__.r(__webpack_exports__);
     JetResponsiveNavLink: _Jetstream_ResponsiveNavLink__WEBPACK_IMPORTED_MODULE_4__["default"],
     JetButton: _Jetstream_Button__WEBPACK_IMPORTED_MODULE_5__["default"]
   },
-  props: ['showingHeader'],
+  props: ['showingHeader', 'sidebarItems'],
   data: function data() {
     return {
       showingNavigationDropdown: false,
-      showingNavigationSide: false
+      showingNavigationSide: false,
+      copySidebarItems: this.sidebarItems,
+      levelsChevronActivated: [],
+      chaptersChevronActivated: [],
+      contentsChevronActivated: []
     };
+  },
+  mounted: function mounted() {
+    if (this.copySidebarItems) {
+      this.copySidebarItems.forEach(function (element) {
+        element['unrolled'] = false;
+        element['chapters'].forEach(function (element) {
+          element['unrolled'] = false;
+          element['courses'].forEach(function (element) {
+            element['unrolled'] = false;
+          });
+        });
+      });
+    }
   },
   methods: {
     logout: function logout() {
       axios.post(route('logout').url()).then(function (response) {
         window.location = '/';
       });
+    },
+    dropMenu: function dropMenu(item) {
+      item['unrolled'] = !item['unrolled'];
+      this.refreshSidebar();
+    },
+    refreshSidebar: function refreshSidebar() {
+      this.showingNavigationSide = !this.showingNavigationSide;
+      this.showingNavigationSide = !this.showingNavigationSide;
     }
   }
 });
@@ -3978,7 +4047,7 @@ __webpack_require__.r(__webpack_exports__);
   components: {
     AppLayout: _Layouts_AppLayout__WEBPACK_IMPORTED_MODULE_0__["default"]
   },
-  props: ['chapters', 'level'],
+  props: ['chapters', 'level', 'sidebarItems'],
   data: function data() {
     return {
       levelTitle: this.level.title,
@@ -4383,7 +4452,7 @@ __webpack_require__.r(__webpack_exports__);
     editor: _tinymce_tinymce_vue__WEBPACK_IMPORTED_MODULE_2__["default"],
     PdfViewer: _Pages_Contents_PdfViewer__WEBPACK_IMPORTED_MODULE_3__["default"]
   },
-  props: ['contents', 'course', 'chapter', 'level', 'progression'],
+  props: ['contents', 'course', 'chapter', 'level', 'progression', 'sidebarItems'],
   data: function data() {
     return {
       courseTitle: this.course.title,
@@ -4905,7 +4974,7 @@ __webpack_require__.r(__webpack_exports__);
   components: {
     AppLayout: _Layouts_AppLayout__WEBPACK_IMPORTED_MODULE_0__["default"]
   },
-  props: ['courses', 'chapter', 'level'],
+  props: ['courses', 'chapter', 'level', 'sidebarItems'],
   data: function data() {
     return {
       chapterTitle: this.chapter.title,
@@ -5267,7 +5336,7 @@ __webpack_require__.r(__webpack_exports__);
     Input: _Jetstream_Input__WEBPACK_IMPORTED_MODULE_1__["default"],
     AppLayout: _Layouts_AppLayout__WEBPACK_IMPORTED_MODULE_0__["default"]
   },
-  props: ['levels'],
+  props: ['levels', 'sidebarItems'],
   data: function data() {
     return {
       addLevel: false,
@@ -99580,14 +99649,14 @@ var render = function() {
         )
       ]),
       _vm._v(" "),
-      _vm.showingNavigationSide
+      _vm.sidebarItems && _vm.showingNavigationSide
         ? _c("div", {
             staticClass:
               "fixed overflow-hidden top-0 left-0 flex items-center justify-center w-full h-full bg-black bg-opacity-50"
           })
         : _vm._e(),
       _vm._v(" "),
-      !_vm.showingNavigationSide
+      !_vm.showingNavigationSide && _vm.sidebarItems
         ? _c(
             "div",
             {
@@ -99597,7 +99666,7 @@ var render = function() {
             [
               _c("i", {
                 staticClass:
-                  "fas fa-angle-double-right fa-lg text-gray-500 hover:text-gray-700 fixed pl-4",
+                  "fas fa-angle-double-right fa-lg text-gray-500 hover:text-gray-700 fixed pl-4 bg-white pr-2 py-2 rounded-r shadow-md hover:shadow-lg",
                 on: {
                   click: function($event) {
                     _vm.showingNavigationSide = !_vm.showingNavigationSide
@@ -99608,62 +99677,298 @@ var render = function() {
           )
         : _vm._e(),
       _vm._v(" "),
-      _c(
-        "aside",
-        {
-          staticClass:
-            "flex flex-col z-30 rounded-r-lg transform top-0 left-0 w-64 bg-white fixed h-full overflow-auto ease-in-out transition-all duration-300",
-          class: _vm.showingNavigationSide
-            ? "translate-x-0"
-            : "-translate-x-full"
-        },
-        [
-          _vm._m(0),
-          _vm._v(" "),
-          _c(
-            "div",
-            { staticClass: "flex-grow" },
-            _vm._l(35, function(index) {
-              return _c(
-                "span",
-                {
-                  key: index,
-                  staticClass: "flex items-center py-2 pl-4 text-base"
-                },
-                [
-                  _vm._m(1, true),
-                  _vm._v(" "),
-                  _c(
-                    "span",
-                    {
-                      staticClass:
-                        "text-gray-500 hover:text-gray-700 cursor-pointer"
-                    },
-                    [_vm._v("\n                Test 1\n            ")]
+      _vm.sidebarItems
+        ? _c(
+            "aside",
+            {
+              staticClass:
+                "flex flex-col z-30 rounded-r-lg transform top-0 left-0 w-64 bg-white fixed h-full overflow-auto ease-in-out transition-all duration-300",
+              class: _vm.showingNavigationSide
+                ? "translate-x-0"
+                : "-translate-x-full"
+            },
+            [
+              _vm._m(0),
+              _vm._v(" "),
+              _c(
+                "div",
+                { staticClass: "flex-grow" },
+                _vm._l(_vm.copySidebarItems, function(level, index) {
+                  return _c(
+                    "div",
+                    { key: index },
+                    [
+                      _c(
+                        "span",
+                        {
+                          staticClass:
+                            "flex items-center py-1 px-2 mx-auto text-base"
+                        },
+                        [
+                          level["chapters"] && level["chapters"].length > 0
+                            ? _c("span", { staticClass: "mr-2" }, [
+                                !level["unrolled"]
+                                  ? _c("i", {
+                                      staticClass:
+                                        "fas fa-chevron-right text-gray-500 hover:text-gray-700 cursor-pointer",
+                                      on: {
+                                        click: function($event) {
+                                          return _vm.dropMenu(level)
+                                        }
+                                      }
+                                    })
+                                  : _c("i", {
+                                      staticClass:
+                                        "fas fa-chevron-down text-gray-500 hover:text-gray-700 cursor-pointer",
+                                      on: {
+                                        click: function($event) {
+                                          return _vm.dropMenu(level)
+                                        }
+                                      }
+                                    })
+                              ])
+                            : _c("span", { staticClass: "mr-2" }, [
+                                _c("i", {
+                                  staticClass:
+                                    "fas fa-caret-right fa-lg text-gray-500"
+                                })
+                              ]),
+                          _vm._v(" "),
+                          _c(
+                            "a",
+                            {
+                              staticClass:
+                                "text-gray-500 hover:text-gray-700 cursor-pointer hover:underline",
+                              attrs: { href: "/formation/" + level.uuid }
+                            },
+                            [
+                              _vm._v(
+                                "\n                        " +
+                                  _vm._s(level.title) +
+                                  "\n                    "
+                              )
+                            ]
+                          )
+                        ]
+                      ),
+                      _vm._v(" "),
+                      _vm._l(level["chapters"], function(chapter, index) {
+                        return level["unrolled"]
+                          ? _c(
+                              "div",
+                              { key: index },
+                              [
+                                _c(
+                                  "span",
+                                  {
+                                    staticClass:
+                                      "flex items-center py-1 pr-2 pl-8 mx-auto text-base"
+                                  },
+                                  [
+                                    chapter["courses"] &&
+                                    chapter["courses"].length > 0
+                                      ? _c("span", { staticClass: "mr-2" }, [
+                                          !chapter["unrolled"]
+                                            ? _c("i", {
+                                                staticClass:
+                                                  "fas fa-chevron-right text-gray-500 hover:text-gray-700 cursor-pointer",
+                                                on: {
+                                                  click: function($event) {
+                                                    return _vm.dropMenu(chapter)
+                                                  }
+                                                }
+                                              })
+                                            : _c("i", {
+                                                staticClass:
+                                                  "fas fa-chevron-down text-gray-500 hover:text-gray-700 cursor-pointer",
+                                                on: {
+                                                  click: function($event) {
+                                                    return _vm.dropMenu(chapter)
+                                                  }
+                                                }
+                                              })
+                                        ])
+                                      : _c("span", { staticClass: "mr-2" }, [
+                                          _c("i", {
+                                            staticClass:
+                                              "fas fa-caret-right fa-lg text-gray-500"
+                                          })
+                                        ]),
+                                    _vm._v(" "),
+                                    _c(
+                                      "a",
+                                      {
+                                        staticClass:
+                                          "text-gray-500 hover:text-gray-700 cursor-pointer hover:underline",
+                                        attrs: {
+                                          href: "/chapitre/" + chapter.uuid
+                                        }
+                                      },
+                                      [
+                                        _vm._v(
+                                          "\n                            " +
+                                            _vm._s(chapter.title) +
+                                            "\n                        "
+                                        )
+                                      ]
+                                    )
+                                  ]
+                                ),
+                                _vm._v(" "),
+                                _vm._l(chapter["courses"], function(
+                                  course,
+                                  index
+                                ) {
+                                  return chapter["unrolled"]
+                                    ? _c(
+                                        "div",
+                                        { key: index },
+                                        [
+                                          _c(
+                                            "span",
+                                            {
+                                              staticClass:
+                                                "flex items-center py-1 pr-2 pl-14 mx-auto text-base"
+                                            },
+                                            [
+                                              course["contents"] &&
+                                              course["contents"].length > 0
+                                                ? _c(
+                                                    "span",
+                                                    { staticClass: "mr-2" },
+                                                    [
+                                                      !course["unrolled"]
+                                                        ? _c("i", {
+                                                            staticClass:
+                                                              "fas fa-chevron-right text-gray-500 hover:text-gray-700 cursor-pointer",
+                                                            on: {
+                                                              click: function(
+                                                                $event
+                                                              ) {
+                                                                return _vm.dropMenu(
+                                                                  course
+                                                                )
+                                                              }
+                                                            }
+                                                          })
+                                                        : _c("i", {
+                                                            staticClass:
+                                                              "fas fa-chevron-down text-gray-500 hover:text-gray-700 cursor-pointer",
+                                                            on: {
+                                                              click: function(
+                                                                $event
+                                                              ) {
+                                                                return _vm.dropMenu(
+                                                                  course
+                                                                )
+                                                              }
+                                                            }
+                                                          })
+                                                    ]
+                                                  )
+                                                : _c(
+                                                    "span",
+                                                    { staticClass: "mr-2" },
+                                                    [
+                                                      _c("i", {
+                                                        staticClass:
+                                                          "fas fa-caret-right fa-lg text-gray-500"
+                                                      })
+                                                    ]
+                                                  ),
+                                              _vm._v(" "),
+                                              _c(
+                                                "a",
+                                                {
+                                                  staticClass:
+                                                    "text-gray-500 hover:text-gray-700 cursor-pointer hover:underline",
+                                                  attrs: {
+                                                    href:
+                                                      "/cours/" + course.uuid
+                                                  }
+                                                },
+                                                [
+                                                  _vm._v(
+                                                    "\n                                " +
+                                                      _vm._s(course.title) +
+                                                      "\n                            "
+                                                  )
+                                                ]
+                                              )
+                                            ]
+                                          ),
+                                          _vm._v(" "),
+                                          _vm._l(course["contents"], function(
+                                            content,
+                                            index
+                                          ) {
+                                            return course["unrolled"]
+                                              ? _c("div", { key: index }, [
+                                                  _c(
+                                                    "span",
+                                                    {
+                                                      staticClass:
+                                                        "flex items-center py-1 pr-2 pl-20 mx-auto text-base"
+                                                    },
+                                                    [
+                                                      _vm._m(1, true),
+                                                      _vm._v(" "),
+                                                      _c(
+                                                        "span",
+                                                        {
+                                                          staticClass:
+                                                            "text-gray-500 hover:text-gray-700 cursor-pointer hover:underline"
+                                                        },
+                                                        [
+                                                          _vm._v(
+                                                            "\n                                    " +
+                                                              _vm._s(
+                                                                content.title
+                                                              ) +
+                                                              "\n                                "
+                                                          )
+                                                        ]
+                                                      )
+                                                    ]
+                                                  )
+                                                ])
+                                              : _vm._e()
+                                          })
+                                        ],
+                                        2
+                                      )
+                                    : _vm._e()
+                                })
+                              ],
+                              2
+                            )
+                          : _vm._e()
+                      })
+                    ],
+                    2
                   )
-                ]
-              )
-            }),
-            0
-          ),
-          _vm._v(" "),
-          _c("div", { staticClass: "flex flex-col items-center" }, [
-            _c(
-              "button",
-              {
-                staticClass:
-                  "bg-red-500 hover:bg-red-700 mt-2 mb-4 w-10/12 rounded focus:outline-none focus:shadow-outline text-white font-bold py-2 px-4",
-                on: {
-                  click: function($event) {
-                    _vm.showingNavigationSide = !_vm.showingNavigationSide
-                  }
-                }
-              },
-              [_vm._v("\n                Fermer\n            ")]
-            )
-          ])
-        ]
-      ),
+                }),
+                0
+              ),
+              _vm._v(" "),
+              _c("div", { staticClass: "flex flex-col items-center" }, [
+                _c(
+                  "button",
+                  {
+                    staticClass:
+                      "bg-red-500 hover:bg-red-700 mt-2 mb-4 w-10/12 rounded focus:outline-none focus:shadow-outline text-white font-bold py-2 px-4",
+                    on: {
+                      click: function($event) {
+                        _vm.showingNavigationSide = !_vm.showingNavigationSide
+                      }
+                    }
+                  },
+                  [_vm._v("\n                Fermer\n            ")]
+                )
+              ])
+            ]
+          )
+        : _vm._e(),
       _vm._v(" "),
       _vm.showingHeader
         ? _c("header", [
@@ -99950,7 +100255,7 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c(
       "div",
-      { staticClass: "flex flex-col items-center mb-2 w-10/12 mx-auto" },
+      { staticClass: "flex flex-col items-center mb-3 w-10/12 mx-auto" },
       [
         _c("input", {
           staticClass:
@@ -99965,10 +100270,7 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("span", { staticClass: "mr-2" }, [
-      _c("i", {
-        staticClass:
-          "fas fa-chevron-right text-gray-500 hover:text-gray-700 cursor-pointer"
-      })
+      _c("i", { staticClass: "fas fa-caret-right fa-lg text-gray-500" })
     ])
   },
   function() {
@@ -100695,7 +100997,7 @@ var render = function() {
   return _c(
     "app-layout",
     {
-      attrs: { showingHeader: true },
+      attrs: { showingHeader: true, sidebarItems: _vm.sidebarItems },
       scopedSlots: _vm._u([
         {
           key: "header",
@@ -101685,7 +101987,7 @@ var render = function() {
   return _c(
     "app-layout",
     {
-      attrs: { showingHeader: true },
+      attrs: { showingHeader: true, sidebarItems: _vm.sidebarItems },
       scopedSlots: _vm._u([
         {
           key: "header",
@@ -102958,7 +103260,7 @@ var render = function() {
   return _c(
     "app-layout",
     {
-      attrs: { showingHeader: true },
+      attrs: { showingHeader: true, sidebarItems: _vm.sidebarItems },
       scopedSlots: _vm._u([
         {
           key: "header",
@@ -104000,7 +104302,7 @@ var render = function() {
   return _c(
     "app-layout",
     {
-      attrs: { showingHeader: true },
+      attrs: { showingHeader: true, sidebarItems: _vm.sidebarItems },
       scopedSlots: _vm._u([
         {
           key: "header",

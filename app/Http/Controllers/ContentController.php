@@ -29,7 +29,8 @@ class ContentController extends Controller
             'contents' => $contents,
             'course' => $course,
             'chapter' => $chapter,
-            'level' => $level
+            'level' => $level,
+            'sidebarItems' => $this->sidebar()
         ]);
     }
 
