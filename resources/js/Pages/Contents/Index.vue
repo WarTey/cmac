@@ -25,11 +25,18 @@
                 </button>
             </div>
         </div>
+        <div class="pt-4 max-w-7xl mx-auto sm:px-6 lg:px-8 right-0">
+            <div class="flex flex-row-reverse">
+                <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" v-on:click="toggleAddResource">
+                    Ajouter une ressource
+                </button>
+            </div>
+        </div>
         <transition name="slide-fade">
             <div class="py-4" v-if="addContent">
                 <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                     <div class="w-full">
-                        <form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" @submit.prevent="storeSubmit">
+                        <form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" @submit.prevent="storeContentSubmit">
                             <div class="mb-4">
                                 <label class="block text-gray-700 text-sm font-bold mb-2" for="title">
                                     Contenu
@@ -38,6 +45,27 @@
                                 <input v-else class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="title" type="text" v-model="createForm.title" placeholder="Contenu">
                                 <p class="text-red-700 mt-2" v-if="$page.errors.titleStore">{{ $page.errors.titleStore[0] }}</p>
                             </div>
+                            <div class="mb-4">
+                                <label class="block text-gray-700 text-sm font-bold mb-2" for="position">
+                                    Position
+                                </label>
+                                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="position" v-model="createForm.position" type="number" min="0" placeholder="0">
+                                <p class="text-red-700 mt-2" v-if="$page.errors.positionStore">{{ $page.errors.positionStore[0] }}</p>
+                            </div>
+                            <div class="text-green-700 mb-4" v-if="$page.flash.successStore">
+                                {{ $page.flash.successStore }}
+                            </div>
+                            <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
+                                Ajouter le contenu
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="py-4" v-if="addResource">
+                <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+                    <div class="w-full">
+                        <form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" @submit.prevent="storeResourceSubmit">
                             <div class="mb-4">
                                 <label class="block text-gray-700 text-sm font-bold mb-2" for="description">
                                     Description (optionnel)
@@ -69,7 +97,7 @@
                                 <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="position" v-model="createForm.position" type="number" min="0" placeholder="0">
                                 <p class="text-red-700 mt-2" v-if="$page.errors.positionStore">{{ $page.errors.positionStore[0] }}</p>
                             </div>
-                            <div class="mb-4">
+                            <!--<div class="mb-4">
                                 <label class="block text-gray-700 text-sm font-bold mb-2">
                                     PDF (optionnel)
                                 </label>
@@ -93,12 +121,58 @@
                                         Format du fichier ou taille incorrect.
                                     </p>
                                 </div>
+                            </div>-->
+                            <div class="mb-4">
+                                <label class="block text-gray-700 text-sm font-bold mb-2">
+                                    PDF (optionnel)
+                                </label>
+                                <header class="border-dashed border-2 border-gray-400 py-12 flex flex-col justify-center items-center mb-4">
+                                    <input id="hidden-input-file" type="file" class="hidden" v-on:change="updateFileStore">
+                                    <button id="button-store" class="mt-2 rounded-sm text-sm px-3 py-1 bg-gray-200 hover:bg-gray-300 focus:shadow-outline focus:outline-none" @click.prevent="selectFileStore">
+                                        Télécharger un PDF
+                                    </button>
+                                </header>
+                                <ul id="gallery-store" class="flex flex-1 flex-wrap -m-1">
+                                    <li v-if="!this.createForm.file" class="h-full w-full text-center flex flex-col items-center justify-center items-center">
+                                        <img class="mx-auto w-32" :src="'/img/no-img.png'" alt="Aucune image sélectionnée">
+                                        <span class="text-sm text-gray-500">Aucun PDF sélectionné</span>
+                                    </li>
+                                </ul>
+                                <div class="pt-4" v-if="this.createForm.file">
+                                    <div class="font-semibold text-gray-700 text-sm">
+                                        {{ this.createForm.file.name }} - <a href="#" v-on:click.prevent="resetFileStore" class="text-red-700 hover:underline">Supprimer</a>
+                                    </div>
+                                </div>
+                                <p class="text-red-700 mt-2" v-if="$page.errors.fileStore">{{ $page.errors.fileStore[0] }}</p>
+                            </div>
+                            <div class="mb-4">
+                                <label class="block text-gray-700 text-sm font-bold mb-2">
+                                    Vidéo (optionnel)
+                                </label>
+                                <header class="border-dashed border-2 border-gray-400 py-12 flex flex-col justify-center items-center mb-4">
+                                    <input id="hidden-input-video" type="file" class="hidden" v-on:change="updateVideoStore">
+                                    <button id="button-store-video" class="mt-2 rounded-sm text-sm px-3 py-1 bg-gray-200 hover:bg-gray-300 focus:shadow-outline focus:outline-none" @click.prevent="selectVideoStore">
+                                        Télécharger une vidéo
+                                    </button>
+                                </header>
+                                <ul id="gallery-store-video" class="flex flex-1 flex-wrap -m-1">
+                                    <li v-if="!this.createForm.video" class="h-full w-full text-center flex flex-col items-center justify-center items-center">
+                                        <img class="mx-auto w-32" :src="'/img/no-img.png'" alt="Aucune image sélectionnée">
+                                        <span class="text-sm text-gray-500">Aucune vidéo sélectionnée</span>
+                                    </li>
+                                </ul>
+                                <div class="pt-4" v-if="this.createForm.video">
+                                    <div class="font-semibold text-gray-700 text-sm">
+                                        {{ this.createForm.video.name }} - <a href="#" v-on:click.prevent="resetVideoStore" class="text-red-700 hover:underline">Supprimer</a>
+                                    </div>
+                                </div>
+                                <p class="text-red-700 mt-2" v-if="$page.errors.videoStore">{{ $page.errors.videoStore[0] }}</p>
                             </div>
                             <div class="text-green-700 mb-4" v-if="$page.flash.successStore">
                                 {{ $page.flash.successStore }}
                             </div>
                             <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
-                                Ajouter le contenu
+                                Ajouter la resource
                             </button>
                         </form>
                     </div>
@@ -114,18 +188,32 @@
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white overflow-hidden shadow-lg hover:shadow-xl rounded-lg transition duration-500 ease-in-out">
                     <div class="p-6 sm:px-20 bg-white border-b border-gray-200">
-                        <div class="text-gray-500 text-justify">
+                        <div v-for="resource in $page.contents[contentIndex].resources" v-bind:key="resource.uuid">
+                            <div :class="{'mt-6': contentIndex > 0}" v-if="resource.description">
+                                <span v-html="resource.description"></span>
+                            </div>
+                            <div class="mt-6" v-if="resource.file">
+                                <iframe :src="'/storage/files/' + resource.file" width="100%" height="500px"></iframe>
+                            </div>
+                            <div class="mt-6" v-if="resource.video">
+                                <video width="100%" height="500px" controls>
+                                    <!-- TODO : Change video format -->
+                                    <source :src="'/storage/videos/' + resource.video" type=video/quicktime>
+                                </video>
+                            </div>
+                        </div>
+                        <!--<div class="text-gray-500 text-justify">
                             <span v-html="$page.contents[contentIndex].description"></span>
                         </div>
                         <div class="mt-6" v-for="file in $page.contents[contentIndex].files" v-bind:key="file.uuid">
                             <PdfViewer :url-file="'/storage/files/' + file.title" :file="file" />
-                        </div>
+                        </div>-->
                         <div class="mt-4 flex">
                             <a class="text-blue-500 font-semibold text-justify hover:underline cursor-pointer" v-on:click.prevent="showModal($page.contents[contentIndex])">
                                 Éditer le contenu
                             </a>
                             <a class="text-red-500 font-semibold text-justify hover:underline cursor-pointer ml-auto" v-on:click.prevent="removeContent($page.contents[contentIndex].uuid)">
-                                Retirer le cours
+                                Retirer le contenu
                             </a>
                         </div>
                     </div>
@@ -267,13 +355,15 @@ export default {
             levelTitle: this.level.title,
             levelUuid: this.level.uuid,
             addContent: false,
+            addResource: false,
             modalVisible: false,
             contentIndex: 0,
             createForm: {
                 title: null,
                 description: null,
-                position: null,
-                files: []
+                file: null,
+                video: null,
+                position: null
             },
             editForm: {
                 uuid: null,
@@ -299,44 +389,83 @@ export default {
 
     methods: {
         toggleAddContent() {
+            if (this.addResource) {
+                this.addResource = !this.addResource;
+            }
             this.addContent = !this.addContent;
 
             this.clearFormMessages();
         },
 
-        storeSubmit() {
+        toggleAddResource() {
+            if (this.addContent) {
+                this.addContent = !this.addContent;
+            }
+            this.addResource = !this.addResource;
+
+            this.clearFormMessages();
+        },
+
+        storeContentSubmit() {
             const formData = new FormData();
             if (this.createForm.title) {
                 formData.append('titleStore', this.createForm.title);
             }
-            if (this.createForm.description) {
-                formData.append('descriptionStore', this.createForm.description);
-            }
             if (this.createForm.position) {
                 formData.append('positionStore', this.createForm.position);
-            }
-            if (this.createForm.files.length > 0) {
-                this.createForm.files.forEach(element =>
-                    formData.append('filesStore[]', element)
-                );
             }
             formData.append('courseUuid', this.courseUuid);
 
             this.$inertia.post('/content/store', formData);
         },
 
+        storeResourceSubmit() {
+            const formData = new FormData();
+            if (this.createForm.description) {
+                formData.append('descriptionStore', this.createForm.description);
+            }
+            if (this.createForm.file) {
+                formData.append('fileStore', this.createForm.file);
+            }
+            if (this.createForm.video) {
+                formData.append('videoStore', this.createForm.video);
+            }
+            if (this.createForm.position) {
+                formData.append('positionStore', this.createForm.position);
+            }
+            formData.append('contentUuid', this.contents[this.contentIndex].uuid);
+            formData.append('courseUuid', this.courseUuid);
+
+            this.$inertia.post('/resource/store', formData);
+        },
+
         updateFileStore(event) {
             if (event.target.files[0].type.match("application/pdf")) {
-                this.createForm.files.push(event.target.files[0]);
+                this.createForm.file = event.target.files[0];
             }
         },
 
-        resetFileStore(index) {
-            this.createForm.files.splice(index, 1);
+        resetFileStore() {
+            this.createForm.file = null;
         },
 
         selectFileStore() {
-            document.getElementById("hidden-input").click();
+            document.getElementById("hidden-input-file").click();
+        },
+
+        updateVideoStore(event) {
+            // TODO : Change video format
+            if (event.target.files[0].type.match("video/quicktime")) {
+                this.createForm.video = event.target.files[0];
+            }
+        },
+
+        resetVideoStore() {
+            this.createForm.video = null;
+        },
+
+        selectVideoStore() {
+            document.getElementById("hidden-input-video").click();
         },
 
         removeContent(uuid) {

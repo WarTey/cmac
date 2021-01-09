@@ -26,8 +26,8 @@ class File extends Model
         return 'uuid';
     }
 
-    public function content()
+    public function resource()
     {
-        return $this->belongsTo(Content::class);
+        return $this->belongsTo(Resource::class);
     }
 }

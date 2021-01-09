@@ -19,7 +19,9 @@ class ContentController extends Controller
     {
         $course = Course::select('id', 'uuid', 'title', 'chapter_id')->where('uuid', $uuid)->first();
 
-        $contents = Content::where('course_id', $course->id)->orderBy('position')->with('files')->withCount('users')->get();
+        $contents = Content::where('course_id', $course->id)->orderBy('position')->with('resources', function ($query) {
+            $query->orderBy('position');
+        })->withCount('users')->get();
 
         $chapter = Chapter::select('uuid', 'title', 'level_id')->where('id', $course->chapter_id)->first();
 
@@ -36,29 +38,35 @@ class ContentController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
+        /*$request->validate([
             'titleStore' => 'required|unique:contents,title|max:100',
             'descriptionStore' => 'nullable',
             'positionStore' => 'required|integer|min:0',
             'filesStore.*' => 'nullable|file|mimes:pdf|max:2048',
             'courseUuid' => 'required'
+        ]);*/
+
+        $request->validate([
+            'titleStore' => 'required|unique:contents,title|max:100',
+            'positionStore' => 'required|integer|min:0',
+            'courseUuid' => 'required'
         ]);
 
         $content = new Content();
         $content->title = $request->post('titleStore');
-        $content->description = $request->post('descriptionStore');
+        //$content->description = $request->post('descriptionStore');
         $content->position = $request->post('positionStore');
         $content->course_id = Course::where('uuid', $request->post('courseUuid'))->first()->id;
 
         $content->save();
 
-        if ($request->file())
+        /*if ($request->file())
         {
             foreach ($request->file()["filesStore"] as $file)
             {
                 $this->uploadFile($file, $content->uuid);
             }
-        }
+        }*/
 
         return Redirect::route('contents.index', ['uuid' => $request->post('courseUuid')])->with('successStore', 'Contenu en ligne.');
     }

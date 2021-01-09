@@ -17,7 +17,6 @@ class CreateContentsTable extends Migration
             $table->id();
             $table->uuid('uuid')->index();
             $table->string('title')->unique();
-            $table->text('description')->nullable();
             $table->integer('position');
             $table->foreignId('course_id')->constrained()->cascadeOnDelete();
             $table->timestamps();

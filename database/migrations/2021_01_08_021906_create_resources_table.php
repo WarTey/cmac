@@ -15,6 +15,12 @@ class CreateResourcesTable extends Migration
     {
         Schema::create('resources', function (Blueprint $table) {
             $table->id();
+            $table->uuid('uuid')->index();
+            $table->text('description')->nullable();
+            $table->string('file')->nullable()->unique();
+            $table->string('video')->nullable()->unique();
+            $table->integer('position');
+            $table->foreignId('content_id')->constrained()->cascadeOnDelete();
             $table->timestamps();
         });
     }

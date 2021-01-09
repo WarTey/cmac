@@ -15,9 +15,9 @@ class Controller extends BaseController
     public function sidebar()
     {
         return Level::select('id', 'uuid', 'title')->orderBy('position')->with('chapters', function ($query) {
-            $query->select('id', 'uuid', 'title', 'level_id')->with('courses', function ($query) {
-                $query->select('id', 'uuid', 'title', 'chapter_id')->with('contents', function ($query) {
-                    $query->select('id', 'title', 'course_id');
+            $query->select('id', 'uuid', 'title', 'level_id')->orderBy('position')->with('courses', function ($query) {
+                $query->select('id', 'uuid', 'title', 'chapter_id')->orderBy('position')->with('contents', function ($query) {
+                    $query->select('id', 'title', 'course_id')->orderBy('position');
                 });
             });
         })->get();

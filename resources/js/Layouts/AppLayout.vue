@@ -341,11 +341,18 @@ export default {
 
     props: ['showingHeader', 'sidebarItems'],
 
+    watch: {
+        sidebarItems: function (value) {
+            this.sidebarItems = value;
+            this.copyItems();
+        }
+    },
+
     data() {
         return {
             showingNavigationDropdown: false,
             showingNavigationSide: false,
-            copySidebarItems: this.sidebarItems,
+            copySidebarItems: null,
             levelsChevronActivated: [],
             chaptersChevronActivated: [],
             contentsChevronActivated: []
@@ -353,17 +360,7 @@ export default {
     },
 
     mounted() {
-        if (this.copySidebarItems) {
-            this.copySidebarItems.forEach(element => {
-                element['unrolled'] = false;
-                element['chapters'].forEach(element => {
-                    element['unrolled'] = false;
-                    element['courses'].forEach(element => {
-                        element['unrolled'] = false;
-                    });
-                });
-            });
-        }
+        this.copyItems();
     },
 
     methods: {
@@ -371,6 +368,21 @@ export default {
             axios.post(route('logout').url()).then(response => {
                 window.location = '/';
             })
+        },
+
+        copyItems() {
+            this.copySidebarItems = this.sidebarItems;
+            if (this.sidebarItems) {
+                this.copySidebarItems.forEach(element => {
+                    element['unrolled'] = false;
+                    element['chapters'].forEach(element => {
+                        element['unrolled'] = false;
+                        element['courses'].forEach(element => {
+                            element['unrolled'] = false;
+                        });
+                    });
+                });
+            }
         },
 
         dropMenu(item) {

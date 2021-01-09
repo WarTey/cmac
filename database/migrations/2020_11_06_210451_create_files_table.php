@@ -18,7 +18,8 @@ class CreateFilesTable extends Migration
             $table->uuid('uuid')->index();
             $table->string('title')->unique();
             $table->string('name');
-            $table->foreignId('content_id')->constrained()->cascadeOnDelete();
+            $table->integer('position');
+            //$table->foreignId('resources_id')->constrained()->cascadeOnDelete();
             $table->timestamps();
         });
     }

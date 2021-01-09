@@ -15,6 +15,11 @@ class CreateVideosTable extends Migration
     {
         Schema::create('videos', function (Blueprint $table) {
             $table->id();
+            $table->uuid('uuid')->index();
+            $table->string('title')->unique();
+            $table->string('name');
+            $table->integer('position');
+            //$table->foreignId('resource_id')->constrained()->cascadeOnDelete();
             $table->timestamps();
         });
     }

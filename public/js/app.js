@@ -3486,34 +3486,45 @@ __webpack_require__.r(__webpack_exports__);
     JetButton: _Jetstream_Button__WEBPACK_IMPORTED_MODULE_5__["default"]
   },
   props: ['showingHeader', 'sidebarItems'],
+  watch: {
+    sidebarItems: function sidebarItems(value) {
+      this.sidebarItems = value;
+      this.copyItems();
+    }
+  },
   data: function data() {
     return {
       showingNavigationDropdown: false,
       showingNavigationSide: false,
-      copySidebarItems: this.sidebarItems,
+      copySidebarItems: null,
       levelsChevronActivated: [],
       chaptersChevronActivated: [],
       contentsChevronActivated: []
     };
   },
   mounted: function mounted() {
-    if (this.copySidebarItems) {
-      this.copySidebarItems.forEach(function (element) {
-        element['unrolled'] = false;
-        element['chapters'].forEach(function (element) {
-          element['unrolled'] = false;
-          element['courses'].forEach(function (element) {
-            element['unrolled'] = false;
-          });
-        });
-      });
-    }
+    this.copyItems();
   },
   methods: {
     logout: function logout() {
       axios.post(route('logout').url()).then(function (response) {
         window.location = '/';
       });
+    },
+    copyItems: function copyItems() {
+      this.copySidebarItems = this.sidebarItems;
+
+      if (this.sidebarItems) {
+        this.copySidebarItems.forEach(function (element) {
+          element['unrolled'] = false;
+          element['chapters'].forEach(function (element) {
+            element['unrolled'] = false;
+            element['courses'].forEach(function (element) {
+              element['unrolled'] = false;
+            });
+          });
+        });
+      }
     },
     dropMenu: function dropMenu(item) {
       item['unrolled'] = !item['unrolled'];
@@ -4441,6 +4452,94 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -4462,13 +4561,15 @@ __webpack_require__.r(__webpack_exports__);
       levelTitle: this.level.title,
       levelUuid: this.level.uuid,
       addContent: false,
+      addResource: false,
       modalVisible: false,
       contentIndex: 0,
       createForm: {
         title: null,
         description: null,
-        position: null,
-        files: []
+        file: null,
+        video: null,
+        position: null
       },
       editForm: {
         uuid: null,
@@ -4492,43 +4593,80 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     toggleAddContent: function toggleAddContent() {
+      if (this.addResource) {
+        this.addResource = !this.addResource;
+      }
+
       this.addContent = !this.addContent;
       this.clearFormMessages();
     },
-    storeSubmit: function storeSubmit() {
+    toggleAddResource: function toggleAddResource() {
+      if (this.addContent) {
+        this.addContent = !this.addContent;
+      }
+
+      this.addResource = !this.addResource;
+      this.clearFormMessages();
+    },
+    storeContentSubmit: function storeContentSubmit() {
       var formData = new FormData();
 
       if (this.createForm.title) {
         formData.append('titleStore', this.createForm.title);
       }
 
+      if (this.createForm.position) {
+        formData.append('positionStore', this.createForm.position);
+      }
+
+      formData.append('courseUuid', this.courseUuid);
+      this.$inertia.post('/content/store', formData);
+    },
+    storeResourceSubmit: function storeResourceSubmit() {
+      var formData = new FormData();
+
       if (this.createForm.description) {
         formData.append('descriptionStore', this.createForm.description);
+      }
+
+      if (this.createForm.file) {
+        formData.append('fileStore', this.createForm.file);
+      }
+
+      if (this.createForm.video) {
+        formData.append('videoStore', this.createForm.video);
       }
 
       if (this.createForm.position) {
         formData.append('positionStore', this.createForm.position);
       }
 
-      if (this.createForm.files.length > 0) {
-        this.createForm.files.forEach(function (element) {
-          return formData.append('filesStore[]', element);
-        });
-      }
-
+      formData.append('contentUuid', this.contents[this.contentIndex].uuid);
       formData.append('courseUuid', this.courseUuid);
-      this.$inertia.post('/content/store', formData);
+      this.$inertia.post('/resource/store', formData);
     },
     updateFileStore: function updateFileStore(event) {
       if (event.target.files[0].type.match("application/pdf")) {
-        this.createForm.files.push(event.target.files[0]);
+        this.createForm.file = event.target.files[0];
       }
     },
-    resetFileStore: function resetFileStore(index) {
-      this.createForm.files.splice(index, 1);
+    resetFileStore: function resetFileStore() {
+      this.createForm.file = null;
     },
     selectFileStore: function selectFileStore() {
-      document.getElementById("hidden-input").click();
+      document.getElementById("hidden-input-file").click();
+    },
+    updateVideoStore: function updateVideoStore(event) {
+      // TODO : Change video format
+      if (event.target.files[0].type.match("video/quicktime")) {
+        this.createForm.video = event.target.files[0];
+      }
+    },
+    resetVideoStore: function resetVideoStore() {
+      this.createForm.video = null;
+    },
+    selectVideoStore: function selectVideoStore() {
+      document.getElementById("hidden-input-video").click();
     },
     removeContent: function removeContent(uuid) {
       var formData = new FormData();
@@ -102074,6 +102212,24 @@ var render = function() {
         ]
       ),
       _vm._v(" "),
+      _c(
+        "div",
+        { staticClass: "pt-4 max-w-7xl mx-auto sm:px-6 lg:px-8 right-0" },
+        [
+          _c("div", { staticClass: "flex flex-row-reverse" }, [
+            _c(
+              "button",
+              {
+                staticClass:
+                  "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline",
+                on: { click: _vm.toggleAddResource }
+              },
+              [_vm._v("\n                Ajouter une ressource\n            ")]
+            )
+          ])
+        ]
+      ),
+      _vm._v(" "),
       _c("transition", { attrs: { name: "slide-fade" } }, [
         _vm.addContent
           ? _c("div", { staticClass: "py-4" }, [
@@ -102087,7 +102243,7 @@ var render = function() {
                       on: {
                         submit: function($event) {
                           $event.preventDefault()
-                          return _vm.storeSubmit($event)
+                          return _vm.storeContentSubmit($event)
                         }
                       }
                     },
@@ -102176,6 +102332,107 @@ var render = function() {
                           : _vm._e()
                       ]),
                       _vm._v(" "),
+                      _c("div", { staticClass: "mb-4" }, [
+                        _c(
+                          "label",
+                          {
+                            staticClass:
+                              "block text-gray-700 text-sm font-bold mb-2",
+                            attrs: { for: "position" }
+                          },
+                          [
+                            _vm._v(
+                              "\n                                Position\n                            "
+                            )
+                          ]
+                        ),
+                        _vm._v(" "),
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.createForm.position,
+                              expression: "createForm.position"
+                            }
+                          ],
+                          staticClass:
+                            "shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline",
+                          attrs: {
+                            id: "position",
+                            type: "number",
+                            min: "0",
+                            placeholder: "0"
+                          },
+                          domProps: { value: _vm.createForm.position },
+                          on: {
+                            input: function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.$set(
+                                _vm.createForm,
+                                "position",
+                                $event.target.value
+                              )
+                            }
+                          }
+                        }),
+                        _vm._v(" "),
+                        _vm.$page.errors.positionStore
+                          ? _c("p", { staticClass: "text-red-700 mt-2" }, [
+                              _vm._v(_vm._s(_vm.$page.errors.positionStore[0]))
+                            ])
+                          : _vm._e()
+                      ]),
+                      _vm._v(" "),
+                      _vm.$page.flash.successStore
+                        ? _c("div", { staticClass: "text-green-700 mb-4" }, [
+                            _vm._v(
+                              "\n                            " +
+                                _vm._s(_vm.$page.flash.successStore) +
+                                "\n                        "
+                            )
+                          ])
+                        : _vm._e(),
+                      _vm._v(" "),
+                      _c(
+                        "button",
+                        {
+                          staticClass:
+                            "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline",
+                          attrs: { type: "submit" }
+                        },
+                        [
+                          _vm._v(
+                            "\n                            Ajouter le contenu\n                        "
+                          )
+                        ]
+                      )
+                    ]
+                  )
+                ])
+              ])
+            ])
+          : _vm._e(),
+        _vm._v(" "),
+        _vm.addResource
+          ? _c("div", { staticClass: "py-4" }, [
+              _c("div", { staticClass: "max-w-7xl mx-auto sm:px-6 lg:px-8" }, [
+                _c("div", { staticClass: "w-full" }, [
+                  _c(
+                    "form",
+                    {
+                      staticClass:
+                        "bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4",
+                      on: {
+                        submit: function($event) {
+                          $event.preventDefault()
+                          return _vm.storeResourceSubmit($event)
+                        }
+                      }
+                    },
+                    [
                       _c(
                         "div",
                         { staticClass: "mb-4" },
@@ -102290,152 +102547,253 @@ var render = function() {
                           : _vm._e()
                       ]),
                       _vm._v(" "),
-                      _c(
-                        "div",
-                        { staticClass: "mb-4" },
-                        [
-                          _c(
-                            "label",
-                            {
-                              staticClass:
-                                "block text-gray-700 text-sm font-bold mb-2"
-                            },
-                            [
-                              _vm._v(
-                                "\n                                PDF (optionnel)\n                            "
-                              )
-                            ]
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "header",
-                            {
-                              staticClass:
-                                "border-dashed border-2 border-gray-400 py-12 flex flex-col justify-center items-center mb-4"
-                            },
-                            [
-                              _c("input", {
-                                staticClass: "hidden",
-                                attrs: {
-                                  id: "hidden-input",
-                                  type: "file",
-                                  multiple: ""
-                                },
-                                on: { change: _vm.updateFileStore }
-                              }),
-                              _vm._v(" "),
+                      _c("div", { staticClass: "mb-4" }, [
+                        _c(
+                          "label",
+                          {
+                            staticClass:
+                              "block text-gray-700 text-sm font-bold mb-2"
+                          },
+                          [
+                            _vm._v(
+                              "\n                                PDF (optionnel)\n                            "
+                            )
+                          ]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "header",
+                          {
+                            staticClass:
+                              "border-dashed border-2 border-gray-400 py-12 flex flex-col justify-center items-center mb-4"
+                          },
+                          [
+                            _c("input", {
+                              staticClass: "hidden",
+                              attrs: { id: "hidden-input-file", type: "file" },
+                              on: { change: _vm.updateFileStore }
+                            }),
+                            _vm._v(" "),
+                            _c(
+                              "button",
+                              {
+                                staticClass:
+                                  "mt-2 rounded-sm text-sm px-3 py-1 bg-gray-200 hover:bg-gray-300 focus:shadow-outline focus:outline-none",
+                                attrs: { id: "button-store" },
+                                on: {
+                                  click: function($event) {
+                                    $event.preventDefault()
+                                    return _vm.selectFileStore($event)
+                                  }
+                                }
+                              },
+                              [
+                                _vm._v(
+                                  "\n                                    Télécharger un PDF\n                                "
+                                )
+                              ]
+                            )
+                          ]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "ul",
+                          {
+                            staticClass: "flex flex-1 flex-wrap -m-1",
+                            attrs: { id: "gallery-store" }
+                          },
+                          [
+                            !this.createForm.file
+                              ? _c(
+                                  "li",
+                                  {
+                                    staticClass:
+                                      "h-full w-full text-center flex flex-col items-center justify-center items-center"
+                                  },
+                                  [
+                                    _c("img", {
+                                      staticClass: "mx-auto w-32",
+                                      attrs: {
+                                        src: "/img/no-img.png",
+                                        alt: "Aucune image sélectionnée"
+                                      }
+                                    }),
+                                    _vm._v(" "),
+                                    _c(
+                                      "span",
+                                      { staticClass: "text-sm text-gray-500" },
+                                      [_vm._v("Aucun PDF sélectionné")]
+                                    )
+                                  ]
+                                )
+                              : _vm._e()
+                          ]
+                        ),
+                        _vm._v(" "),
+                        this.createForm.file
+                          ? _c("div", { staticClass: "pt-4" }, [
                               _c(
-                                "button",
+                                "div",
                                 {
                                   staticClass:
-                                    "mt-2 rounded-sm text-sm px-3 py-1 bg-gray-200 hover:bg-gray-300 focus:shadow-outline focus:outline-none",
-                                  attrs: { id: "button" },
-                                  on: {
-                                    click: function($event) {
-                                      $event.preventDefault()
-                                      return _vm.selectFileStore($event)
-                                    }
-                                  }
+                                    "font-semibold text-gray-700 text-sm"
                                 },
                                 [
                                   _vm._v(
-                                    "\n                                    Télécharger un PDF\n                                "
+                                    "\n                                    " +
+                                      _vm._s(this.createForm.file.name) +
+                                      " - "
+                                  ),
+                                  _c(
+                                    "a",
+                                    {
+                                      staticClass:
+                                        "text-red-700 hover:underline",
+                                      attrs: { href: "#" },
+                                      on: {
+                                        click: function($event) {
+                                          $event.preventDefault()
+                                          return _vm.resetFileStore($event)
+                                        }
+                                      }
+                                    },
+                                    [_vm._v("Supprimer")]
                                   )
                                 ]
                               )
-                            ]
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "ul",
-                            {
-                              staticClass: "flex flex-1 flex-wrap -m-1",
-                              attrs: { id: "gallery" }
-                            },
-                            [
-                              this.createForm.files.length === 0
-                                ? _c(
-                                    "li",
-                                    {
-                                      staticClass:
-                                        "h-full w-full text-center flex flex-col items-center justify-center items-center"
-                                    },
-                                    [
-                                      _c("img", {
-                                        staticClass: "mx-auto w-32",
-                                        attrs: {
-                                          src: "/img/no-img.png",
-                                          alt: "Aucun PDF sélectionné"
-                                        }
-                                      }),
-                                      _vm._v(" "),
-                                      _c(
-                                        "span",
-                                        {
-                                          staticClass: "text-sm text-gray-500"
-                                        },
-                                        [_vm._v("Aucun PDF sélectionné")]
-                                      )
-                                    ]
-                                  )
-                                : _vm._e()
-                            ]
-                          ),
-                          _vm._v(" "),
-                          _vm._l(this.createForm.files, function(file, index) {
-                            return _c(
-                              "div",
-                              { key: file.name + index, staticClass: "pt-4" },
+                            ])
+                          : _vm._e(),
+                        _vm._v(" "),
+                        _vm.$page.errors.fileStore
+                          ? _c("p", { staticClass: "text-red-700 mt-2" }, [
+                              _vm._v(_vm._s(_vm.$page.errors.fileStore[0]))
+                            ])
+                          : _vm._e()
+                      ]),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "mb-4" }, [
+                        _c(
+                          "label",
+                          {
+                            staticClass:
+                              "block text-gray-700 text-sm font-bold mb-2"
+                          },
+                          [
+                            _vm._v(
+                              "\n                                Vidéo (optionnel)\n                            "
+                            )
+                          ]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "header",
+                          {
+                            staticClass:
+                              "border-dashed border-2 border-gray-400 py-12 flex flex-col justify-center items-center mb-4"
+                          },
+                          [
+                            _c("input", {
+                              staticClass: "hidden",
+                              attrs: { id: "hidden-input-video", type: "file" },
+                              on: { change: _vm.updateVideoStore }
+                            }),
+                            _vm._v(" "),
+                            _c(
+                              "button",
+                              {
+                                staticClass:
+                                  "mt-2 rounded-sm text-sm px-3 py-1 bg-gray-200 hover:bg-gray-300 focus:shadow-outline focus:outline-none",
+                                attrs: { id: "button-store-video" },
+                                on: {
+                                  click: function($event) {
+                                    $event.preventDefault()
+                                    return _vm.selectVideoStore($event)
+                                  }
+                                }
+                              },
                               [
-                                _c(
-                                  "div",
-                                  {
-                                    staticClass:
-                                      "font-semibold text-gray-700 text-sm"
-                                  },
-                                  [
-                                    _vm._v(
-                                      "\n                                    " +
-                                        _vm._s(file.name) +
-                                        " - "
-                                    ),
-                                    _c(
-                                      "a",
-                                      {
-                                        staticClass:
-                                          "text-red-700 hover:underline",
-                                        attrs: { href: "#" },
-                                        on: {
-                                          click: function($event) {
-                                            $event.preventDefault()
-                                            return _vm.resetFileStore(index)
-                                          }
-                                        }
-                                      },
-                                      [_vm._v("Supprimer")]
-                                    )
-                                  ]
-                                ),
-                                _vm._v(" "),
-                                _vm.$page.errors.hasOwnProperty(
-                                  "filesStore." + index
+                                _vm._v(
+                                  "\n                                    Télécharger une vidéo\n                                "
                                 )
-                                  ? _c(
-                                      "p",
-                                      { staticClass: "text-red-700 mt-2" },
-                                      [
-                                        _vm._v(
-                                          "\n                                    Format du fichier ou taille incorrect.\n                                "
-                                        )
-                                      ]
-                                    )
-                                  : _vm._e()
                               ]
                             )
-                          })
-                        ],
-                        2
-                      ),
+                          ]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "ul",
+                          {
+                            staticClass: "flex flex-1 flex-wrap -m-1",
+                            attrs: { id: "gallery-store-video" }
+                          },
+                          [
+                            !this.createForm.video
+                              ? _c(
+                                  "li",
+                                  {
+                                    staticClass:
+                                      "h-full w-full text-center flex flex-col items-center justify-center items-center"
+                                  },
+                                  [
+                                    _c("img", {
+                                      staticClass: "mx-auto w-32",
+                                      attrs: {
+                                        src: "/img/no-img.png",
+                                        alt: "Aucune image sélectionnée"
+                                      }
+                                    }),
+                                    _vm._v(" "),
+                                    _c(
+                                      "span",
+                                      { staticClass: "text-sm text-gray-500" },
+                                      [_vm._v("Aucune vidéo sélectionnée")]
+                                    )
+                                  ]
+                                )
+                              : _vm._e()
+                          ]
+                        ),
+                        _vm._v(" "),
+                        this.createForm.video
+                          ? _c("div", { staticClass: "pt-4" }, [
+                              _c(
+                                "div",
+                                {
+                                  staticClass:
+                                    "font-semibold text-gray-700 text-sm"
+                                },
+                                [
+                                  _vm._v(
+                                    "\n                                    " +
+                                      _vm._s(this.createForm.video.name) +
+                                      " - "
+                                  ),
+                                  _c(
+                                    "a",
+                                    {
+                                      staticClass:
+                                        "text-red-700 hover:underline",
+                                      attrs: { href: "#" },
+                                      on: {
+                                        click: function($event) {
+                                          $event.preventDefault()
+                                          return _vm.resetVideoStore($event)
+                                        }
+                                      }
+                                    },
+                                    [_vm._v("Supprimer")]
+                                  )
+                                ]
+                              )
+                            ])
+                          : _vm._e(),
+                        _vm._v(" "),
+                        _vm.$page.errors.videoStore
+                          ? _c("p", { staticClass: "text-red-700 mt-2" }, [
+                              _vm._v(_vm._s(_vm.$page.errors.videoStore[0]))
+                            ])
+                          : _vm._e()
+                      ]),
                       _vm._v(" "),
                       _vm.$page.flash.successStore
                         ? _c("div", { staticClass: "text-green-700 mb-4" }, [
@@ -102456,7 +102814,7 @@ var render = function() {
                         },
                         [
                           _vm._v(
-                            "\n                            Ajouter le contenu\n                        "
+                            "\n                            Ajouter la resource\n                        "
                           )
                         ]
                       )
@@ -102501,33 +102859,61 @@ var render = function() {
                   staticClass: "p-6 sm:px-20 bg-white border-b border-gray-200"
                 },
                 [
-                  _c("div", { staticClass: "text-gray-500 text-justify" }, [
-                    _c("span", {
-                      domProps: {
-                        innerHTML: _vm._s(
-                          _vm.$page.contents[_vm.contentIndex].description
-                        )
-                      }
-                    })
-                  ]),
-                  _vm._v(" "),
-                  _vm._l(_vm.$page.contents[_vm.contentIndex].files, function(
-                    file
-                  ) {
-                    return _c(
-                      "div",
-                      { key: file.uuid, staticClass: "mt-6" },
-                      [
-                        _c("PdfViewer", {
-                          attrs: {
-                            "url-file": "/storage/files/" + file.title,
-                            file: file
-                          }
-                        })
-                      ],
-                      1
-                    )
-                  }),
+                  _vm._l(
+                    _vm.$page.contents[_vm.contentIndex].resources,
+                    function(resource) {
+                      return _c("div", { key: resource.uuid }, [
+                        resource.description
+                          ? _c(
+                              "div",
+                              { class: { "mt-6": _vm.contentIndex > 0 } },
+                              [
+                                _c("span", {
+                                  domProps: {
+                                    innerHTML: _vm._s(resource.description)
+                                  }
+                                })
+                              ]
+                            )
+                          : _vm._e(),
+                        _vm._v(" "),
+                        resource.file
+                          ? _c("div", { staticClass: "mt-6" }, [
+                              _c("iframe", {
+                                attrs: {
+                                  src: "/storage/files/" + resource.file,
+                                  width: "100%",
+                                  height: "500px"
+                                }
+                              })
+                            ])
+                          : _vm._e(),
+                        _vm._v(" "),
+                        resource.video
+                          ? _c("div", { staticClass: "mt-6" }, [
+                              _c(
+                                "video",
+                                {
+                                  attrs: {
+                                    width: "100%",
+                                    height: "500px",
+                                    controls: ""
+                                  }
+                                },
+                                [
+                                  _c("source", {
+                                    attrs: {
+                                      src: "/storage/videos/" + resource.video,
+                                      type: "video/quicktime"
+                                    }
+                                  })
+                                ]
+                              )
+                            ])
+                          : _vm._e()
+                      ])
+                    }
+                  ),
                   _vm._v(" "),
                   _c("div", { staticClass: "mt-4 flex" }, [
                     _c(
@@ -102567,7 +102953,7 @@ var render = function() {
                       },
                       [
                         _vm._v(
-                          "\n                            Retirer le cours\n                        "
+                          "\n                            Retirer le contenu\n                        "
                         )
                       ]
                     )

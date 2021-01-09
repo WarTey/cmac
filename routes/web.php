@@ -40,6 +40,7 @@ Route::group(['auth:sanctum', 'verified'], function () {
     Route::post('/chapter/store', 'App\Http\Controllers\ChapterController@store')->name('chapters.store');
     Route::post('/course/store', 'App\Http\Controllers\CourseController@store')->name('courses.store');
     Route::post('/content/store', 'App\Http\Controllers\ContentController@store')->name('contents.store');
+    Route::post('/resource/store', 'App\Http\Controllers\ResourceController@store')->name('resources.store');
 
     Route::post('/formation/delete', 'App\Http\Controllers\LevelController@delete')->name('levels.delete');
     Route::post('/chapter/delete', 'App\Http\Controllers\ChapterController@delete')->name('chapters.delete');
