@@ -101737,7 +101737,7 @@ var render = function() {
                 "form",
                 {
                   staticClass:
-                    "bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 md:max-w-xl w-full",
+                    "bg-white shadow-md rounded px-8 md:max-w-xl w-full max-h-4/5 overflow-auto",
                   on: {
                     submit: function($event) {
                       $event.preventDefault()
@@ -101746,7 +101746,7 @@ var render = function() {
                   }
                 },
                 [
-                  _c("div", { staticClass: "mb-4" }, [
+                  _c("div", { staticClass: "mb-4 mt-6" }, [
                     _c(
                       "label",
                       {
@@ -102100,7 +102100,7 @@ var render = function() {
                       ])
                     : _vm._e(),
                   _vm._v(" "),
-                  _c("div", { staticClass: "mt-4" }, [
+                  _c("div", { staticClass: "mt-4 mb-6" }, [
                     _c("span", { staticClass: "flex w-full rounded" }, [
                       _c(
                         "button",
@@ -103143,7 +103143,7 @@ var render = function() {
                 "form",
                 {
                   staticClass:
-                    "bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 md:max-w-xl w-full",
+                    "bg-white shadow-md rounded px-8 md:max-w-xl w-full max-h-4/5 overflow-auto",
                   on: {
                     submit: function($event) {
                       $event.preventDefault()
@@ -103152,7 +103152,7 @@ var render = function() {
                   }
                 },
                 [
-                  _c("div", { staticClass: "mb-4" }, [
+                  _c("div", { staticClass: "mb-4 mt-6" }, [
                     _c(
                       "label",
                       {
@@ -103300,7 +103300,7 @@ var render = function() {
                       ])
                     : _vm._e(),
                   _vm._v(" "),
-                  _c("div", { staticClass: "mt-4" }, [
+                  _c("div", { staticClass: "mt-4 mb-6" }, [
                     _c("span", { staticClass: "flex w-full rounded" }, [
                       _c(
                         "button",
@@ -103349,7 +103349,7 @@ var render = function() {
                 "form",
                 {
                   staticClass:
-                    "bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 md:max-w-xl w-full",
+                    "bg-white shadow-md rounded px-8 md:max-w-xl w-full max-h-4/5 overflow-auto",
                   on: {
                     submit: function($event) {
                       $event.preventDefault()
@@ -103360,7 +103360,7 @@ var render = function() {
                 [
                   _c(
                     "div",
-                    { staticClass: "mb-4" },
+                    { staticClass: "mb-4 mt-6" },
                     [
                       _c(
                         "label",
@@ -103791,7 +103791,7 @@ var render = function() {
                       ])
                     : _vm._e(),
                   _vm._v(" "),
-                  _c("div", { staticClass: "mt-4" }, [
+                  _c("div", { staticClass: "mt-4 mb-6" }, [
                     _c("span", { staticClass: "flex w-full rounded" }, [
                       _c(
                         "button",
@@ -104549,7 +104549,7 @@ var render = function() {
                 "form",
                 {
                   staticClass:
-                    "bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 md:max-w-xl w-full",
+                    "bg-white shadow-md rounded px-8 md:max-w-xl w-full max-h-4/5 overflow-auto",
                   on: {
                     submit: function($event) {
                       $event.preventDefault()
@@ -104558,7 +104558,7 @@ var render = function() {
                   }
                 },
                 [
-                  _c("div", { staticClass: "mb-4" }, [
+                  _c("div", { staticClass: "mb-4 mt-6" }, [
                     _c(
                       "label",
                       {
@@ -104908,7 +104908,7 @@ var render = function() {
                       ])
                     : _vm._e(),
                   _vm._v(" "),
-                  _c("div", { staticClass: "mt-4" }, [
+                  _c("div", { staticClass: "mt-4 mb-6" }, [
                     _c("span", { staticClass: "flex w-full rounded" }, [
                       _c(
                         "button",
@@ -105560,7 +105560,7 @@ var render = function() {
                 "form",
                 {
                   staticClass:
-                    "bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 md:max-w-xl w-full",
+                    "bg-white shadow-md rounded px-8 md:max-w-xl w-full max-h-4/5 overflow-auto",
                   on: {
                     submit: function($event) {
                       $event.preventDefault()
@@ -105569,7 +105569,7 @@ var render = function() {
                   }
                 },
                 [
-                  _c("div", { staticClass: "mb-4" }, [
+                  _c("div", { staticClass: "mb-4 mt-6" }, [
                     _c(
                       "label",
                       {
@@ -105923,7 +105923,7 @@ var render = function() {
                       ])
                     : _vm._e(),
                   _vm._v(" "),
-                  _c("div", { staticClass: "mt-4" }, [
+                  _c("div", { staticClass: "mt-4 mb-6" }, [
                     _c("span", { staticClass: "flex w-full rounded" }, [
                       _c(
                         "button",

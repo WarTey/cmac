@@ -110,8 +110,8 @@
             </div>
         </div>
         <div v-if="modalVisible" class="fixed overflow-hidden top-0 left-0 flex items-center justify-center w-full h-full bg-black bg-opacity-50">
-            <form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 md:max-w-xl w-full" @submit.prevent="editSubmit">
-                <div class="mb-4">
+            <form class="bg-white shadow-md rounded px-8 md:max-w-xl w-full max-h-4/5 overflow-auto" @submit.prevent="editSubmit">
+                <div class="mb-4 mt-6">
                     <label class="block text-gray-700 text-sm font-bold mb-2" for="edit-title">
                         Chapitre
                     </label>
@@ -162,7 +162,7 @@
                 <div class="text-green-700" v-if="$page.flash.successEdit">
                     {{ $page.flash.successEdit }}
                 </div>
-                <div class="mt-4">
+                <div class="mt-4 mb-6">
                     <span class="flex w-full rounded">
                         <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
                             Enregistrer

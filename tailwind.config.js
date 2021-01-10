@@ -17,6 +17,9 @@ module.exports = {
                 'general-texture': "url('/img/bg.webp')"
             })
         },
+        maxHeight: {
+            '4/5' : '80%',
+        }
     },
 
     variants: {
