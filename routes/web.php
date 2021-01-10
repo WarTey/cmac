@@ -46,9 +46,11 @@ Route::group(['auth:sanctum', 'verified'], function () {
     Route::post('/chapter/delete', 'App\Http\Controllers\ChapterController@delete')->name('chapters.delete');
     Route::post('/course/delete', 'App\Http\Controllers\CourseController@delete')->name('courses.delete');
     Route::post('/content/delete', 'App\Http\Controllers\ContentController@delete')->name('contents.delete');
+    Route::post('/resource/delete', 'App\Http\Controllers\ResourceController@delete')->name('resources.delete');
 
     Route::post('/formation/edit', 'App\Http\Controllers\LevelController@edit')->name('levels.edit');
     Route::post('/chapter/edit', 'App\Http\Controllers\ChapterController@edit')->name('chapters.edit');
     Route::post('/course/edit', 'App\Http\Controllers\CourseController@edit')->name('courses.edit');
     Route::post('/content/edit', 'App\Http\Controllers\ContentController@edit')->name('contents.edit');
+    Route::post('/resource/edit', 'App\Http\Controllers\ResourceController@edit')->name('resources.edit');
 });

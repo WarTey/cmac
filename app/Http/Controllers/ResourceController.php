@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Redirect;
 
 class ResourceController extends Controller
 {
-    public function store (Request $request)
+    public function store(Request $request)
     {
         // TODO : Change video format
         $request->validate([
@@ -43,5 +43,75 @@ class ResourceController extends Controller
         $resource->save();
 
         return Redirect::route('contents.index', ['uuid' => $request->post('courseUuid')])->with('successStore', 'Ressource en ligne.');
+    }
+
+    public function delete(Request $request)
+    {
+        $request->validate([
+            'uuid' => 'required',
+            'courseUuid' => 'required'
+        ]);
+
+        Resource::where('uuid', $request->post('uuid'))->first()->delete();
+
+        return Redirect::route('contents.index', ['uuid' => $request->post('courseUuid')])->with('toast', 'Ressource supprimée.');
+    }
+
+    public function edit(Request $request)
+    {
+        // TODO : Change video format
+        $request->validate([
+            'uuid' => 'required',
+            'descriptionEdit' => 'nullable',
+            'positionEdit' => 'required|integer|min:0',
+            'courseUuid' => 'required'
+        ]);
+
+        $resource = Resource::where('uuid', $request->post('uuid'))->first();
+
+        if ($request->file('fileEdit'))
+        {
+            $request->validate([
+                'fileEdit' => 'nullable|file|mimes:pdf|max:2048'
+            ]);
+
+            $path = $request->file('fileEdit')->store('public/files');
+
+            $resource->update([
+                'file' => basename($path)
+            ]);
+        }
+        else if ($request->post('fileEdit') == null)
+        {
+            $resource->update([
+                'file' => null
+            ]);
+        }
+
+        if ($request->file('videoEdit'))
+        {
+            $request->validate([
+                'videoEdit' => 'nullable|file|mimetypes:video/quicktime|max:2048'
+            ]);
+
+            $path = $request->file('videoEdit')->store('public/videos');
+
+            $resource->update([
+                'video' => basename($path)
+            ]);
+        }
+        else if ($request->post('videoEdit') == null)
+        {
+            $resource->update([
+                'video' => null
+            ]);
+        }
+
+        $resource->update([
+            'description' => $request->post('descriptionEdit'),
+            'position' => $request->post('positionEdit')
+        ]);
+
+        return Redirect::route('contents.index', ['uuid' => $request->post('courseUuid')])->with('successEdit', 'Ressource mise à jour.');
     }
 }

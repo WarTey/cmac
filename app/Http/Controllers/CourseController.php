@@ -97,7 +97,7 @@ class CourseController extends Controller
             'description' => $request->post('descriptionEdit')
         ]);
 
-        return Redirect::route('courses.index', ['uuid' => $request->post('chapterUuid')])->with('successEdit', 'Cours en ligne.');
+        return Redirect::route('courses.index', ['uuid' => $request->post('chapterUuid')])->with('successEdit', 'Cours mis à jour.');
     }
 
     public function delete(Request $request)

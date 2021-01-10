@@ -87,7 +87,7 @@ class LevelController extends Controller
             'description' => $request->post('descriptionEdit')
         ]);
 
-        return Redirect::route('levels.index')->with('successEdit', 'Formation modifiée.');
+        return Redirect::route('levels.index')->with('successEdit', 'Formation mise à jour.');
     }
 
     public function delete(Request $request)

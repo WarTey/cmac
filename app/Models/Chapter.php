@@ -12,7 +12,7 @@ class Chapter extends Model
 
     protected $hidden = ['id', 'level_id'];
 
-    protected $fillable = ['title', 'description', 'image'];
+    protected $fillable = ['title', 'description', 'image', 'position'];
 
     public static function boot()
     {

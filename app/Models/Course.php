@@ -12,7 +12,7 @@ class Course extends Model
 
     protected $hidden = ['id', 'chapter_id'];
 
-    protected $fillable = ['title', 'description', 'image'];
+    protected $fillable = ['title', 'description', 'image', 'position'];
 
     public static function boot()
     {

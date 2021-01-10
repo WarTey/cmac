@@ -94,7 +94,7 @@ class ChapterController extends Controller
             'description' => $request->post('descriptionEdit')
         ]);
 
-        return Redirect::route('chapters.index', ['uuid' => $request->post('levelUuid')])->with('successEdit', 'Chapitre en ligne.');
+        return Redirect::route('chapters.index', ['uuid' => $request->post('levelUuid')])->with('successEdit', 'Chapitre mis à jour.');
     }
 
     public function delete(Request $request)

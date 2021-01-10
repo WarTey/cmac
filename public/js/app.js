@@ -3496,10 +3496,7 @@ __webpack_require__.r(__webpack_exports__);
     return {
       showingNavigationDropdown: false,
       showingNavigationSide: false,
-      copySidebarItems: null,
-      levelsChevronActivated: [],
-      chaptersChevronActivated: [],
-      contentsChevronActivated: []
+      copySidebarItems: null
     };
   },
   mounted: function mounted() {
@@ -4540,6 +4537,26 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -4562,7 +4579,8 @@ __webpack_require__.r(__webpack_exports__);
       levelUuid: this.level.uuid,
       addContent: false,
       addResource: false,
-      modalVisible: false,
+      editContent: false,
+      editResource: false,
       contentIndex: 0,
       createForm: {
         title: null,
@@ -4575,11 +4593,12 @@ __webpack_require__.r(__webpack_exports__);
         uuid: null,
         title: null,
         description: null,
+        file: null,
+        video: null,
         position: null
       },
-      delFiles: [],
-      addFiles: [],
-      saveFiles: []
+      editFile: null,
+      editVideo: null
     };
   },
   watch: {
@@ -4674,16 +4693,21 @@ __webpack_require__.r(__webpack_exports__);
       formData.append('courseUuid', this.courseUuid);
       this.$inertia.post('/content/delete', formData);
     },
-    showModal: function showModal(content) {
+    showEditContent: function showEditContent(content) {
       this.updateEditForm(content);
-      this.modalVisible = true;
+
+      if (this.editResource) {
+        this.editResource = false;
+      }
+
+      this.editContent = true;
     },
-    closeModal: function closeModal() {
-      this.modalVisible = false;
+    closeEditContent: function closeEditContent() {
+      this.editContent = false;
       this.updateEditForm(null);
       this.clearFormMessages();
     },
-    editSubmit: function editSubmit() {
+    editContentSubmit: function editContentSubmit() {
       var formData = new FormData();
 
       if (this.editForm.uuid) {
@@ -4694,67 +4718,88 @@ __webpack_require__.r(__webpack_exports__);
         formData.append('titleEdit', this.editForm.title);
       }
 
+      if (this.editForm.position) {
+        formData.append('positionEdit', this.editForm.position);
+      }
+
+      formData.append('courseUuid', this.courseUuid);
+      this.$inertia.post('/content/edit', formData);
+    },
+    removeResource: function removeResource(uuid) {
+      var formData = new FormData();
+      formData.append('uuid', uuid);
+      formData.append('courseUuid', this.courseUuid);
+      this.$inertia.post('/resource/delete', formData);
+    },
+    showEditResource: function showEditResource(resource) {
+      this.updateEditForm(resource);
+
+      if (this.editContent) {
+        this.editContent = false;
+      }
+
+      this.editResource = true;
+    },
+    closeEditResource: function closeEditResource() {
+      this.editResource = false;
+      this.updateEditForm(null);
+      this.clearFormMessages();
+    },
+    editResourceSubmit: function editResourceSubmit() {
+      var formData = new FormData();
+
+      if (this.editForm.uuid) {
+        formData.append('uuid', this.editForm.uuid);
+      }
+
       if (this.editForm.description) {
         formData.append('descriptionEdit', this.editForm.description);
+      }
+
+      if (this.editFile) {
+        formData.append('fileEdit', this.editFile);
+      }
+
+      if (this.editVideo) {
+        formData.append('videoEdit', this.editVideo);
       }
 
       if (this.editForm.position) {
         formData.append('positionEdit', this.editForm.position);
       }
 
-      if (this.saveFiles.length > 0) {
-        this.saveFiles.forEach(function (element) {
-          return formData.append('filesSave[]', element);
-        });
-      }
-
-      if (this.delFiles.length > 0) {
-        this.delFiles.forEach(function (element) {
-          return formData.append('filesDel[]', element);
-        });
-      }
-
-      if (this.addFiles.length > 0) {
-        this.addFiles.forEach(function (element) {
-          return formData.append('filesAdd[]', element);
-        });
-      }
-
       formData.append('courseUuid', this.courseUuid);
-      this.$inertia.post('/content/edit', formData);
+      this.$inertia.post('/resource/edit', formData);
     },
     updateFileEdit: function updateFileEdit(event) {
       if (event.target.files[0].type.match("application/pdf")) {
-        this.addFiles.push(event.target.files[0]);
+        this.editFile = event.target.files[0];
       }
     },
-    resetFileSave: function resetFileSave(index) {
-      this.delFiles.push(this.saveFiles[index].uuid);
-      this.saveFiles.splice(index, 1);
-    },
-    resetFileAdd: function resetFileAdd(index) {
-      this.addFiles.splice(index, 1);
+    resetFileEdit: function resetFileEdit() {
+      this.editFile = null;
     },
     selectFileEdit: function selectFileEdit() {
-      document.getElementById("hidden-input-edit").click();
+      document.getElementById("hidden-input-file-edit").click();
+    },
+    updateVideoEdit: function updateVideoEdit(event) {
+      if (event.target.files[0].type.match("video/quicktime")) {
+        this.editVideo = event.target.files[0];
+      }
+    },
+    resetVideoEdit: function resetVideoEdit() {
+      this.editVideo = null;
+    },
+    selectVideoEdit: function selectVideoEdit() {
+      document.getElementById("hidden-input-video-edit").click();
     },
     updateEditForm: function updateEditForm(content) {
-      var _this = this;
-
-      this.editForm.uuid = content ? content.uuid : null;
-      this.editForm.title = content ? content.title : null;
-      this.editForm.description = content ? content.description : null;
-      this.editForm.position = content ? content.position : null;
-
-      if (content && content.files.length > 0) {
-        content.files.forEach(function (element) {
-          return _this.saveFiles.push(element);
-        });
-      } else {
-        this.saveFiles = [];
-        this.addFiles = [];
-        this.delFiles = [];
-      }
+      this.editForm.uuid = content && content.uuid ? content.uuid : null;
+      this.editForm.title = content && content.title ? content.title : null;
+      this.editForm.description = content && content.description ? content.description : null;
+      this.editForm.position = content && content.position ? content.position : null;
+      this.editFile = content && content.file ? content.file : null;
+      this.editVideo = content && content.video ? content.video : null;
     },
     clearFormMessages: function clearFormMessages() {
       this.$page.errors = {};
@@ -4767,12 +4812,7 @@ __webpack_require__.r(__webpack_exports__);
       var formData = new FormData();
       formData.append('contentUuid', content.uuid);
       formData.append('courseUuid', this.courseUuid);
-
-      if (content.users_count > 0) {
-        this.$inertia.post('/completed/delete', formData);
-      } else {
-        this.$inertia.post('/completed/edit', formData);
-      }
+      this.$inertia.post(content.users_count > 0 ? '/completed/delete' : '/completed/edit', formData);
     }
   }
 });
@@ -102680,7 +102720,7 @@ var render = function() {
                           },
                           [
                             _vm._v(
-                              "\n                                Vidéo (optionnel)\n                            "
+                              "\n                                Vidéo (optionnelle)\n                            "
                             )
                           ]
                         ),
@@ -102861,20 +102901,16 @@ var render = function() {
                 [
                   _vm._l(
                     _vm.$page.contents[_vm.contentIndex].resources,
-                    function(resource) {
+                    function(resource, index) {
                       return _c("div", { key: resource.uuid }, [
                         resource.description
-                          ? _c(
-                              "div",
-                              { class: { "mt-6": _vm.contentIndex > 0 } },
-                              [
-                                _c("span", {
-                                  domProps: {
-                                    innerHTML: _vm._s(resource.description)
-                                  }
-                                })
-                              ]
-                            )
+                          ? _c("div", { class: { "mt-6": index > 0 } }, [
+                              _c("span", {
+                                domProps: {
+                                  innerHTML: _vm._s(resource.description)
+                                }
+                              })
+                            ])
                           : _vm._e(),
                         _vm._v(" "),
                         resource.file
@@ -102910,7 +102946,47 @@ var render = function() {
                                 ]
                               )
                             ])
-                          : _vm._e()
+                          : _vm._e(),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "mt-4 flex" }, [
+                          _c(
+                            "a",
+                            {
+                              staticClass:
+                                "text-blue-500 font-semibold text-justify hover:underline cursor-pointer",
+                              on: {
+                                click: function($event) {
+                                  $event.preventDefault()
+                                  return _vm.showEditResource(resource)
+                                }
+                              }
+                            },
+                            [
+                              _vm._v(
+                                "\n                                Éditer la ressource\n                            "
+                              )
+                            ]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "a",
+                            {
+                              staticClass:
+                                "text-red-500 font-semibold text-justify hover:underline cursor-pointer ml-auto",
+                              on: {
+                                click: function($event) {
+                                  $event.preventDefault()
+                                  return _vm.removeResource(resource.uuid)
+                                }
+                              }
+                            },
+                            [
+                              _vm._v(
+                                "\n                                Retirer la ressource\n                            "
+                              )
+                            ]
+                          )
+                        ])
                       ])
                     }
                   ),
@@ -102924,7 +103000,7 @@ var render = function() {
                         on: {
                           click: function($event) {
                             $event.preventDefault()
-                            return _vm.showModal(
+                            return _vm.showEditContent(
                               _vm.$page.contents[_vm.contentIndex]
                             )
                           }
@@ -103006,53 +103082,56 @@ var render = function() {
                 )
           ]),
           _vm._v(" "),
-          _c("div", { staticClass: "py-5 text-center flex" }, [
-            _vm.contentIndex > 0
-              ? _c(
-                  "button",
-                  {
-                    staticClass:
-                      "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline",
-                    on: {
-                      click: function($event) {
-                        _vm.contentIndex -= 1
-                      }
-                    }
-                  },
-                  [
-                    _c("i", { staticClass: "fas fa-chevron-left fa-xs" }),
-                    _vm._v(
-                      "\n                    Contenu précédent\n                "
+          _vm.contentIndex > 0 ||
+          _vm.contentIndex < _vm.$page.contents.length - 1
+            ? _c("div", { staticClass: "py-5 text-center flex" }, [
+                _vm.contentIndex > 0
+                  ? _c(
+                      "button",
+                      {
+                        staticClass:
+                          "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline",
+                        on: {
+                          click: function($event) {
+                            _vm.contentIndex -= 1
+                          }
+                        }
+                      },
+                      [
+                        _c("i", { staticClass: "fas fa-chevron-left fa-xs" }),
+                        _vm._v(
+                          "\n                    Contenu précédent\n                "
+                        )
+                      ]
                     )
-                  ]
-                )
-              : _vm._e(),
-            _vm._v(" "),
-            _vm.contentIndex < _vm.$page.contents.length - 1
-              ? _c(
-                  "button",
-                  {
-                    staticClass:
-                      "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline ml-auto",
-                    on: {
-                      click: function($event) {
-                        _vm.contentIndex += 1
-                      }
-                    }
-                  },
-                  [
-                    _vm._v(
-                      "\n                    Contenu suivant\n                    "
-                    ),
-                    _c("i", { staticClass: "fas fa-chevron-right fa-xs" })
-                  ]
-                )
-              : _vm._e()
-          ])
+                  : _vm._e(),
+                _vm._v(" "),
+                _vm.contentIndex < _vm.$page.contents.length - 1
+                  ? _c(
+                      "button",
+                      {
+                        staticClass:
+                          "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline ml-auto",
+                        on: {
+                          click: function($event) {
+                            _vm.contentIndex += 1
+                          }
+                        }
+                      },
+                      [
+                        _vm._v(
+                          "\n                    Contenu suivant\n                    "
+                        ),
+                        _c("i", { staticClass: "fas fa-chevron-right fa-xs" })
+                      ]
+                    )
+                  : _vm._e()
+              ])
+            : _vm._e()
         ])
       ]),
       _vm._v(" "),
-      _vm.modalVisible
+      _vm.editContent
         ? _c(
             "div",
             {
@@ -103068,7 +103147,7 @@ var render = function() {
                   on: {
                     submit: function($event) {
                       $event.preventDefault()
-                      return _vm.editSubmit($event)
+                      return _vm.editContentSubmit($event)
                     }
                   }
                 },
@@ -103157,6 +103236,128 @@ var render = function() {
                       : _vm._e()
                   ]),
                   _vm._v(" "),
+                  _c("div", { staticClass: "mb-4" }, [
+                    _c(
+                      "label",
+                      {
+                        staticClass:
+                          "block text-gray-700 text-sm font-bold mb-2",
+                        attrs: { for: "position" }
+                      },
+                      [
+                        _vm._v(
+                          "\n                    Position\n                "
+                        )
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.editForm.position,
+                          expression: "editForm.position"
+                        }
+                      ],
+                      staticClass:
+                        "shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline",
+                      attrs: {
+                        id: "edit-position",
+                        type: "number",
+                        min: "0",
+                        placeholder: "0"
+                      },
+                      domProps: { value: _vm.editForm.position },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(
+                            _vm.editForm,
+                            "position",
+                            $event.target.value
+                          )
+                        }
+                      }
+                    }),
+                    _vm._v(" "),
+                    _vm.$page.errors.positionEdit
+                      ? _c("p", { staticClass: "text-red-700 mt-2" }, [
+                          _vm._v(_vm._s(_vm.$page.errors.positionEdit[0]))
+                        ])
+                      : _vm._e()
+                  ]),
+                  _vm._v(" "),
+                  _vm.$page.flash.successEdit
+                    ? _c("div", { staticClass: "text-green-700" }, [
+                        _vm._v(
+                          "\n                " +
+                            _vm._s(_vm.$page.flash.successEdit) +
+                            "\n            "
+                        )
+                      ])
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "mt-4" }, [
+                    _c("span", { staticClass: "flex w-full rounded" }, [
+                      _c(
+                        "button",
+                        {
+                          staticClass:
+                            "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline",
+                          attrs: { type: "submit" }
+                        },
+                        [
+                          _vm._v(
+                            "\n                        Enregistrer\n                    "
+                          )
+                        ]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "button",
+                        {
+                          staticClass:
+                            "ml-auto bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline",
+                          on: { click: _vm.closeEditContent }
+                        },
+                        [
+                          _vm._v(
+                            "\n                        Fermer\n                    "
+                          )
+                        ]
+                      )
+                    ])
+                  ])
+                ]
+              )
+            ]
+          )
+        : _vm._e(),
+      _vm._v(" "),
+      _vm.editResource
+        ? _c(
+            "div",
+            {
+              staticClass:
+                "fixed overflow-hidden top-0 left-0 flex items-center justify-center w-full h-full bg-black bg-opacity-50"
+            },
+            [
+              _c(
+                "form",
+                {
+                  staticClass:
+                    "bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 md:max-w-xl w-full",
+                  on: {
+                    submit: function($event) {
+                      $event.preventDefault()
+                      return _vm.editResourceSubmit($event)
+                    }
+                  }
+                },
+                [
                   _c(
                     "div",
                     { staticClass: "mb-4" },
@@ -103242,7 +103443,7 @@ var render = function() {
                       staticClass:
                         "shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline",
                       attrs: {
-                        id: "edit-position",
+                        id: "edit-position-resource",
                         type: "number",
                         min: "0",
                         placeholder: "0"
@@ -103269,191 +103470,316 @@ var render = function() {
                       : _vm._e()
                   ]),
                   _vm._v(" "),
-                  _c(
-                    "div",
-                    { staticClass: "mb-4" },
-                    [
-                      _c(
-                        "label",
-                        {
-                          staticClass:
-                            "block text-gray-700 text-sm font-bold mb-2"
-                        },
-                        [
-                          _vm._v(
-                            "\n                    PDF (optionnel)\n                "
-                          )
-                        ]
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "header",
-                        {
-                          staticClass:
-                            "border-dashed border-2 border-gray-400 py-12 flex flex-col justify-center items-center mb-4"
-                        },
-                        [
-                          _c("input", {
-                            staticClass: "hidden",
-                            attrs: {
-                              id: "hidden-input-edit",
-                              type: "file",
-                              multiple: ""
-                            },
-                            on: { change: _vm.updateFileEdit }
-                          }),
-                          _vm._v(" "),
-                          _c(
-                            "button",
-                            {
-                              staticClass:
-                                "mt-2 rounded-sm text-sm px-3 py-1 bg-gray-200 hover:bg-gray-300 focus:shadow-outline focus:outline-none",
-                              attrs: { id: "button-edit" },
-                              on: {
-                                click: function($event) {
-                                  $event.preventDefault()
-                                  return _vm.selectFileEdit($event)
-                                }
+                  _c("div", { staticClass: "mb-4" }, [
+                    _c(
+                      "label",
+                      {
+                        staticClass:
+                          "block text-gray-700 text-sm font-bold mb-2"
+                      },
+                      [
+                        _vm._v(
+                          "\n                    PDF (optionnel)\n                "
+                        )
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "header",
+                      {
+                        staticClass:
+                          "border-dashed border-2 border-gray-400 py-12 flex flex-col justify-center items-center mb-4"
+                      },
+                      [
+                        _c("input", {
+                          staticClass: "hidden",
+                          attrs: { id: "hidden-input-file-edit", type: "file" },
+                          on: { change: _vm.updateFileEdit }
+                        }),
+                        _vm._v(" "),
+                        _c(
+                          "button",
+                          {
+                            staticClass:
+                              "mt-2 rounded-sm text-sm px-3 py-1 bg-gray-200 hover:bg-gray-300 focus:shadow-outline focus:outline-none",
+                            attrs: { id: "button-file-edit" },
+                            on: {
+                              click: function($event) {
+                                $event.preventDefault()
+                                return _vm.selectFileEdit($event)
                               }
-                            },
-                            [
-                              _vm._v(
-                                "\n                        Télécharger un PDF\n                    "
-                              )
-                            ]
-                          )
-                        ]
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "ul",
-                        {
-                          staticClass: "flex flex-1 flex-wrap -m-1",
-                          attrs: { id: "gallery-edit" }
-                        },
-                        [
-                          this.saveFiles.length === 0 &&
-                          this.addFiles.length === 0
+                            }
+                          },
+                          [
+                            _vm._v(
+                              "\n                        Télécharger un PDF\n                    "
+                            )
+                          ]
+                        )
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "ul",
+                      {
+                        staticClass: "flex flex-1 flex-wrap -m-1",
+                        attrs: { id: "gallery-file-edit" }
+                      },
+                      [
+                        !_vm.editFile
+                          ? _c(
+                              "li",
+                              {
+                                staticClass:
+                                  "h-full w-full text-center flex flex-col items-center justify-center items-center"
+                              },
+                              [
+                                _c("img", {
+                                  staticClass: "mx-auto w-32",
+                                  attrs: {
+                                    src: "/img/no-img.png",
+                                    alt: "Aucun PDF sélectionné"
+                                  }
+                                }),
+                                _vm._v(" "),
+                                _c(
+                                  "span",
+                                  { staticClass: "text-sm text-gray-500" },
+                                  [_vm._v("Aucun PDF sélectionné")]
+                                )
+                              ]
+                            )
+                          : _vm._e()
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _vm.editFile
+                      ? _c("div", { staticClass: "pt-4" }, [
+                          _vm.editFile.name
                             ? _c(
-                                "li",
+                                "div",
                                 {
                                   staticClass:
-                                    "h-full w-full text-center flex flex-col items-center justify-center items-center"
+                                    "font-semibold text-gray-700 text-sm"
                                 },
                                 [
-                                  _c("img", {
-                                    staticClass: "mx-auto w-32",
-                                    attrs: {
-                                      src: "/img/no-img.png",
-                                      alt: "Aucun PDF sélectionné"
-                                    }
-                                  }),
-                                  _vm._v(" "),
+                                  _vm._v(
+                                    "\n                        " +
+                                      _vm._s(_vm.editFile.name) +
+                                      " - "
+                                  ),
                                   _c(
-                                    "span",
-                                    { staticClass: "text-sm text-gray-500" },
-                                    [_vm._v("Aucun PDF sélectionné")]
+                                    "a",
+                                    {
+                                      staticClass:
+                                        "text-red-700 hover:underline",
+                                      attrs: { href: "#" },
+                                      on: {
+                                        click: function($event) {
+                                          $event.preventDefault()
+                                          return _vm.resetFileEdit($event)
+                                        }
+                                      }
+                                    },
+                                    [_vm._v("Supprimer")]
                                   )
                                 ]
                               )
-                            : _vm._e()
-                        ]
-                      ),
-                      _vm._v(" "),
-                      _vm._l(this.saveFiles, function(file, index) {
-                        return _c(
-                          "div",
-                          { key: file.name + index, staticClass: "pt-4" },
-                          [
-                            _c(
-                              "div",
-                              {
-                                staticClass:
-                                  "font-semibold text-gray-700 text-sm"
-                              },
-                              [
-                                _vm._v(
-                                  "\n                        " +
-                                    _vm._s(file.name) +
-                                    " - "
-                                ),
-                                _c(
-                                  "a",
-                                  {
-                                    staticClass: "text-red-700 hover:underline",
-                                    attrs: { href: "#" },
-                                    on: {
-                                      click: function($event) {
-                                        $event.preventDefault()
-                                        return _vm.resetFileSave(index)
+                            : _c(
+                                "div",
+                                {
+                                  staticClass:
+                                    "font-semibold text-gray-700 text-sm"
+                                },
+                                [
+                                  _vm._v(
+                                    "\n                        " +
+                                      _vm._s(_vm.editFile) +
+                                      " - "
+                                  ),
+                                  _c(
+                                    "a",
+                                    {
+                                      staticClass:
+                                        "text-red-700 hover:underline",
+                                      attrs: { href: "#" },
+                                      on: {
+                                        click: function($event) {
+                                          $event.preventDefault()
+                                          return _vm.resetFileEdit($event)
+                                        }
                                       }
-                                    }
-                                  },
-                                  [_vm._v("Supprimer")]
-                                )
-                              ]
-                            ),
-                            _vm._v(" "),
-                            _vm.$page.errors.hasOwnProperty(
-                              "filesSave." + index
+                                    },
+                                    [_vm._v("Supprimer")]
+                                  )
+                                ]
+                              )
+                        ])
+                      : _vm._e(),
+                    _vm._v(" "),
+                    _vm.$page.errors.imageEdit
+                      ? _c("p", { staticClass: "text-red-700 mt-2" }, [
+                          _vm._v(_vm._s(_vm.$page.errors.imageEdit[0]))
+                        ])
+                      : _vm._e()
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "mb-4" }, [
+                    _c(
+                      "label",
+                      {
+                        staticClass:
+                          "block text-gray-700 text-sm font-bold mb-2"
+                      },
+                      [
+                        _vm._v(
+                          "\n                    Vidéo (optionnelle)\n                "
+                        )
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "header",
+                      {
+                        staticClass:
+                          "border-dashed border-2 border-gray-400 py-12 flex flex-col justify-center items-center mb-4"
+                      },
+                      [
+                        _c("input", {
+                          staticClass: "hidden",
+                          attrs: {
+                            id: "hidden-input-video-edit",
+                            type: "file"
+                          },
+                          on: { change: _vm.updateVideoEdit }
+                        }),
+                        _vm._v(" "),
+                        _c(
+                          "button",
+                          {
+                            staticClass:
+                              "mt-2 rounded-sm text-sm px-3 py-1 bg-gray-200 hover:bg-gray-300 focus:shadow-outline focus:outline-none",
+                            attrs: { id: "button-video-edit" },
+                            on: {
+                              click: function($event) {
+                                $event.preventDefault()
+                                return _vm.selectVideoEdit($event)
+                              }
+                            }
+                          },
+                          [
+                            _vm._v(
+                              "\n                        Télécharger une vidéo\n                    "
                             )
-                              ? _c("p", { staticClass: "text-red-700 mt-2" }, [
-                                  _vm._v(
-                                    "\n                        Format du fichier ou taille incorrect.\n                    "
-                                  )
-                                ])
-                              : _vm._e()
                           ]
                         )
-                      }),
-                      _vm._v(" "),
-                      _vm._l(this.addFiles, function(file, index) {
-                        return _c(
-                          "div",
-                          { key: file.name + index, staticClass: "pt-4" },
-                          [
-                            _c(
-                              "div",
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "ul",
+                      {
+                        staticClass: "flex flex-1 flex-wrap -m-1",
+                        attrs: { id: "gallery-video-edit" }
+                      },
+                      [
+                        !_vm.editVideo
+                          ? _c(
+                              "li",
                               {
                                 staticClass:
-                                  "font-semibold text-gray-700 text-sm"
+                                  "h-full w-full text-center flex flex-col items-center justify-center items-center"
                               },
                               [
-                                _vm._v(
-                                  "\n                        " +
-                                    _vm._s(file.name) +
-                                    " - "
-                                ),
+                                _c("img", {
+                                  staticClass: "mx-auto w-32",
+                                  attrs: {
+                                    src: "/img/no-img.png",
+                                    alt: "Aucune Vidéo sélectionnée"
+                                  }
+                                }),
+                                _vm._v(" "),
                                 _c(
-                                  "a",
-                                  {
-                                    staticClass: "text-red-700 hover:underline",
-                                    attrs: { href: "#" },
-                                    on: {
-                                      click: function($event) {
-                                        $event.preventDefault()
-                                        return _vm.resetFileAdd(index)
-                                      }
-                                    }
-                                  },
-                                  [_vm._v("Supprimer")]
+                                  "span",
+                                  { staticClass: "text-sm text-gray-500" },
+                                  [_vm._v("Aucune Vidéo sélectionnée")]
                                 )
                               ]
-                            ),
-                            _vm._v(" "),
-                            _vm.$page.errors.hasOwnProperty("filesAdd." + index)
-                              ? _c("p", { staticClass: "text-red-700 mt-2" }, [
+                            )
+                          : _vm._e()
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _vm.editVideo
+                      ? _c("div", { staticClass: "pt-4" }, [
+                          _vm.editVideo.name
+                            ? _c(
+                                "div",
+                                {
+                                  staticClass:
+                                    "font-semibold text-gray-700 text-sm"
+                                },
+                                [
                                   _vm._v(
-                                    "\n                        Format du fichier ou taille incorrect.\n                    "
+                                    "\n                        " +
+                                      _vm._s(_vm.editVideo.name) +
+                                      " - "
+                                  ),
+                                  _c(
+                                    "a",
+                                    {
+                                      staticClass:
+                                        "text-red-700 hover:underline",
+                                      attrs: { href: "#" },
+                                      on: {
+                                        click: function($event) {
+                                          $event.preventDefault()
+                                          return _vm.resetVideoEdit($event)
+                                        }
+                                      }
+                                    },
+                                    [_vm._v("Supprimer")]
                                   )
-                                ])
-                              : _vm._e()
-                          ]
-                        )
-                      })
-                    ],
-                    2
-                  ),
+                                ]
+                              )
+                            : _c(
+                                "div",
+                                {
+                                  staticClass:
+                                    "font-semibold text-gray-700 text-sm"
+                                },
+                                [
+                                  _vm._v(
+                                    "\n                        " +
+                                      _vm._s(_vm.editVideo) +
+                                      " - "
+                                  ),
+                                  _c(
+                                    "a",
+                                    {
+                                      staticClass:
+                                        "text-red-700 hover:underline",
+                                      attrs: { href: "#" },
+                                      on: {
+                                        click: function($event) {
+                                          $event.preventDefault()
+                                          return _vm.resetVideoEdit($event)
+                                        }
+                                      }
+                                    },
+                                    [_vm._v("Supprimer")]
+                                  )
+                                ]
+                              )
+                        ])
+                      : _vm._e(),
+                    _vm._v(" "),
+                    _vm.$page.errors.imageEdit
+                      ? _c("p", { staticClass: "text-red-700 mt-2" }, [
+                          _vm._v(_vm._s(_vm.$page.errors.imageEdit[0]))
+                        ])
+                      : _vm._e()
+                  ]),
                   _vm._v(" "),
                   _vm.$page.flash.successEdit
                     ? _c("div", { staticClass: "text-green-700" }, [
@@ -103486,7 +103812,7 @@ var render = function() {
                         {
                           staticClass:
                             "ml-auto bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline",
-                          on: { click: _vm.closeModal }
+                          on: { click: _vm.closeEditResource }
                         },
                         [
                           _vm._v(

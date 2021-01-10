@@ -12,6 +12,8 @@ class Resource extends Model
 
     protected $hidden = ['id'];
 
+    protected $fillable = ['description', 'file', 'video', 'position'];
+
     public static function boot()
     {
         parent::boot();

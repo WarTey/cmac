@@ -12,7 +12,7 @@ class Level extends Model
 
     protected $hidden = ['id'];
 
-    protected $fillable = ['title', 'description', 'image'];
+    protected $fillable = ['title', 'description', 'image', 'position'];
 
     public static function boot()
     {

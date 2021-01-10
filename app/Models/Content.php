@@ -12,7 +12,7 @@ class Content extends Model
 
     protected $hidden = ['id', 'course_id'];
 
-    protected $fillable = ['title', 'description'];
+    protected $fillable = ['title', 'position'];
 
     public static function boot()
     {

@@ -97,31 +97,6 @@
                                 <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="position" v-model="createForm.position" type="number" min="0" placeholder="0">
                                 <p class="text-red-700 mt-2" v-if="$page.errors.positionStore">{{ $page.errors.positionStore[0] }}</p>
                             </div>
-                            <!--<div class="mb-4">
-                                <label class="block text-gray-700 text-sm font-bold mb-2">
-                                    PDF (optionnel)
-                                </label>
-                                <header class="border-dashed border-2 border-gray-400 py-12 flex flex-col justify-center items-center mb-4">
-                                    <input id="hidden-input" type="file" multiple class="hidden" v-on:change="updateFileStore">
-                                    <button id="button" class="mt-2 rounded-sm text-sm px-3 py-1 bg-gray-200 hover:bg-gray-300 focus:shadow-outline focus:outline-none" @click.prevent="selectFileStore">
-                                        Télécharger un PDF
-                                    </button>
-                                </header>
-                                <ul id="gallery" class="flex flex-1 flex-wrap -m-1">
-                                    <li v-if="this.createForm.files.length === 0" class="h-full w-full text-center flex flex-col items-center justify-center items-center">
-                                        <img class="mx-auto w-32" :src="'/img/no-img.png'" alt="Aucun PDF sélectionné">
-                                        <span class="text-sm text-gray-500">Aucun PDF sélectionné</span>
-                                    </li>
-                                </ul>
-                                <div class="pt-4" v-for="(file, index) in this.createForm.files" v-bind:key="file.name + index">
-                                    <div class="font-semibold text-gray-700 text-sm">
-                                        {{ file.name }} - <a href="#" v-on:click.prevent="resetFileStore(index)" class="text-red-700 hover:underline">Supprimer</a>
-                                    </div>
-                                    <p class="text-red-700 mt-2" v-if="$page.errors.hasOwnProperty('filesStore.' + index)">
-                                        Format du fichier ou taille incorrect.
-                                    </p>
-                                </div>
-                            </div>-->
                             <div class="mb-4">
                                 <label class="block text-gray-700 text-sm font-bold mb-2">
                                     PDF (optionnel)
@@ -147,7 +122,7 @@
                             </div>
                             <div class="mb-4">
                                 <label class="block text-gray-700 text-sm font-bold mb-2">
-                                    Vidéo (optionnel)
+                                    Vidéo (optionnelle)
                                 </label>
                                 <header class="border-dashed border-2 border-gray-400 py-12 flex flex-col justify-center items-center mb-4">
                                     <input id="hidden-input-video" type="file" class="hidden" v-on:change="updateVideoStore">
@@ -188,8 +163,8 @@
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white overflow-hidden shadow-lg hover:shadow-xl rounded-lg transition duration-500 ease-in-out">
                     <div class="p-6 sm:px-20 bg-white border-b border-gray-200">
-                        <div v-for="resource in $page.contents[contentIndex].resources" v-bind:key="resource.uuid">
-                            <div :class="{'mt-6': contentIndex > 0}" v-if="resource.description">
+                        <div v-for="(resource, index) in $page.contents[contentIndex].resources" v-bind:key="resource.uuid">
+                            <div :class="{'mt-6': index > 0}" v-if="resource.description">
                                 <span v-html="resource.description"></span>
                             </div>
                             <div class="mt-6" v-if="resource.file">
@@ -201,15 +176,17 @@
                                     <source :src="'/storage/videos/' + resource.video" type=video/quicktime>
                                 </video>
                             </div>
+                            <div class="mt-4 flex">
+                                <a class="text-blue-500 font-semibold text-justify hover:underline cursor-pointer" v-on:click.prevent="showEditResource(resource)">
+                                    Éditer la ressource
+                                </a>
+                                <a class="text-red-500 font-semibold text-justify hover:underline cursor-pointer ml-auto" v-on:click.prevent="removeResource(resource.uuid)">
+                                    Retirer la ressource
+                                </a>
+                            </div>
                         </div>
-                        <!--<div class="text-gray-500 text-justify">
-                            <span v-html="$page.contents[contentIndex].description"></span>
-                        </div>
-                        <div class="mt-6" v-for="file in $page.contents[contentIndex].files" v-bind:key="file.uuid">
-                            <PdfViewer :url-file="'/storage/files/' + file.title" :file="file" />
-                        </div>-->
                         <div class="mt-4 flex">
-                            <a class="text-blue-500 font-semibold text-justify hover:underline cursor-pointer" v-on:click.prevent="showModal($page.contents[contentIndex])">
+                            <a class="text-blue-500 font-semibold text-justify hover:underline cursor-pointer" v-on:click.prevent="showEditContent($page.contents[contentIndex])">
                                 Éditer le contenu
                             </a>
                             <a class="text-red-500 font-semibold text-justify hover:underline cursor-pointer ml-auto" v-on:click.prevent="removeContent($page.contents[contentIndex].uuid)">
@@ -226,7 +203,7 @@
                         Je n'ai pas terminé
                     </button>
                 </div>
-                <div class="py-5 text-center flex">
+                <div class="py-5 text-center flex" v-if="contentIndex > 0 || contentIndex < $page.contents.length - 1">
                     <button v-if="contentIndex > 0" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" v-on:click="contentIndex -= 1">
                         <i class="fas fa-chevron-left fa-xs"></i>
                         Contenu précédent
@@ -238,8 +215,8 @@
                 </div>
             </div>
         </div>
-        <div v-if="modalVisible" class="fixed overflow-hidden top-0 left-0 flex items-center justify-center w-full h-full bg-black bg-opacity-50">
-            <form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 md:max-w-xl w-full" @submit.prevent="editSubmit">
+        <div v-if="editContent" class="fixed overflow-hidden top-0 left-0 flex items-center justify-center w-full h-full bg-black bg-opacity-50">
+            <form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 md:max-w-xl w-full" @submit.prevent="editContentSubmit">
                 <div class="mb-4">
                     <label class="block text-gray-700 text-sm font-bold mb-2" for="edit-title">
                         Contenu
@@ -248,6 +225,30 @@
                     <input v-else class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="edit-title" type="text" v-model="editForm.title" placeholder="Contenu">
                     <p class="text-red-700 mt-2" v-if="$page.errors.titleEdit">{{ $page.errors.titleEdit[0] }}</p>
                 </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="position">
+                        Position
+                    </label>
+                    <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="edit-position" v-model="editForm.position" type="number" min="0" placeholder="0">
+                    <p class="text-red-700 mt-2" v-if="$page.errors.positionEdit">{{ $page.errors.positionEdit[0] }}</p>
+                </div>
+                <div class="text-green-700" v-if="$page.flash.successEdit">
+                    {{ $page.flash.successEdit }}
+                </div>
+                <div class="mt-4">
+                    <span class="flex w-full rounded">
+                        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
+                            Enregistrer
+                        </button>
+                        <button v-on:click="closeEditContent" class="ml-auto bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                            Fermer
+                        </button>
+                    </span>
+                </div>
+            </form>
+        </div>
+        <div v-if="editResource" class="fixed overflow-hidden top-0 left-0 flex items-center justify-center w-full h-full bg-black bg-opacity-50">
+            <form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 md:max-w-xl w-full" @submit.prevent="editResourceSubmit">
                 <div class="mb-4">
                     <label class="block text-gray-700 text-sm font-bold mb-2" for="edit-description">
                         Description (optionnel)
@@ -276,7 +277,7 @@
                     <label class="block text-gray-700 text-sm font-bold mb-2" for="position">
                         Position
                     </label>
-                    <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="edit-position" v-model="editForm.position" type="number" min="0" placeholder="0">
+                    <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="edit-position-resource" v-model="editForm.position" type="number" min="0" placeholder="0">
                     <p class="text-red-700 mt-2" v-if="$page.errors.positionEdit">{{ $page.errors.positionEdit[0] }}</p>
                 </div>
                 <div class="mb-4">
@@ -284,33 +285,52 @@
                         PDF (optionnel)
                     </label>
                     <header class="border-dashed border-2 border-gray-400 py-12 flex flex-col justify-center items-center mb-4">
-                        <input id="hidden-input-edit" type="file" multiple class="hidden" v-on:change="updateFileEdit">
-                        <button id="button-edit" class="mt-2 rounded-sm text-sm px-3 py-1 bg-gray-200 hover:bg-gray-300 focus:shadow-outline focus:outline-none" @click.prevent="selectFileEdit">
+                        <input id="hidden-input-file-edit" type="file" class="hidden" v-on:change="updateFileEdit">
+                        <button id="button-file-edit" class="mt-2 rounded-sm text-sm px-3 py-1 bg-gray-200 hover:bg-gray-300 focus:shadow-outline focus:outline-none" @click.prevent="selectFileEdit">
                             Télécharger un PDF
                         </button>
                     </header>
-                    <ul id="gallery-edit" class="flex flex-1 flex-wrap -m-1">
-                        <li v-if="this.saveFiles.length === 0 && this.addFiles.length === 0" class="h-full w-full text-center flex flex-col items-center justify-center items-center">
+                    <ul id="gallery-file-edit" class="flex flex-1 flex-wrap -m-1">
+                        <li v-if="!editFile" class="h-full w-full text-center flex flex-col items-center justify-center items-center">
                             <img class="mx-auto w-32" :src="'/img/no-img.png'" alt="Aucun PDF sélectionné">
                             <span class="text-sm text-gray-500">Aucun PDF sélectionné</span>
                         </li>
                     </ul>
-                    <div class="pt-4" v-for="(file, index) in this.saveFiles" v-bind:key="file.name + index">
-                        <div class="font-semibold text-gray-700 text-sm">
-                            {{ file.name }} - <a href="#" v-on:click.prevent="resetFileSave(index)" class="text-red-700 hover:underline">Supprimer</a>
+                    <div class="pt-4" v-if="editFile">
+                        <div class="font-semibold text-gray-700 text-sm" v-if="editFile.name">
+                            {{ editFile.name }} - <a href="#" v-on:click.prevent="resetFileEdit" class="text-red-700 hover:underline">Supprimer</a>
                         </div>
-                        <p class="text-red-700 mt-2" v-if="$page.errors.hasOwnProperty('filesSave.' + index)">
-                            Format du fichier ou taille incorrect.
-                        </p>
-                    </div>
-                    <div class="pt-4" v-for="(file, index) in this.addFiles" v-bind:key="file.name + index">
-                        <div class="font-semibold text-gray-700 text-sm">
-                            {{ file.name }} - <a href="#" v-on:click.prevent="resetFileAdd(index)" class="text-red-700 hover:underline">Supprimer</a>
+                        <div class="font-semibold text-gray-700 text-sm" v-else>
+                            {{ editFile }} - <a href="#" v-on:click.prevent="resetFileEdit" class="text-red-700 hover:underline">Supprimer</a>
                         </div>
-                        <p class="text-red-700 mt-2" v-if="$page.errors.hasOwnProperty('filesAdd.' + index)">
-                            Format du fichier ou taille incorrect.
-                        </p>
                     </div>
+                    <p class="text-red-700 mt-2" v-if="$page.errors.imageEdit">{{ $page.errors.imageEdit[0] }}</p>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2">
+                        Vidéo (optionnelle)
+                    </label>
+                    <header class="border-dashed border-2 border-gray-400 py-12 flex flex-col justify-center items-center mb-4">
+                        <input id="hidden-input-video-edit" type="file" class="hidden" v-on:change="updateVideoEdit">
+                        <button id="button-video-edit" class="mt-2 rounded-sm text-sm px-3 py-1 bg-gray-200 hover:bg-gray-300 focus:shadow-outline focus:outline-none" @click.prevent="selectVideoEdit">
+                            Télécharger une vidéo
+                        </button>
+                    </header>
+                    <ul id="gallery-video-edit" class="flex flex-1 flex-wrap -m-1">
+                        <li v-if="!editVideo" class="h-full w-full text-center flex flex-col items-center justify-center items-center">
+                            <img class="mx-auto w-32" :src="'/img/no-img.png'" alt="Aucune Vidéo sélectionnée">
+                            <span class="text-sm text-gray-500">Aucune Vidéo sélectionnée</span>
+                        </li>
+                    </ul>
+                    <div class="pt-4" v-if="editVideo">
+                        <div class="font-semibold text-gray-700 text-sm" v-if="editVideo.name">
+                            {{ editVideo.name }} - <a href="#" v-on:click.prevent="resetVideoEdit" class="text-red-700 hover:underline">Supprimer</a>
+                        </div>
+                        <div class="font-semibold text-gray-700 text-sm" v-else>
+                            {{ editVideo }} - <a href="#" v-on:click.prevent="resetVideoEdit" class="text-red-700 hover:underline">Supprimer</a>
+                        </div>
+                    </div>
+                    <p class="text-red-700 mt-2" v-if="$page.errors.imageEdit">{{ $page.errors.imageEdit[0] }}</p>
                 </div>
                 <div class="text-green-700" v-if="$page.flash.successEdit">
                     {{ $page.flash.successEdit }}
@@ -320,7 +340,7 @@
                         <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
                             Enregistrer
                         </button>
-                        <button v-on:click="closeModal" class="ml-auto bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                        <button v-on:click="closeEditResource" class="ml-auto bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
                             Fermer
                         </button>
                     </span>
@@ -356,7 +376,8 @@ export default {
             levelUuid: this.level.uuid,
             addContent: false,
             addResource: false,
-            modalVisible: false,
+            editContent: false,
+            editResource: false,
             contentIndex: 0,
             createForm: {
                 title: null,
@@ -369,11 +390,12 @@ export default {
                 uuid: null,
                 title: null,
                 description: null,
+                file: null,
+                video: null,
                 position: null
             },
-            delFiles: [],
-            addFiles: [],
-            saveFiles: []
+            editFile: null,
+            editVideo: null
         }
     },
 
@@ -476,20 +498,23 @@ export default {
             this.$inertia.post('/content/delete', formData);
         },
 
-        showModal(content) {
+        showEditContent(content) {
             this.updateEditForm(content);
 
-            this.modalVisible = true;
+            if (this.editResource) {
+                this.editResource = false;
+            }
+            this.editContent = true;
         },
 
-        closeModal() {
-            this.modalVisible = false;
+        closeEditContent() {
+            this.editContent = false;
 
             this.updateEditForm(null);
             this.clearFormMessages();
         },
 
-        editSubmit() {
+        editContentSubmit() {
             const formData = new FormData();
             if (this.editForm.uuid) {
                 formData.append('uuid', this.editForm.uuid);
@@ -497,65 +522,95 @@ export default {
             if (this.editForm.title) {
                 formData.append('titleEdit', this.editForm.title);
             }
-            if (this.editForm.description) {
-                formData.append('descriptionEdit', this.editForm.description);
-            }
             if (this.editForm.position) {
                 formData.append('positionEdit', this.editForm.position);
-            }
-            if (this.saveFiles.length > 0) {
-                this.saveFiles.forEach(element =>
-                    formData.append('filesSave[]', element)
-                );
-            }
-            if (this.delFiles.length > 0) {
-                this.delFiles.forEach(element =>
-                    formData.append('filesDel[]', element)
-                );
-            }
-            if (this.addFiles.length > 0) {
-                this.addFiles.forEach(element =>
-                    formData.append('filesAdd[]', element)
-                );
             }
             formData.append('courseUuid', this.courseUuid);
 
             this.$inertia.post('/content/edit', formData);
         },
 
+        removeResource(uuid) {
+            const formData = new FormData();
+            formData.append('uuid', uuid);
+            formData.append('courseUuid', this.courseUuid);
+
+            this.$inertia.post('/resource/delete', formData);
+        },
+
+        showEditResource(resource) {
+            this.updateEditForm(resource);
+
+            if (this.editContent) {
+                this.editContent = false;
+            }
+            this.editResource = true;
+        },
+
+        closeEditResource() {
+            this.editResource = false;
+
+            this.updateEditForm(null);
+            this.clearFormMessages();
+        },
+
+        editResourceSubmit() {
+            const formData = new FormData();
+            if (this.editForm.uuid) {
+                formData.append('uuid', this.editForm.uuid);
+            }
+            if (this.editForm.description) {
+                formData.append('descriptionEdit', this.editForm.description);
+            }
+            if (this.editFile) {
+                formData.append('fileEdit', this.editFile);
+            }
+            if (this.editVideo) {
+                formData.append('videoEdit', this.editVideo);
+            }
+            if (this.editForm.position) {
+                formData.append('positionEdit', this.editForm.position);
+            }
+            formData.append('courseUuid', this.courseUuid);
+
+            this.$inertia.post('/resource/edit', formData);
+        },
+
         updateFileEdit(event) {
             if (event.target.files[0].type.match("application/pdf")) {
-                this.addFiles.push(event.target.files[0]);
+                this.editFile = event.target.files[0];
             }
         },
 
-        resetFileSave(index) {
-            this.delFiles.push(this.saveFiles[index].uuid);
-            this.saveFiles.splice(index, 1);
-        },
-
-        resetFileAdd(index) {
-            this.addFiles.splice(index, 1);
+        resetFileEdit() {
+            this.editFile = null;
         },
 
         selectFileEdit() {
-            document.getElementById("hidden-input-edit").click();
+            document.getElementById("hidden-input-file-edit").click();
+        },
+
+        updateVideoEdit(event) {
+            if (event.target.files[0].type.match("video/quicktime")) {
+                this.editVideo = event.target.files[0];
+            }
+        },
+
+        resetVideoEdit() {
+            this.editVideo = null;
+        },
+
+        selectVideoEdit() {
+            document.getElementById("hidden-input-video-edit").click();
         },
 
         updateEditForm(content) {
-            this.editForm.uuid = content ? content.uuid : null;
-            this.editForm.title = content ? content.title : null;
-            this.editForm.description = content ? content.description : null;
-            this.editForm.position = content ? content.position : null;
-            if (content && content.files.length > 0) {
-                content.files.forEach(element =>
-                    this.saveFiles.push(element)
-                );
-            } else {
-                this.saveFiles = [];
-                this.addFiles = [];
-                this.delFiles = [];
-            }
+            this.editForm.uuid = content && content.uuid ? content.uuid : null;
+            this.editForm.title = content && content.title ? content.title : null;
+            this.editForm.description = content && content.description ? content.description : null;
+            this.editForm.position = content && content.position ? content.position : null;
+            this.editFile = content && content.file ? content.file : null;
+            this.editVideo = content && content.video ? content.video : null;
         },
 
         clearFormMessages() {
@@ -572,11 +627,7 @@ export default {
             formData.append('contentUuid', content.uuid);
             formData.append('courseUuid', this.courseUuid);
 
-            if (content.users_count > 0) {
-                this.$inertia.post('/completed/delete', formData);
-            } else {
-                this.$inertia.post('/completed/edit', formData);
-            }
+            this.$inertia.post(content.users_count > 0 ? '/completed/delete' : '/completed/edit', formData);
         }
     }
 }

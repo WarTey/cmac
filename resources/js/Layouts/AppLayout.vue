@@ -352,10 +352,7 @@ export default {
         return {
             showingNavigationDropdown: false,
             showingNavigationSide: false,
-            copySidebarItems: null,
-            levelsChevronActivated: [],
-            chaptersChevronActivated: [],
-            contentsChevronActivated: []
+            copySidebarItems: null
         }
     },
 
