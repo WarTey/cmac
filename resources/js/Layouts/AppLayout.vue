@@ -47,7 +47,7 @@
                                 <i class="fab fa-linkedin-in fa-lg mr-1 text-gray-500 hover:text-gray-700"></i>
                             </inertia-link>
                             <div class="ml-3 relative">
-                                <jet-dropdown align="right" width="48">
+                                <jet-dropdown align="right" width="48" v-if="$page.user">
                                     <template #trigger>
                                         <button v-if="$page.user.profile_photo_url" class="flex text-sm border-2 border-transparent rounded-full focus:outline-none focus:border-gray-300 transition duration-150 ease-in-out">
                                             <img class="h-10 w-10 rounded-full object-cover" :src="$page.user.profile_photo_url" :alt="$page.user.name" />
@@ -84,6 +84,10 @@
                                         </form>
                                     </template>
                                 </jet-dropdown>
+
+                                <button v-else class="bg-gray-100 hover:bg-gray-200 text-gray-500 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline border border-gray-400" v-on:click="showConnectionForm">
+                                    Connexion
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -127,7 +131,7 @@
                 </div>
 
                 <!-- Responsive Settings Options -->
-                <div class="pt-4 pb-1 border-t border-gray-200">
+                <div v-if="$page.user" class="pt-4 pb-1 border-t border-gray-200">
                     <div class="flex items-center px-4">
                         <div class="flex-shrink-0">
                             <img class="h-10 w-10 rounded-full" :src="$page.user.profile_photo_url" :alt="$page.user.name" />
@@ -233,6 +237,72 @@
                 </div>
             </div>
         </header>
+
+        <!-- Connection / Recover Password Form -->
+        <div v-if="showingConnectionForm || showingRecoverPasswordForm" class="fixed overflow-hidden top-0 left-0 flex items-center justify-center w-full h-full bg-black bg-opacity-50">
+
+            <!-- Connection Form -->
+            <form v-if="showingConnectionForm" class="bg-white shadow-md rounded px-8 md:max-w-xl w-full max-h-4/5 overflow-auto" @submit.prevent="login">
+                <div class="mb-4 mt-6">
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="email-login">
+                        Email
+                    </label>
+                    <input v-model="loginForm.email" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="email-login" type="email" placeholder="Email">
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="password-login">
+                        Mot de passe
+                    </label>
+                    <input v-model="loginForm.password" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="password-login" type="password" placeholder="Mot de passe">
+                </div>
+                <div class="text-red-700" v-if="loginError">
+                    {{ loginError }}
+                </div>
+                <div class="mt-2">
+                    <a class="text-blue-500 font-semibold text-justify hover:underline cursor-pointer" v-on:click.prevent="showRecoverPasswordForm">
+                        Mot de passe oublié ?
+                    </a>
+                </div>
+                <div class="mt-4 mb-6">
+                    <span class="flex w-full rounded">
+                        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
+                            Connexion
+                        </button>
+                        <button v-on:click="showConnectionForm" class="ml-auto bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                            Fermer
+                        </button>
+                    </span>
+                </div>
+            </form>
+
+            <!-- Recover Password Form -->
+            <form v-if="showingRecoverPasswordForm" class="bg-white shadow-md rounded px-8 md:max-w-xl w-full max-h-4/5 overflow-auto" @submit.prevent="resetPassword">
+                <div class="mb-4 mt-6">
+                    <span class="text-gray-700 text-sm font-normal mb-2">
+                        Mot de passe oublié ? Aucun problème. Saisissez votre email dans le champ ci-dessous et nous vous enverrons un lien de réinitialisation pour en choisir un nouveau.
+                    </span>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="email-reset">
+                        Email
+                    </label>
+                    <input v-model="loginForm.email" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="email-reset" type="email" placeholder="Email">
+                </div>
+                <div class="text-red-700" v-if="loginError">
+                    {{ loginError }}
+                </div>
+                <div class="mt-4 mb-6">
+                    <span class="flex w-full rounded">
+                        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
+                            Envoyer un lien
+                        </button>
+                        <button v-on:click.prevent="showRecoverPasswordForm" class="ml-auto bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                            Fermer
+                        </button>
+                    </span>
+                </div>
+            </form>
+        </div>
 
         <!-- Page Content -->
         <main class="flex-grow">
@@ -351,8 +421,15 @@ export default {
     data() {
         return {
             showingNavigationDropdown: false,
+            showingConnectionForm: false,
+            showingRecoverPasswordForm: false,
             showingNavigationSide: false,
-            copySidebarItems: null
+            copySidebarItems: null,
+            loginForm: {
+                email: null,
+                password: null
+            },
+            loginError: null
         }
     },
 
@@ -362,9 +439,45 @@ export default {
 
     methods: {
         logout() {
-            axios.post(route('logout').url()).then(response => {
+            axios.post(route('logout').url()).then(() => {
                 window.location = '/';
-            })
+            });
+        },
+
+        login() {
+            axios.post(route('login').url(), {
+                email: this.loginForm.email,
+                password: this.loginForm.password
+            }).then(() => {
+                location.reload();
+            }).catch((err) => {
+                this.loginError = err.response.data.errors.email[0];
+            });
+        },
+
+        resetPassword() {
+            // TODO : Reset password
+        },
+
+        showConnectionForm() {
+            this.loginError = null;
+            if (this.showingConnectionForm) {
+                this.showingConnectionForm = false;
+            } else {
+                this.showingRecoverPasswordForm = false;
+                this.showingConnectionForm = true;
+            }
+        },
+
+        showRecoverPasswordForm() {
+            this.loginError = null;
+            if (this.showingRecoverPasswordForm) {
+                this.showingRecoverPasswordForm = false;
+                this.showingConnectionForm = true;
+            } else {
+                this.showingConnectionForm = false;
+                this.showingRecoverPasswordForm = true;
+            }
         },
 
         copyItems() {

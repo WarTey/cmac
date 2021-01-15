@@ -13,21 +13,14 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
-Route::get('/test', function() {
-    return Inertia\Inertia::render('Showcase/Home');
+Route::get('/', function() {
+    return Inertia\Inertia::render('Levels/Index');
 })->name('home');
 
 Route::get('/formations', 'App\Http\Controllers\LevelController@index')->name('levels.index');
 
+// TODO : Add middleware for User
 Route::group(['auth:sanctum', 'verified'], function () {
-    Route::get('/dashboard', function() {
-        return Inertia\Inertia::render('Dashboard');
-    })->name('dashboard');
-
     Route::get('/formation/{uuid}', 'App\Http\Controllers\ChapterController@index')->name('chapters.index');
     Route::get('/chapitre/{uuid}', 'App\Http\Controllers\CourseController@index')->name('courses.index');
     Route::get('/cours/{uuid}', 'App\Http\Controllers\ContentController@index')->name('contents.index');
@@ -36,6 +29,10 @@ Route::group(['auth:sanctum', 'verified'], function () {
     Route::post('/completed/delete', 'App\Http\Controllers\ContentUserController@delete')->name('contentUser.delete');
 
     // TODO : Add middleware for Admin
+    Route::get('/dashboard', function() {
+        return Inertia\Inertia::render('Dashboard');
+    })->name('dashboard');
+
     Route::post('/formation/store', 'App\Http\Controllers\LevelController@store')->name('levels.store');
     Route::post('/chapter/store', 'App\Http\Controllers\ChapterController@store')->name('chapters.store');
     Route::post('/course/store', 'App\Http\Controllers\CourseController@store')->name('courses.store');

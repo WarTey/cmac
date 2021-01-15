@@ -17,8 +17,7 @@ class RouteServiceProvider extends ServiceProvider
      *
      * @var string
      */
-    // TODO : Change redirection
-    public const HOME = '/formations';
+    public const HOME = '/';
 
     /**
      * The controller namespace for the application.

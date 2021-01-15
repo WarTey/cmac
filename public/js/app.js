@@ -3470,6 +3470,76 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -3495,8 +3565,15 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       showingNavigationDropdown: false,
+      showingConnectionForm: false,
+      showingRecoverPasswordForm: false,
       showingNavigationSide: false,
-      copySidebarItems: null
+      copySidebarItems: null,
+      loginForm: {
+        email: null,
+        password: null
+      },
+      loginError: null
     };
   },
   mounted: function mounted() {
@@ -3504,9 +3581,44 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     logout: function logout() {
-      axios.post(route('logout').url()).then(function (response) {
+      axios.post(route('logout').url()).then(function () {
         window.location = '/';
       });
+    },
+    login: function login() {
+      var _this = this;
+
+      axios.post(route('login').url(), {
+        email: this.loginForm.email,
+        password: this.loginForm.password
+      }).then(function () {
+        location.reload();
+      })["catch"](function (err) {
+        _this.loginError = err.response.data.errors.email[0];
+      });
+    },
+    resetPassword: function resetPassword() {// TODO : Reset password
+    },
+    showConnectionForm: function showConnectionForm() {
+      this.loginError = null;
+
+      if (this.showingConnectionForm) {
+        this.showingConnectionForm = false;
+      } else {
+        this.showingRecoverPasswordForm = false;
+        this.showingConnectionForm = true;
+      }
+    },
+    showRecoverPasswordForm: function showRecoverPasswordForm() {
+      this.loginError = null;
+
+      if (this.showingRecoverPasswordForm) {
+        this.showingRecoverPasswordForm = false;
+        this.showingConnectionForm = true;
+      } else {
+        this.showingConnectionForm = false;
+        this.showingRecoverPasswordForm = true;
+      }
     },
     copyItems: function copyItems() {
       this.copySidebarItems = this.sidebarItems;
@@ -99473,135 +99585,164 @@ var render = function() {
                     "div",
                     { staticClass: "ml-3 relative" },
                     [
-                      _c("jet-dropdown", {
-                        attrs: { align: "right", width: "48" },
-                        scopedSlots: _vm._u([
-                          {
-                            key: "trigger",
-                            fn: function() {
-                              return [
-                                _vm.$page.user.profile_photo_url
-                                  ? _c(
-                                      "button",
-                                      {
-                                        staticClass:
-                                          "flex text-sm border-2 border-transparent rounded-full focus:outline-none focus:border-gray-300 transition duration-150 ease-in-out"
-                                      },
-                                      [
-                                        _c("img", {
-                                          staticClass:
-                                            "h-10 w-10 rounded-full object-cover",
-                                          attrs: {
-                                            src:
-                                              _vm.$page.user.profile_photo_url,
-                                            alt: _vm.$page.user.name
-                                          }
-                                        })
-                                      ]
-                                    )
-                                  : _c(
-                                      "button",
-                                      {
-                                        staticClass:
-                                          "flex items-center text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300 focus:outline-none focus:text-gray-700 focus:border-gray-300 transition duration-150 ease-in-out"
-                                      },
-                                      [
-                                        _c("div", [
-                                          _vm._v(_vm._s(_vm.$page.user.name))
-                                        ]),
-                                        _vm._v(" "),
-                                        _c("div", { staticClass: "ml-1" }, [
-                                          _c(
-                                            "svg",
+                      _vm.$page.user
+                        ? _c("jet-dropdown", {
+                            attrs: { align: "right", width: "48" },
+                            scopedSlots: _vm._u(
+                              [
+                                {
+                                  key: "trigger",
+                                  fn: function() {
+                                    return [
+                                      _vm.$page.user.profile_photo_url
+                                        ? _c(
+                                            "button",
                                             {
                                               staticClass:
-                                                "fill-current h-4 w-4",
-                                              attrs: {
-                                                xmlns:
-                                                  "http://www.w3.org/2000/svg",
-                                                viewBox: "0 0 20 20"
-                                              }
+                                                "flex text-sm border-2 border-transparent rounded-full focus:outline-none focus:border-gray-300 transition duration-150 ease-in-out"
                                             },
                                             [
-                                              _c("path", {
+                                              _c("img", {
+                                                staticClass:
+                                                  "h-10 w-10 rounded-full object-cover",
                                                 attrs: {
-                                                  "fill-rule": "evenodd",
-                                                  d:
-                                                    "M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z",
-                                                  "clip-rule": "evenodd"
+                                                  src:
+                                                    _vm.$page.user
+                                                      .profile_photo_url,
+                                                  alt: _vm.$page.user.name
                                                 }
                                               })
                                             ]
                                           )
-                                        ])
-                                      ]
-                                    )
-                              ]
+                                        : _c(
+                                            "button",
+                                            {
+                                              staticClass:
+                                                "flex items-center text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300 focus:outline-none focus:text-gray-700 focus:border-gray-300 transition duration-150 ease-in-out"
+                                            },
+                                            [
+                                              _c("div", [
+                                                _vm._v(
+                                                  _vm._s(_vm.$page.user.name)
+                                                )
+                                              ]),
+                                              _vm._v(" "),
+                                              _c(
+                                                "div",
+                                                { staticClass: "ml-1" },
+                                                [
+                                                  _c(
+                                                    "svg",
+                                                    {
+                                                      staticClass:
+                                                        "fill-current h-4 w-4",
+                                                      attrs: {
+                                                        xmlns:
+                                                          "http://www.w3.org/2000/svg",
+                                                        viewBox: "0 0 20 20"
+                                                      }
+                                                    },
+                                                    [
+                                                      _c("path", {
+                                                        attrs: {
+                                                          "fill-rule":
+                                                            "evenodd",
+                                                          d:
+                                                            "M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z",
+                                                          "clip-rule": "evenodd"
+                                                        }
+                                                      })
+                                                    ]
+                                                  )
+                                                ]
+                                              )
+                                            ]
+                                          )
+                                    ]
+                                  },
+                                  proxy: true
+                                },
+                                {
+                                  key: "content",
+                                  fn: function() {
+                                    return [
+                                      _c(
+                                        "div",
+                                        {
+                                          staticClass:
+                                            "block px-4 py-2 text-xs text-gray-400"
+                                        },
+                                        [
+                                          _vm._v(
+                                            "\n                                        Gestion du compte\n                                    "
+                                          )
+                                        ]
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "jet-dropdown-link",
+                                        {
+                                          attrs: {
+                                            href: _vm.route("profile.show")
+                                          }
+                                        },
+                                        [
+                                          _vm._v(
+                                            "\n                                        Profil\n                                    "
+                                          )
+                                        ]
+                                      ),
+                                      _vm._v(" "),
+                                      _c("div", {
+                                        staticClass: "border-t border-gray-100"
+                                      }),
+                                      _vm._v(" "),
+                                      _c(
+                                        "form",
+                                        {
+                                          on: {
+                                            submit: function($event) {
+                                              $event.preventDefault()
+                                              return _vm.logout($event)
+                                            }
+                                          }
+                                        },
+                                        [
+                                          _c(
+                                            "jet-dropdown-link",
+                                            { attrs: { as: "button" } },
+                                            [
+                                              _vm._v(
+                                                "\n                                            Déconnexion\n                                        "
+                                              )
+                                            ]
+                                          )
+                                        ],
+                                        1
+                                      )
+                                    ]
+                                  },
+                                  proxy: true
+                                }
+                              ],
+                              null,
+                              false,
+                              1630348344
+                            )
+                          })
+                        : _c(
+                            "button",
+                            {
+                              staticClass:
+                                "bg-gray-100 hover:bg-gray-200 text-gray-500 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline border border-gray-400",
+                              on: { click: _vm.showConnectionForm }
                             },
-                            proxy: true
-                          },
-                          {
-                            key: "content",
-                            fn: function() {
-                              return [
-                                _c(
-                                  "div",
-                                  {
-                                    staticClass:
-                                      "block px-4 py-2 text-xs text-gray-400"
-                                  },
-                                  [
-                                    _vm._v(
-                                      "\n                                        Gestion du compte\n                                    "
-                                    )
-                                  ]
-                                ),
-                                _vm._v(" "),
-                                _c(
-                                  "jet-dropdown-link",
-                                  {
-                                    attrs: { href: _vm.route("profile.show") }
-                                  },
-                                  [
-                                    _vm._v(
-                                      "\n                                        Profil\n                                    "
-                                    )
-                                  ]
-                                ),
-                                _vm._v(" "),
-                                _c("div", {
-                                  staticClass: "border-t border-gray-100"
-                                }),
-                                _vm._v(" "),
-                                _c(
-                                  "form",
-                                  {
-                                    on: {
-                                      submit: function($event) {
-                                        $event.preventDefault()
-                                        return _vm.logout($event)
-                                      }
-                                    }
-                                  },
-                                  [
-                                    _c(
-                                      "jet-dropdown-link",
-                                      { attrs: { as: "button" } },
-                                      [
-                                        _vm._v(
-                                          "\n                                            Déconnexion\n                                        "
-                                        )
-                                      ]
-                                    )
-                                  ],
-                                  1
-                                )
-                              ]
-                            },
-                            proxy: true
-                          }
-                        ])
-                      })
+                            [
+                              _vm._v(
+                                "\n                                Connexion\n                            "
+                              )
+                            ]
+                          )
                     ],
                     1
                   )
@@ -99749,80 +99890,88 @@ var render = function() {
               1
             ),
             _vm._v(" "),
-            _c("div", { staticClass: "pt-4 pb-1 border-t border-gray-200" }, [
-              _c("div", { staticClass: "flex items-center px-4" }, [
-                _c("div", { staticClass: "flex-shrink-0" }, [
-                  _c("img", {
-                    staticClass: "h-10 w-10 rounded-full",
-                    attrs: {
-                      src: _vm.$page.user.profile_photo_url,
-                      alt: _vm.$page.user.name
-                    }
-                  })
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "ml-3" }, [
-                  _c(
-                    "div",
-                    { staticClass: "font-medium text-base text-gray-800" },
-                    [_vm._v(_vm._s(_vm.$page.user.name))]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "div",
-                    { staticClass: "font-medium text-sm text-gray-500" },
-                    [_vm._v(_vm._s(_vm.$page.user.email))]
-                  )
-                ])
-              ]),
-              _vm._v(" "),
-              _c(
-                "div",
-                { staticClass: "mt-3 space-y-1" },
-                [
-                  _c(
-                    "jet-responsive-nav-link",
-                    {
-                      attrs: {
-                        href: _vm.route("profile.show"),
-                        active: _vm.route().current("profile.show")
-                      }
-                    },
-                    [
-                      _vm._v(
-                        "\n                        Profil\n                    "
-                      )
-                    ]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "form",
-                    {
-                      attrs: { method: "POST" },
-                      on: {
-                        submit: function($event) {
-                          $event.preventDefault()
-                          return _vm.logout($event)
-                        }
-                      }
-                    },
-                    [
-                      _c(
-                        "jet-responsive-nav-link",
-                        { attrs: { as: "button" } },
-                        [
-                          _vm._v(
-                            "\n                            Déconnexion\n                        "
-                          )
-                        ]
-                      )
-                    ],
-                    1
-                  )
-                ],
-                1
-              )
-            ])
+            _vm.$page.user
+              ? _c(
+                  "div",
+                  { staticClass: "pt-4 pb-1 border-t border-gray-200" },
+                  [
+                    _c("div", { staticClass: "flex items-center px-4" }, [
+                      _c("div", { staticClass: "flex-shrink-0" }, [
+                        _c("img", {
+                          staticClass: "h-10 w-10 rounded-full",
+                          attrs: {
+                            src: _vm.$page.user.profile_photo_url,
+                            alt: _vm.$page.user.name
+                          }
+                        })
+                      ]),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "ml-3" }, [
+                        _c(
+                          "div",
+                          {
+                            staticClass: "font-medium text-base text-gray-800"
+                          },
+                          [_vm._v(_vm._s(_vm.$page.user.name))]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "div",
+                          { staticClass: "font-medium text-sm text-gray-500" },
+                          [_vm._v(_vm._s(_vm.$page.user.email))]
+                        )
+                      ])
+                    ]),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      { staticClass: "mt-3 space-y-1" },
+                      [
+                        _c(
+                          "jet-responsive-nav-link",
+                          {
+                            attrs: {
+                              href: _vm.route("profile.show"),
+                              active: _vm.route().current("profile.show")
+                            }
+                          },
+                          [
+                            _vm._v(
+                              "\n                        Profil\n                    "
+                            )
+                          ]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "form",
+                          {
+                            attrs: { method: "POST" },
+                            on: {
+                              submit: function($event) {
+                                $event.preventDefault()
+                                return _vm.logout($event)
+                              }
+                            }
+                          },
+                          [
+                            _c(
+                              "jet-responsive-nav-link",
+                              { attrs: { as: "button" } },
+                              [
+                                _vm._v(
+                                  "\n                            Déconnexion\n                        "
+                                )
+                              ]
+                            )
+                          ],
+                          1
+                        )
+                      ],
+                      1
+                    )
+                  ]
+                )
+              : _vm._e()
           ]
         )
       ]),
@@ -100165,6 +100314,304 @@ var render = function() {
           ])
         : _vm._e(),
       _vm._v(" "),
+      _vm.showingConnectionForm || _vm.showingRecoverPasswordForm
+        ? _c(
+            "div",
+            {
+              staticClass:
+                "fixed overflow-hidden top-0 left-0 flex items-center justify-center w-full h-full bg-black bg-opacity-50"
+            },
+            [
+              _vm.showingConnectionForm
+                ? _c(
+                    "form",
+                    {
+                      staticClass:
+                        "bg-white shadow-md rounded px-8 md:max-w-xl w-full max-h-4/5 overflow-auto",
+                      on: {
+                        submit: function($event) {
+                          $event.preventDefault()
+                          return _vm.login($event)
+                        }
+                      }
+                    },
+                    [
+                      _c("div", { staticClass: "mb-4 mt-6" }, [
+                        _c(
+                          "label",
+                          {
+                            staticClass:
+                              "block text-gray-700 text-sm font-bold mb-2",
+                            attrs: { for: "email-login" }
+                          },
+                          [
+                            _vm._v(
+                              "\n                    Email\n                "
+                            )
+                          ]
+                        ),
+                        _vm._v(" "),
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.loginForm.email,
+                              expression: "loginForm.email"
+                            }
+                          ],
+                          staticClass:
+                            "shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline",
+                          attrs: {
+                            id: "email-login",
+                            type: "email",
+                            placeholder: "Email"
+                          },
+                          domProps: { value: _vm.loginForm.email },
+                          on: {
+                            input: function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.$set(
+                                _vm.loginForm,
+                                "email",
+                                $event.target.value
+                              )
+                            }
+                          }
+                        })
+                      ]),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "mb-4" }, [
+                        _c(
+                          "label",
+                          {
+                            staticClass:
+                              "block text-gray-700 text-sm font-bold mb-2",
+                            attrs: { for: "password-login" }
+                          },
+                          [
+                            _vm._v(
+                              "\n                    Mot de passe\n                "
+                            )
+                          ]
+                        ),
+                        _vm._v(" "),
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.loginForm.password,
+                              expression: "loginForm.password"
+                            }
+                          ],
+                          staticClass:
+                            "shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline",
+                          attrs: {
+                            id: "password-login",
+                            type: "password",
+                            placeholder: "Mot de passe"
+                          },
+                          domProps: { value: _vm.loginForm.password },
+                          on: {
+                            input: function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.$set(
+                                _vm.loginForm,
+                                "password",
+                                $event.target.value
+                              )
+                            }
+                          }
+                        })
+                      ]),
+                      _vm._v(" "),
+                      _vm.loginError
+                        ? _c("div", { staticClass: "text-red-700" }, [
+                            _vm._v(
+                              "\n                " +
+                                _vm._s(_vm.loginError) +
+                                "\n            "
+                            )
+                          ])
+                        : _vm._e(),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "mt-2" }, [
+                        _c(
+                          "a",
+                          {
+                            staticClass:
+                              "text-blue-500 font-semibold text-justify hover:underline cursor-pointer",
+                            on: {
+                              click: function($event) {
+                                $event.preventDefault()
+                                return _vm.showRecoverPasswordForm($event)
+                              }
+                            }
+                          },
+                          [
+                            _vm._v(
+                              "\n                    Mot de passe oublié ?\n                "
+                            )
+                          ]
+                        )
+                      ]),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "mt-4 mb-6" }, [
+                        _c("span", { staticClass: "flex w-full rounded" }, [
+                          _c(
+                            "button",
+                            {
+                              staticClass:
+                                "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline",
+                              attrs: { type: "submit" }
+                            },
+                            [
+                              _vm._v(
+                                "\n                        Connexion\n                    "
+                              )
+                            ]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "button",
+                            {
+                              staticClass:
+                                "ml-auto bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline",
+                              on: { click: _vm.showConnectionForm }
+                            },
+                            [
+                              _vm._v(
+                                "\n                        Fermer\n                    "
+                              )
+                            ]
+                          )
+                        ])
+                      ])
+                    ]
+                  )
+                : _vm._e(),
+              _vm._v(" "),
+              _vm.showingRecoverPasswordForm
+                ? _c(
+                    "form",
+                    {
+                      staticClass:
+                        "bg-white shadow-md rounded px-8 md:max-w-xl w-full max-h-4/5 overflow-auto",
+                      on: {
+                        submit: function($event) {
+                          $event.preventDefault()
+                          return _vm.resetPassword($event)
+                        }
+                      }
+                    },
+                    [
+                      _vm._m(2),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "mb-4" }, [
+                        _c(
+                          "label",
+                          {
+                            staticClass:
+                              "block text-gray-700 text-sm font-bold mb-2",
+                            attrs: { for: "email-reset" }
+                          },
+                          [
+                            _vm._v(
+                              "\n                    Email\n                "
+                            )
+                          ]
+                        ),
+                        _vm._v(" "),
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.loginForm.email,
+                              expression: "loginForm.email"
+                            }
+                          ],
+                          staticClass:
+                            "shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline",
+                          attrs: {
+                            id: "email-reset",
+                            type: "email",
+                            placeholder: "Email"
+                          },
+                          domProps: { value: _vm.loginForm.email },
+                          on: {
+                            input: function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.$set(
+                                _vm.loginForm,
+                                "email",
+                                $event.target.value
+                              )
+                            }
+                          }
+                        })
+                      ]),
+                      _vm._v(" "),
+                      _vm.loginError
+                        ? _c("div", { staticClass: "text-red-700" }, [
+                            _vm._v(
+                              "\n                " +
+                                _vm._s(_vm.loginError) +
+                                "\n            "
+                            )
+                          ])
+                        : _vm._e(),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "mt-4 mb-6" }, [
+                        _c("span", { staticClass: "flex w-full rounded" }, [
+                          _c(
+                            "button",
+                            {
+                              staticClass:
+                                "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline",
+                              attrs: { type: "submit" }
+                            },
+                            [
+                              _vm._v(
+                                "\n                        Envoyer un lien\n                    "
+                              )
+                            ]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "button",
+                            {
+                              staticClass:
+                                "ml-auto bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline",
+                              on: {
+                                click: function($event) {
+                                  $event.preventDefault()
+                                  return _vm.showRecoverPasswordForm($event)
+                                }
+                              }
+                            },
+                            [
+                              _vm._v(
+                                "\n                        Fermer\n                    "
+                              )
+                            ]
+                          )
+                        ])
+                      ])
+                    ]
+                  )
+                : _vm._e()
+            ]
+          )
+        : _vm._e(),
+      _vm._v(" "),
       _c("main", { staticClass: "flex-grow" }, [_vm._t("default")], 2),
       _vm._v(" "),
       _c("footer", { staticClass: "bg-gray-600 w-full static bottom-0 mt-4" }, [
@@ -100242,7 +100689,7 @@ var render = function() {
                   )
                 ]),
                 _vm._v(" "),
-                _vm._m(2),
+                _vm._m(3),
                 _vm._v(" "),
                 _c("div", [
                   _c(
@@ -100449,6 +100896,18 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("span", { staticClass: "mr-2" }, [
       _c("i", { staticClass: "fas fa-caret-right fa-lg text-gray-500" })
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "mb-4 mt-6" }, [
+      _c("span", { staticClass: "text-gray-700 text-sm font-normal mb-2" }, [
+        _vm._v(
+          "\n                    Mot de passe oublié ? Aucun problème. Saisissez votre email dans le champ ci-dessous et nous vous enverrons un lien de réinitialisation pour en choisir un nouveau.\n                "
+        )
+      ])
     ])
   },
   function() {
