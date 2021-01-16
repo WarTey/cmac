@@ -351,7 +351,6 @@
                     </span>
                 </div>
             </form>
-        <!--</div>-->
         </div>
 
         <!-- Page Content -->
