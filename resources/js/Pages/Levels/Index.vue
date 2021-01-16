@@ -263,7 +263,6 @@
             },
 
             showModal(level) {
-                console.log(this.levels);
                 this.updateEditForm(level);
 
                 this.modalVisible = true;
