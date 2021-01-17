@@ -319,11 +319,6 @@ var bindHandlers = function (initEvent, listeners, editor) {
 var bindModelHandlers = function (ctx, editor) {
     var modelEvents = ctx.$props.modelEvents ? ctx.$props.modelEvents : null;
     var normalizedEvents = Array.isArray(modelEvents) ? modelEvents.join(' ') : modelEvents;
-    ctx.$watch('value', function (val, prevVal) {
-        if (editor && typeof val === 'string' && val !== prevVal && val !== editor.getContent({ format: ctx.$props.outputFormat })) {
-            editor.setContent(val);
-        }
-    });
     editor.on(normalizedEvents ? normalizedEvents : 'change input undo redo', function () {
         ctx.$emit('input', editor.getContent({ format: ctx.$props.outputFormat }));
     });
@@ -332,6 +327,12 @@ var initEditor = function (initEvent, ctx, editor) {
     var value = ctx.$props.value ? ctx.$props.value : '';
     var initialValue = ctx.$props.initialValue ? ctx.$props.initialValue : '';
     editor.setContent(value || (ctx.initialized ? ctx.cache : initialValue));
+    // Always bind the value listener in case users use :value instead of v-model
+    ctx.$watch('value', function (val, prevVal) {
+        if (editor && typeof val === 'string' && val !== prevVal && val !== editor.getContent({ format: ctx.$props.outputFormat })) {
+            editor.setContent(val);
+        }
+    });
     // checks if the v-model shorthand is used (which sets an v-on:input listener) and then binds either
     // specified the events or defaults to "change keyup" event and emits the editor content on that event
     if (ctx.$listeners.input) {
@@ -6375,9 +6376,7 @@ function fromByteArray (uint8) {
 
   // go through the array every three bytes, we'll deal with trailing stuff later
   for (var i = 0, len2 = len - extraBytes; i < len2; i += maxChunkLength) {
-    parts.push(encodeChunk(
-      uint8, i, (i + maxChunkLength) > len2 ? len2 : (i + maxChunkLength)
-    ))
+    parts.push(encodeChunk(uint8, i, (i + maxChunkLength) > len2 ? len2 : (i + maxChunkLength)))
   }
 
   // pad the end with zeros, but make sure to not forget the extra bytes
