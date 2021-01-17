@@ -28,7 +28,7 @@ Route::middleware(['auth', 'verified'])->group(function() {
     Route::post('/completed/delete', 'App\Http\Controllers\ContentUserController@delete')->name('contentUser.delete');
 });
 
-Route::middleware(['admin'])->group(function() {
+Route::middleware(['auth', 'admin', 'verified'])->group(function() {
     Route::get('/dashboard', function() {
         return Inertia\Inertia::render('Dashboard');
     })->name('dashboard');

@@ -175,7 +175,7 @@
 
         <!-- Side Heading -->
         <div v-if="sidebarItems && showingNavigationSide" class="fixed overflow-hidden top-0 left-0 flex items-center justify-center w-full h-full bg-black bg-opacity-50"></div>
-        <div class="flex flex-wrap h-full fixed bg-white content-center cursor-pointer text-2xl" v-if="!showingNavigationSide && sidebarItems">
+        <div class="flex flex-wrap h-full fixed bg-white cursor-pointer text-2xl items-center" v-if="!showingNavigationSide && sidebarItems">
             <i class="fas fa-angle-double-right fa-lg text-gray-500 hover:text-gray-700 fixed pl-4 bg-white pr-2 py-2 rounded-r shadow-md hover:shadow-lg" v-on:click="showingNavigationSide = !showingNavigationSide"></i>
         </div>
         <aside v-if="sidebarItems" class="flex flex-col z-30 rounded-r-lg transform top-0 left-0 w-64 bg-white fixed h-full overflow-auto ease-in-out transition-all duration-300" :class="showingNavigationSide ? 'translate-x-0' : '-translate-x-full'">

@@ -99644,7 +99644,7 @@ var render = function() {
             "div",
             {
               staticClass:
-                "flex flex-wrap h-full fixed bg-white content-center cursor-pointer text-2xl"
+                "flex flex-wrap h-full fixed bg-white cursor-pointer text-2xl items-center"
             },
             [
               _c("i", {
