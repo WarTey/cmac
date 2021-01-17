@@ -13,8 +13,7 @@
                 {{ chapterTitle | truncate(30) }}
             </h2>
         </template>
-        <!-- TODO : Add Admin verification -->
-        <div class="pt-4 max-w-7xl mx-auto sm:px-6 lg:px-8 right-0">
+        <div v-if="$page.user && $page.user.admin" class="pt-4 max-w-7xl mx-auto sm:px-6 lg:px-8 right-0">
             <div class="flex flex-row-reverse">
                 <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" v-on:click="toggleAddCourse">
                     Ajouter un cours
@@ -22,7 +21,7 @@
             </div>
         </div>
         <transition name="slide-fade">
-            <div class="py-4" v-if="addCourse">
+            <div class="py-4" v-if="$page.user && $page.user.admin && addCourse">
                 <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                     <div class="w-full">
                         <form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" @submit.prevent="storeSubmit">
@@ -101,7 +100,7 @@
                         <div class="mt-6 text-gray-500 text-justify">
                             {{ course.description }}
                         </div>
-                        <div class="mt-4 flex">
+                        <div v-if="$page.user && $page.user.admin" class="mt-4 flex">
                             <a class="text-blue-500 font-semibold text-justify hover:underline cursor-pointer" v-on:click.prevent="showModal(course)">
                                 Éditer le cours
                             </a>
@@ -113,7 +112,7 @@
                 </div>
             </div>
         </div>
-        <div v-if="modalVisible" class="fixed overflow-hidden top-0 left-0 flex items-center justify-center w-full h-full bg-black bg-opacity-50">
+        <div v-if="$page.user && $page.user.admin && modalVisible" class="fixed overflow-hidden top-0 left-0 flex items-center justify-center w-full h-full bg-black bg-opacity-50">
             <form class="bg-white shadow-md rounded px-8 md:max-w-xl w-full max-h-4/5 overflow-auto" @submit.prevent="editSubmit">
                 <div class="mb-4 mt-6">
                     <label class="block text-gray-700 text-sm font-bold mb-2" for="edit-title">

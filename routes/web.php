@@ -18,17 +18,17 @@ Route::get('/', function() {
 })->name('home');
 
 Route::get('/formations', 'App\Http\Controllers\LevelController@index')->name('levels.index');
+Route::get('/formation/{uuid}', 'App\Http\Controllers\ChapterController@index')->name('chapters.index');
+Route::get('/chapitre/{uuid}', 'App\Http\Controllers\CourseController@index')->name('courses.index');
 
-// TODO : Add middleware for User
-Route::group(['auth:sanctum', 'verified'], function () {
-    Route::get('/formation/{uuid}', 'App\Http\Controllers\ChapterController@index')->name('chapters.index');
-    Route::get('/chapitre/{uuid}', 'App\Http\Controllers\CourseController@index')->name('courses.index');
+Route::middleware(['auth', 'verified'])->group(function() {
     Route::get('/cours/{uuid}', 'App\Http\Controllers\ContentController@index')->name('contents.index');
 
     Route::post('/completed/edit', 'App\Http\Controllers\ContentUserController@store')->name('contentUser.edit');
     Route::post('/completed/delete', 'App\Http\Controllers\ContentUserController@delete')->name('contentUser.delete');
+});
 
-    // TODO : Add middleware for Admin
+Route::middleware(['admin'])->group(function() {
     Route::get('/dashboard', function() {
         return Inertia\Inertia::render('Dashboard');
     })->name('dashboard');

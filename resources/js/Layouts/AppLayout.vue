@@ -74,6 +74,10 @@
                                             Profil
                                         </jet-dropdown-link>
 
+                                        <jet-dropdown-link v-if="$page.user && $page.user.admin" :href="route('profile.show')">
+                                            Dashboard
+                                        </jet-dropdown-link>
+
                                         <div class="border-t border-gray-100"></div>
 
                                         <!-- Authentication -->
@@ -146,6 +150,10 @@
                     <div class="mt-3 space-y-1">
                         <jet-responsive-nav-link :href="route('profile.show')" :active="route().current('profile.show')">
                             Profil
+                        </jet-responsive-nav-link>
+
+                        <jet-responsive-nav-link v-if="$page.user && $page.user.admin" :href="route('profile.show')" :active="route().current('profile.show')">
+                            Dashboard
                         </jet-responsive-nav-link>
 
                         <!-- Authentication -->
@@ -317,7 +325,7 @@
                 <div class="mt-4 mb-6">
                     <span class="flex w-full rounded">
                         <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
-                            Connexion
+                            Inscription
                         </button>
                         <button v-on:click="showConnectionForm" class="ml-auto bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
                             Fermer

@@ -3521,6 +3521,14 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -3855,7 +3863,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
@@ -4011,7 +4018,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Pages_Contents_ProgressBar__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @/Pages/Contents/ProgressBar */ "./resources/js/Pages/Contents/ProgressBar.vue");
 /* harmony import */ var _tinymce_tinymce_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @tinymce/tinymce-vue */ "./node_modules/@tinymce/tinymce-vue/lib/es2015/main/ts/index.js");
 /* harmony import */ var _Pages_Contents_PdfViewer__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @/Pages/Contents/PdfViewer */ "./resources/js/Pages/Contents/PdfViewer.vue");
-//
 //
 //
 //
@@ -4952,7 +4958,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
@@ -5137,7 +5142,6 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Layouts_AppLayout__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @/Layouts/AppLayout */ "./resources/js/Layouts/AppLayout.vue");
 /* harmony import */ var _Jetstream_Input__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @/Jetstream/Input */ "./resources/js/Jetstream/Input.vue");
-//
 //
 //
 //
@@ -99298,6 +99302,22 @@ var render = function() {
                                         ]
                                       ),
                                       _vm._v(" "),
+                                      _vm.$page.user && _vm.$page.user.admin
+                                        ? _c(
+                                            "jet-dropdown-link",
+                                            {
+                                              attrs: {
+                                                href: _vm.route("profile.show")
+                                              }
+                                            },
+                                            [
+                                              _vm._v(
+                                                "\n                                        Dashboard\n                                    "
+                                              )
+                                            ]
+                                          )
+                                        : _vm._e(),
+                                      _vm._v(" "),
                                       _c("div", {
                                         staticClass: "border-t border-gray-100"
                                       }),
@@ -99332,7 +99352,7 @@ var render = function() {
                               ],
                               null,
                               false,
-                              1630348344
+                              1135325310
                             )
                           })
                         : _c(
@@ -99546,6 +99566,23 @@ var render = function() {
                             )
                           ]
                         ),
+                        _vm._v(" "),
+                        _vm.$page.user && _vm.$page.user.admin
+                          ? _c(
+                              "jet-responsive-nav-link",
+                              {
+                                attrs: {
+                                  href: _vm.route("profile.show"),
+                                  active: _vm.route().current("profile.show")
+                                }
+                              },
+                              [
+                                _vm._v(
+                                  "\n                        Dashboard\n                    "
+                                )
+                              ]
+                            )
+                          : _vm._e(),
                         _vm._v(" "),
                         _c(
                           "form",
@@ -100387,7 +100424,7 @@ var render = function() {
                             },
                             [
                               _vm._v(
-                                "\n                        Connexion\n                    "
+                                "\n                        Inscription\n                    "
                               )
                             ]
                           ),
@@ -100890,26 +100927,32 @@ var render = function() {
     },
     [
       _vm._v(" "),
-      _c(
-        "div",
-        { staticClass: "pt-4 max-w-7xl mx-auto sm:px-6 lg:px-8 right-0" },
-        [
-          _c("div", { staticClass: "flex flex-row-reverse" }, [
-            _c(
-              "button",
-              {
-                staticClass:
-                  "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline",
-                on: { click: _vm.toggleAddChapter }
-              },
-              [_vm._v("\n                Ajouter un chapitre\n            ")]
-            )
-          ])
-        ]
-      ),
+      _vm.$page.user && _vm.$page.user.admin
+        ? _c(
+            "div",
+            { staticClass: "pt-4 max-w-7xl mx-auto sm:px-6 lg:px-8 right-0" },
+            [
+              _c("div", { staticClass: "flex flex-row-reverse" }, [
+                _c(
+                  "button",
+                  {
+                    staticClass:
+                      "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline",
+                    on: { click: _vm.toggleAddChapter }
+                  },
+                  [
+                    _vm._v(
+                      "\n                Ajouter un chapitre\n            "
+                    )
+                  ]
+                )
+              ])
+            ]
+          )
+        : _vm._e(),
       _vm._v(" "),
       _c("transition", { attrs: { name: "slide-fade" } }, [
-        _vm.addChapter
+        _vm.$page.user && _vm.$page.user.admin && _vm.addChapter
           ? _c("div", { staticClass: "py-4" }, [
               _c("div", { staticClass: "max-w-7xl mx-auto sm:px-6 lg:px-8" }, [
                 _c("div", { staticClass: "w-full" }, [
@@ -101358,45 +101401,47 @@ var render = function() {
                         )
                       : _vm._e(),
                     _vm._v(" "),
-                    _c("div", { staticClass: "mt-4 flex" }, [
-                      _c(
-                        "a",
-                        {
-                          staticClass:
-                            "text-blue-500 font-semibold text-justify hover:underline cursor-pointer",
-                          on: {
-                            click: function($event) {
-                              $event.preventDefault()
-                              return _vm.showModal(chapter)
-                            }
-                          }
-                        },
-                        [
-                          _vm._v(
-                            "\n                            Éditer le chapitre\n                        "
+                    _vm.$page.user && _vm.$page.user.admin
+                      ? _c("div", { staticClass: "mt-4 flex" }, [
+                          _c(
+                            "a",
+                            {
+                              staticClass:
+                                "text-blue-500 font-semibold text-justify hover:underline cursor-pointer",
+                              on: {
+                                click: function($event) {
+                                  $event.preventDefault()
+                                  return _vm.showModal(chapter)
+                                }
+                              }
+                            },
+                            [
+                              _vm._v(
+                                "\n                            Éditer le chapitre\n                        "
+                              )
+                            ]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "a",
+                            {
+                              staticClass:
+                                "text-red-500 font-semibold text-justify hover:underline cursor-pointer ml-auto",
+                              on: {
+                                click: function($event) {
+                                  $event.preventDefault()
+                                  return _vm.removeChapter(chapter.uuid)
+                                }
+                              }
+                            },
+                            [
+                              _vm._v(
+                                "\n                            Retirer le chapitre\n                        "
+                              )
+                            ]
                           )
-                        ]
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "a",
-                        {
-                          staticClass:
-                            "text-red-500 font-semibold text-justify hover:underline cursor-pointer ml-auto",
-                          on: {
-                            click: function($event) {
-                              $event.preventDefault()
-                              return _vm.removeChapter(chapter.uuid)
-                            }
-                          }
-                        },
-                        [
-                          _vm._v(
-                            "\n                            Retirer le chapitre\n                        "
-                          )
-                        ]
-                      )
-                    ])
+                        ])
+                      : _vm._e()
                   ]
                 )
               ]
@@ -101405,7 +101450,7 @@ var render = function() {
         ])
       }),
       _vm._v(" "),
-      _vm.modalVisible
+      _vm.$page.user && _vm.$page.user.admin && _vm.modalVisible
         ? _c(
             "div",
             {
@@ -101914,44 +101959,52 @@ var render = function() {
     },
     [
       _vm._v(" "),
-      _c(
-        "div",
-        { staticClass: "pt-4 max-w-7xl mx-auto sm:px-6 lg:px-8 right-0" },
-        [
-          _c("div", { staticClass: "flex flex-row-reverse" }, [
-            _c(
-              "button",
-              {
-                staticClass:
-                  "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline",
-                on: { click: _vm.toggleAddContent }
-              },
-              [_vm._v("\n                Ajouter un contenu\n            ")]
-            )
-          ])
-        ]
-      ),
+      _vm.$page.user && _vm.$page.user.admin
+        ? _c(
+            "div",
+            { staticClass: "pt-4 max-w-7xl mx-auto sm:px-6 lg:px-8 right-0" },
+            [
+              _c("div", { staticClass: "flex flex-row-reverse" }, [
+                _c(
+                  "button",
+                  {
+                    staticClass:
+                      "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline",
+                    on: { click: _vm.toggleAddContent }
+                  },
+                  [_vm._v("\n                Ajouter un contenu\n            ")]
+                )
+              ])
+            ]
+          )
+        : _vm._e(),
       _vm._v(" "),
-      _c(
-        "div",
-        { staticClass: "pt-4 max-w-7xl mx-auto sm:px-6 lg:px-8 right-0" },
-        [
-          _c("div", { staticClass: "flex flex-row-reverse" }, [
-            _c(
-              "button",
-              {
-                staticClass:
-                  "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline",
-                on: { click: _vm.toggleAddResource }
-              },
-              [_vm._v("\n                Ajouter une ressource\n            ")]
-            )
-          ])
-        ]
-      ),
+      _vm.$page.user && _vm.$page.user.admin
+        ? _c(
+            "div",
+            { staticClass: "pt-4 max-w-7xl mx-auto sm:px-6 lg:px-8 right-0" },
+            [
+              _c("div", { staticClass: "flex flex-row-reverse" }, [
+                _c(
+                  "button",
+                  {
+                    staticClass:
+                      "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline",
+                    on: { click: _vm.toggleAddResource }
+                  },
+                  [
+                    _vm._v(
+                      "\n                Ajouter une ressource\n            "
+                    )
+                  ]
+                )
+              ])
+            ]
+          )
+        : _vm._e(),
       _vm._v(" "),
       _c("transition", { attrs: { name: "slide-fade" } }, [
-        _vm.addContent
+        _vm.$page.user && _vm.$page.user.admin && _vm.addContent
           ? _c("div", { staticClass: "py-4" }, [
               _c("div", { staticClass: "max-w-7xl mx-auto sm:px-6 lg:px-8" }, [
                 _c("div", { staticClass: "w-full" }, [
@@ -102136,7 +102189,7 @@ var render = function() {
             ])
           : _vm._e(),
         _vm._v(" "),
-        _vm.addResource
+        _vm.$page.user && _vm.$page.user.admin && _vm.addResource
           ? _c("div", { staticClass: "py-4" }, [
               _c("div", { staticClass: "max-w-7xl mx-auto sm:px-6 lg:px-8" }, [
                 _c("div", { staticClass: "w-full" }, [
@@ -102628,92 +102681,96 @@ var render = function() {
                             ])
                           : _vm._e(),
                         _vm._v(" "),
-                        _c("div", { staticClass: "mt-4 flex" }, [
-                          _c(
-                            "a",
-                            {
-                              staticClass:
-                                "text-blue-500 font-semibold text-justify hover:underline cursor-pointer",
-                              on: {
-                                click: function($event) {
-                                  $event.preventDefault()
-                                  return _vm.showEditResource(resource)
-                                }
-                              }
-                            },
-                            [
-                              _vm._v(
-                                "\n                                Éditer la ressource\n                            "
+                        _vm.$page.user && _vm.$page.user.admin
+                          ? _c("div", { staticClass: "mt-4 flex" }, [
+                              _c(
+                                "a",
+                                {
+                                  staticClass:
+                                    "text-blue-500 font-semibold text-justify hover:underline cursor-pointer",
+                                  on: {
+                                    click: function($event) {
+                                      $event.preventDefault()
+                                      return _vm.showEditResource(resource)
+                                    }
+                                  }
+                                },
+                                [
+                                  _vm._v(
+                                    "\n                                Éditer la ressource\n                            "
+                                  )
+                                ]
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "a",
+                                {
+                                  staticClass:
+                                    "text-red-500 font-semibold text-justify hover:underline cursor-pointer ml-auto",
+                                  on: {
+                                    click: function($event) {
+                                      $event.preventDefault()
+                                      return _vm.removeResource(resource.uuid)
+                                    }
+                                  }
+                                },
+                                [
+                                  _vm._v(
+                                    "\n                                Retirer la ressource\n                            "
+                                  )
+                                ]
                               )
-                            ]
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "a",
-                            {
-                              staticClass:
-                                "text-red-500 font-semibold text-justify hover:underline cursor-pointer ml-auto",
-                              on: {
-                                click: function($event) {
-                                  $event.preventDefault()
-                                  return _vm.removeResource(resource.uuid)
-                                }
-                              }
-                            },
-                            [
-                              _vm._v(
-                                "\n                                Retirer la ressource\n                            "
-                              )
-                            ]
-                          )
-                        ])
+                            ])
+                          : _vm._e()
                       ])
                     }
                   ),
                   _vm._v(" "),
-                  _c("div", { staticClass: "mt-4 flex" }, [
-                    _c(
-                      "a",
-                      {
-                        staticClass:
-                          "text-blue-500 font-semibold text-justify hover:underline cursor-pointer",
-                        on: {
-                          click: function($event) {
-                            $event.preventDefault()
-                            return _vm.showEditContent(
-                              _vm.$page.contents[_vm.contentIndex]
+                  _vm.$page.user && _vm.$page.user.admin
+                    ? _c("div", { staticClass: "mt-4 flex" }, [
+                        _c(
+                          "a",
+                          {
+                            staticClass:
+                              "text-blue-500 font-semibold text-justify hover:underline cursor-pointer",
+                            on: {
+                              click: function($event) {
+                                $event.preventDefault()
+                                return _vm.showEditContent(
+                                  _vm.$page.contents[_vm.contentIndex]
+                                )
+                              }
+                            }
+                          },
+                          [
+                            _vm._v(
+                              "\n                            Éditer le contenu\n                        "
                             )
-                          }
-                        }
-                      },
-                      [
-                        _vm._v(
-                          "\n                            Éditer le contenu\n                        "
-                        )
-                      ]
-                    ),
-                    _vm._v(" "),
-                    _c(
-                      "a",
-                      {
-                        staticClass:
-                          "text-red-500 font-semibold text-justify hover:underline cursor-pointer ml-auto",
-                        on: {
-                          click: function($event) {
-                            $event.preventDefault()
-                            return _vm.removeContent(
-                              _vm.$page.contents[_vm.contentIndex].uuid
+                          ]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "a",
+                          {
+                            staticClass:
+                              "text-red-500 font-semibold text-justify hover:underline cursor-pointer ml-auto",
+                            on: {
+                              click: function($event) {
+                                $event.preventDefault()
+                                return _vm.removeContent(
+                                  _vm.$page.contents[_vm.contentIndex].uuid
+                                )
+                              }
+                            }
+                          },
+                          [
+                            _vm._v(
+                              "\n                            Retirer le contenu\n                        "
                             )
-                          }
-                        }
-                      },
-                      [
-                        _vm._v(
-                          "\n                            Retirer le contenu\n                        "
+                          ]
                         )
-                      ]
-                    )
-                  ])
+                      ])
+                    : _vm._e()
                 ],
                 2
               )
@@ -102811,7 +102868,7 @@ var render = function() {
         ])
       ]),
       _vm._v(" "),
-      _vm.editContent
+      _vm.$page.user && _vm.$page.user.admin && _vm.editContent
         ? _c(
             "div",
             {
@@ -103017,7 +103074,7 @@ var render = function() {
           )
         : _vm._e(),
       _vm._v(" "),
-      _vm.editResource
+      _vm.$page.user && _vm.$page.user.admin && _vm.editResource
         ? _c(
             "div",
             {
@@ -103704,26 +103761,28 @@ var render = function() {
     },
     [
       _vm._v(" "),
-      _c(
-        "div",
-        { staticClass: "pt-4 max-w-7xl mx-auto sm:px-6 lg:px-8 right-0" },
-        [
-          _c("div", { staticClass: "flex flex-row-reverse" }, [
-            _c(
-              "button",
-              {
-                staticClass:
-                  "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline",
-                on: { click: _vm.toggleAddCourse }
-              },
-              [_vm._v("\n                Ajouter un cours\n            ")]
-            )
-          ])
-        ]
-      ),
+      _vm.$page.user && _vm.$page.user.admin
+        ? _c(
+            "div",
+            { staticClass: "pt-4 max-w-7xl mx-auto sm:px-6 lg:px-8 right-0" },
+            [
+              _c("div", { staticClass: "flex flex-row-reverse" }, [
+                _c(
+                  "button",
+                  {
+                    staticClass:
+                      "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline",
+                    on: { click: _vm.toggleAddCourse }
+                  },
+                  [_vm._v("\n                Ajouter un cours\n            ")]
+                )
+              ])
+            ]
+          )
+        : _vm._e(),
       _vm._v(" "),
       _c("transition", { attrs: { name: "slide-fade" } }, [
-        _vm.addCourse
+        _vm.$page.user && _vm.$page.user.admin && _vm.addCourse
           ? _c("div", { staticClass: "py-4" }, [
               _c("div", { staticClass: "max-w-7xl mx-auto sm:px-6 lg:px-8" }, [
                 _c("div", { staticClass: "w-full" }, [
@@ -104170,45 +104229,47 @@ var render = function() {
                       ]
                     ),
                     _vm._v(" "),
-                    _c("div", { staticClass: "mt-4 flex" }, [
-                      _c(
-                        "a",
-                        {
-                          staticClass:
-                            "text-blue-500 font-semibold text-justify hover:underline cursor-pointer",
-                          on: {
-                            click: function($event) {
-                              $event.preventDefault()
-                              return _vm.showModal(course)
-                            }
-                          }
-                        },
-                        [
-                          _vm._v(
-                            "\n                            Éditer le cours\n                        "
+                    _vm.$page.user && _vm.$page.user.admin
+                      ? _c("div", { staticClass: "mt-4 flex" }, [
+                          _c(
+                            "a",
+                            {
+                              staticClass:
+                                "text-blue-500 font-semibold text-justify hover:underline cursor-pointer",
+                              on: {
+                                click: function($event) {
+                                  $event.preventDefault()
+                                  return _vm.showModal(course)
+                                }
+                              }
+                            },
+                            [
+                              _vm._v(
+                                "\n                            Éditer le cours\n                        "
+                              )
+                            ]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "a",
+                            {
+                              staticClass:
+                                "text-red-500 font-semibold text-justify hover:underline cursor-pointer ml-auto",
+                              on: {
+                                click: function($event) {
+                                  $event.preventDefault()
+                                  return _vm.removeCourse(course.uuid)
+                                }
+                              }
+                            },
+                            [
+                              _vm._v(
+                                "\n                            Retirer le cours\n                        "
+                              )
+                            ]
                           )
-                        ]
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "a",
-                        {
-                          staticClass:
-                            "text-red-500 font-semibold text-justify hover:underline cursor-pointer ml-auto",
-                          on: {
-                            click: function($event) {
-                              $event.preventDefault()
-                              return _vm.removeCourse(course.uuid)
-                            }
-                          }
-                        },
-                        [
-                          _vm._v(
-                            "\n                            Retirer le cours\n                        "
-                          )
-                        ]
-                      )
-                    ])
+                        ])
+                      : _vm._e()
                   ]
                 )
               ]
@@ -104217,7 +104278,7 @@ var render = function() {
         ])
       }),
       _vm._v(" "),
-      _vm.modalVisible
+      _vm.$page.user && _vm.$page.user.admin && _vm.modalVisible
         ? _c(
             "div",
             {
@@ -104713,26 +104774,32 @@ var render = function() {
     },
     [
       _vm._v(" "),
-      _c(
-        "div",
-        { staticClass: "pt-4 max-w-7xl mx-auto sm:px-6 lg:px-8 right-0" },
-        [
-          _c("div", { staticClass: "flex flex-row-reverse" }, [
-            _c(
-              "button",
-              {
-                staticClass:
-                  "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline",
-                on: { click: _vm.toggleAddLevel }
-              },
-              [_vm._v("\n                Ajouter une formation\n            ")]
-            )
-          ])
-        ]
-      ),
+      _vm.$page.user && _vm.$page.user.admin
+        ? _c(
+            "div",
+            { staticClass: "pt-4 max-w-7xl mx-auto sm:px-6 lg:px-8 right-0" },
+            [
+              _c("div", { staticClass: "flex flex-row-reverse" }, [
+                _c(
+                  "button",
+                  {
+                    staticClass:
+                      "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline",
+                    on: { click: _vm.toggleAddLevel }
+                  },
+                  [
+                    _vm._v(
+                      "\n                Ajouter une formation\n            "
+                    )
+                  ]
+                )
+              ])
+            ]
+          )
+        : _vm._e(),
       _vm._v(" "),
       _c("transition", { attrs: { name: "slide-fade" } }, [
-        _vm.addLevel
+        _vm.$page.user && _vm.$page.user.admin && _vm.addLevel
           ? _c("div", { staticClass: "py-4" }, [
               _c("div", { staticClass: "max-w-7xl mx-auto sm:px-6 lg:px-8" }, [
                 _c("div", { staticClass: "w-full" }, [
@@ -105181,45 +105248,47 @@ var render = function() {
                         )
                       : _vm._e(),
                     _vm._v(" "),
-                    _c("div", { staticClass: "mt-4 flex" }, [
-                      _c(
-                        "a",
-                        {
-                          staticClass:
-                            "text-blue-500 font-semibold text-justify hover:underline cursor-pointer",
-                          on: {
-                            click: function($event) {
-                              $event.preventDefault()
-                              return _vm.showModal(level)
-                            }
-                          }
-                        },
-                        [
-                          _vm._v(
-                            "\n                            Éditer la formation\n                        "
+                    _vm.$page.user && _vm.$page.user.admin
+                      ? _c("div", { staticClass: "mt-4 flex" }, [
+                          _c(
+                            "a",
+                            {
+                              staticClass:
+                                "text-blue-500 font-semibold text-justify hover:underline cursor-pointer",
+                              on: {
+                                click: function($event) {
+                                  $event.preventDefault()
+                                  return _vm.showModal(level)
+                                }
+                              }
+                            },
+                            [
+                              _vm._v(
+                                "\n                            Éditer la formation\n                        "
+                              )
+                            ]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "a",
+                            {
+                              staticClass:
+                                "text-red-500 font-semibold text-justify hover:underline cursor-pointer ml-auto",
+                              on: {
+                                click: function($event) {
+                                  $event.preventDefault()
+                                  return _vm.removeLevel(level.uuid)
+                                }
+                              }
+                            },
+                            [
+                              _vm._v(
+                                "\n                            Retirer la formation\n                        "
+                              )
+                            ]
                           )
-                        ]
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "a",
-                        {
-                          staticClass:
-                            "text-red-500 font-semibold text-justify hover:underline cursor-pointer ml-auto",
-                          on: {
-                            click: function($event) {
-                              $event.preventDefault()
-                              return _vm.removeLevel(level.uuid)
-                            }
-                          }
-                        },
-                        [
-                          _vm._v(
-                            "\n                            Retirer la formation\n                        "
-                          )
-                        ]
-                      )
-                    ])
+                        ])
+                      : _vm._e()
                   ]
                 )
               ]
@@ -105228,7 +105297,7 @@ var render = function() {
         ])
       }),
       _vm._v(" "),
-      _vm.modalVisible
+      _vm.$page.user && _vm.$page.user.admin && _vm.modalVisible
         ? _c(
             "div",
             {
