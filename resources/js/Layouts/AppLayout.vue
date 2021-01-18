@@ -22,10 +22,10 @@
                             <jet-nav-link :href="route('home')" :active="route().current('home')">
                                 <span class="text-base">Accueil</span>
                             </jet-nav-link>
-                            <jet-nav-link :href="route('dashboard')" :active="route().current('dashboard')">
+                            <jet-nav-link :href="route('dashboard.index')" :active="route().current('dashboard.index')">
                                 <span class="text-base">Produits / Services</span>
                             </jet-nav-link>
-                            <jet-nav-link :href="route('dashboard')" :active="route().current('dashboard')">
+                            <jet-nav-link :href="route('dashboard.index')" :active="route().current('dashboard.index')">
                                 <span class="text-base">Contact</span>
                             </jet-nav-link>
                         </div>
@@ -74,7 +74,7 @@
                                             Profil
                                         </jet-dropdown-link>
 
-                                        <jet-dropdown-link v-if="$page.user && $page.user.admin" :href="route('profile.show')">
+                                        <jet-dropdown-link v-if="$page.user && $page.user.admin" :href="route('dashboard.index')">
                                             Dashboard
                                         </jet-dropdown-link>
 
@@ -114,10 +114,10 @@
                     <jet-responsive-nav-link :href="route('home')" :active="route().current('home')">
                         Accueil
                     </jet-responsive-nav-link>
-                    <jet-responsive-nav-link :href="route('dashboard')" :active="route().current('dashboard')">
+                    <jet-responsive-nav-link :href="route('dashboard.index')" :active="route().current('dashboard.index')">
                         Produits / Services
                     </jet-responsive-nav-link>
-                    <jet-responsive-nav-link :href="route('dashboard')" :active="route().current('dashboard')">
+                    <jet-responsive-nav-link :href="route('dashboard.index')" :active="route().current('dashboard.index')">
                         Contact
                     </jet-responsive-nav-link>
                     <inertia-link :href="route('home')">
@@ -152,7 +152,7 @@
                             Profil
                         </jet-responsive-nav-link>
 
-                        <jet-responsive-nav-link v-if="$page.user && $page.user.admin" :href="route('profile.show')" :active="route().current('profile.show')">
+                        <jet-responsive-nav-link v-if="$page.user && $page.user.admin" :href="route('dashboard.index')" :active="route().current('profile.show')">
                             Dashboard
                         </jet-responsive-nav-link>
 

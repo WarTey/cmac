@@ -17,7 +17,8 @@
         "laravel/jetstream": "^1.5",
         "laravel/sanctum": "^2.6",
         "laravel/tinker": "^2.5",
-        "tightenco/ziggy": "^0.9.4"
+        "tightenco/ziggy": "^0.9.4",
+        "yadahan/laravel-authentication-log": "^1.4"
     },
     "require-dev": {
         "barryvdh/laravel-ide-helper": "^2.8",
