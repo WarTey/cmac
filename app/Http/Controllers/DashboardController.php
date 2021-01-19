@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Log;
-use App\Models\User;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use JamesDordoy\LaravelVueDatatable\Http\Resources\DataTableCollectionResource;
+use Yadahan\AuthenticationLog\AuthenticationLog;
 
 class DashboardController extends Controller
 {
@@ -15,17 +14,22 @@ class DashboardController extends Controller
         return Inertia::render('Dashboard/Index');
     }
 
-    /*public function logs(Request $request)
-    {
+    public function logs(Request $request) {
         $length = $request->input('length');
-        $sortBy = $request->input('column');
-        $orderBy = $request->input('dir');
+        $orderBy = $request->input('column');
+        $orderByDir = $request->input('dir', 'asc');
         $searchValue = $request->input('search');
 
-        $data = Log::select('description', 'user_id', 'created_at')->orderBy('created_at', 'desc')->with('user', function ($query, $sortBy, $orderBy) {
-            $query->select('id', 'name', 'email')->orderBy($sortBy, $orderBy)->first();
-        })->paginate($length);
+        $logs = AuthenticationLog::join('users', 'users.id', '=', 'authentication_log.authenticatable_id')
+            ->select('users.name', 'users.email', 'users.admin', 'authentication_log.ip_address', 'authentication_log.login_at')
+            ->where('users.name', 'like', '%' . $searchValue . '%')
+            ->orWhere('users.email', 'like', '%' . $searchValue . '%')
+            ->orWhere('users.admin', 'like', '%' . $searchValue . '%')
+            ->orWhere('authentication_log.ip_address', 'like', '%' . $searchValue . '%')
+            ->orWhere('authentication_log.login_at', 'like', '%' . $searchValue . '%')
+            ->orderBy($orderBy, $orderByDir)
+            ->paginate($length);
 
-        return new DataTableCollectionResource($data);
-    }*/
+        return new DataTableCollectionResource($logs);
+    }
 }

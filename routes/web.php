@@ -30,7 +30,7 @@ Route::middleware(['auth', 'verified'])->group(function() {
 
 Route::middleware(['auth', 'admin', 'verified'])->group(function() {
     Route::get('/dashboard', 'App\Http\Controllers\DashboardController@index')->name('dashboard.index');
-    //Route::get('/api/dashboard/logs', 'App\Http\Controllers\DashboardController@logs')->name('dashboard.logs');
+    Route::get('/api/dashboard/logs', 'App\Http\Controllers\DashboardController@logs')->name('dashboard.logs');
 
     Route::post('/formation/store', 'App\Http\Controllers\LevelController@store')->name('levels.store');
     Route::post('/chapter/store', 'App\Http\Controllers\ChapterController@store')->name('chapters.store');
