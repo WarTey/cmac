@@ -96,6 +96,20 @@
                                 <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="position" v-model="createForm.position" type="number" min="0" placeholder="0">
                                 <p class="text-red-700 mt-2" v-if="$page.errors.positionStore">{{ $page.errors.positionStore[0] }}</p>
                             </div>
+                            <div class="mb-2 flex flex-col">
+                                <label>
+                                    <input type="radio" class="form-radio" name="accountType" value="0" v-model="createForm.option">
+                                    <span class="ml-2">Comportement normal</span>
+                                </label>
+                                <label>
+                                    <input type="radio" class="form-radio" name="accountType" value="1" v-model="createForm.option">
+                                    <span class="ml-2">Supprimer le cours à la même position</span>
+                                </label>
+                                <label>
+                                    <input type="radio" class="form-radio" name="accountType" value="2" v-model="createForm.option">
+                                    <span class="ml-2">Décaler le cours à la même position</span>
+                                </label>
+                            </div>
                             <div class="mb-4">
                                 <label class="block text-gray-700 text-sm font-bold mb-2">
                                     PDF (optionnel)
@@ -279,6 +293,20 @@
                     <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="edit-position-resource" v-model="editForm.position" type="number" min="0" placeholder="0">
                     <p class="text-red-700 mt-2" v-if="$page.errors.positionEdit">{{ $page.errors.positionEdit[0] }}</p>
                 </div>
+                <div class="mb-2 flex flex-col">
+                    <label>
+                        <input type="radio" class="form-radio" name="accountType" value="0" v-model="editForm.option">
+                        <span class="ml-2">Comportement normal</span>
+                    </label>
+                    <label>
+                        <input type="radio" class="form-radio" name="accountType" value="1" v-model="editForm.option">
+                        <span class="ml-2">Supprimer le cours à la même position</span>
+                    </label>
+                    <label>
+                        <input type="radio" class="form-radio" name="accountType" value="2" v-model="editForm.option">
+                        <span class="ml-2">Décaler le cours à la même position</span>
+                    </label>
+                </div>
                 <div class="mb-4">
                     <label class="block text-gray-700 text-sm font-bold mb-2">
                         PDF (optionnel)
@@ -383,7 +411,8 @@ export default {
                 description: null,
                 file: null,
                 video: null,
-                position: null
+                position: null,
+                option: null
             },
             editForm: {
                 uuid: null,
@@ -391,7 +420,8 @@ export default {
                 description: null,
                 file: null,
                 video: null,
-                position: null
+                position: null,
+                option: null
             },
             editFile: null,
             editVideo: null
@@ -453,6 +483,9 @@ export default {
             }
             if (this.createForm.position) {
                 formData.append('positionStore', this.createForm.position);
+            }
+            if (this.createForm.option) {
+                formData.append('optionStore', this.createForm.option);
             }
             formData.append('contentUuid', this.contents[this.contentIndex].uuid);
             formData.append('courseUuid', this.courseUuid);
@@ -570,6 +603,9 @@ export default {
             if (this.editForm.position) {
                 formData.append('positionEdit', this.editForm.position);
             }
+            if (this.editForm.option) {
+                formData.append('optionEdit', this.editForm.option);
+            }
             formData.append('courseUuid', this.courseUuid);
 
             this.$inertia.post('/resource/edit', formData);
@@ -608,6 +644,7 @@ export default {
             this.editForm.title = content && content.title ? content.title : null;
             this.editForm.description = content && content.description ? content.description : null;
             this.editForm.position = content && content.position ? content.position : null;
+            this.editForm.option = content && content.option ? content.option : null;
             this.editFile = content && content.file ? content.file : null;
             this.editVideo = content && content.video ? content.video : null;
         },

@@ -42,6 +42,10 @@ class ResourceController extends Controller
 
         $resource->save();
 
+        if ($request->post('optionStore')) {
+            $this->editPosition($request->post('positionStore'), $request->post('optionStore'), $resource->uuid);
+        }
+
         return Redirect::route('contents.index', ['uuid' => $request->post('courseUuid')])->with('successStore', 'Ressource en ligne.');
     }
 
@@ -68,6 +72,10 @@ class ResourceController extends Controller
         ]);
 
         $resource = Resource::where('uuid', $request->post('uuid'))->first();
+
+        if ($request->post('optionEdit')) {
+            $this->editPosition($request->post('positionEdit'), $request->post('optionEdit'), $resource->uuid);
+        }
 
         if ($request->file('fileEdit'))
         {
@@ -113,5 +121,27 @@ class ResourceController extends Controller
         ]);
 
         return Redirect::route('contents.index', ['uuid' => $request->post('courseUuid')])->with('successEdit', 'Ressource mise à jour.');
+    }
+
+    public function editPosition($position, $option, $uuid) {
+        if ($option == 1) {
+            $element = Resource::where([
+                ['uuid', '!=', $uuid],
+                ['position', '=', $position],
+            ])->first();
+            if ($element) {
+                $element->delete();
+            }
+        } else if ($option == 2) {
+            $ressources = Resource::where([
+                ['uuid', '!=', $uuid],
+                ['position', '>=', $position],
+            ])->get();
+            foreach ($ressources as $element) {
+                $element->update([
+                    'position' => $element->position + 1
+                ]);
+            }
+        }
     }
 }
