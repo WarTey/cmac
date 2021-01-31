@@ -22,6 +22,12 @@ Route::get('/formation/{uuid}', 'App\Http\Controllers\ChapterController@index')-
 Route::get('/chapitre/{uuid}', 'App\Http\Controllers\CourseController@index')->name('courses.index');
 
 Route::middleware(['auth', 'verified'])->group(function() {
+    Route::get('/profils', 'App\Http\Controllers\ProfileController@index')->name('profiles.index');
+    Route::post('/profils/select', 'App\Http\Controllers\ProfileController@select')->name('profiles.select');
+    Route::post('/profils/edit', 'App\Http\Controllers\ProfileController@edit')->name('profiles.edit');
+    Route::post('/profils/create', 'App\Http\Controllers\ProfileController@create')->name('profiles.create');
+    Route::post('/profils/delete', 'App\Http\Controllers\ProfileController@delete')->name('profiles.delete');
+
     Route::get('/cours/{uuid}', 'App\Http\Controllers\ContentController@index')->name('contents.index');
 
     Route::post('/completed/edit', 'App\Http\Controllers\ContentUserController@store')->name('contentUser.edit');

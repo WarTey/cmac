@@ -71,7 +71,7 @@
                                         </div>
 
                                         <jet-dropdown-link :href="route('profile.show')">
-                                            Profil
+                                            Mon compte
                                         </jet-dropdown-link>
 
                                         <jet-dropdown-link v-if="$page.user && $page.user.admin" :href="route('dashboard.index')">
@@ -149,7 +149,7 @@
 
                     <div class="mt-3 space-y-1">
                         <jet-responsive-nav-link :href="route('profile.show')" :active="route().current('profile.show')">
-                            Profil
+                            Mon compte
                         </jet-responsive-nav-link>
 
                         <jet-responsive-nav-link v-if="$page.user && $page.user.admin" :href="route('dashboard.index')" :active="route().current('profile.show')">
@@ -505,7 +505,7 @@ export default {
                 email: this.userForm.email,
                 password: this.userForm.password
             }).then(() => {
-                location.reload();
+                window.location = '/profils';
             }).catch((err) => {
                 this.userError = err.response.data.errors;
             });
@@ -518,7 +518,7 @@ export default {
                 password: this.userForm.password,
                 password_confirmation: this.userForm.passwordConfirmation
             }).then(() => {
-                location.reload();
+                window.location = '/profils';
             }).catch((err) => {
                 this.userError = err.response.data.errors;
             });

@@ -14,7 +14,8 @@ module.exports = {
                 sans: ['Nunito', ...defaultTheme.fontFamily.sans],
             },
             backgroundImage: theme => ({
-                'general-texture': "url('/img/bg.webp')"
+                'general-texture': "url('/img/bg.webp')",
+                'add-profile': "url('/storage/profiles/add.png')"
             })
         },
         maxHeight: {
