@@ -209,7 +209,7 @@
                     </div>
                 </div>
                 <div class="pt-5 text-center flex">
-                    <button v-if="$page.contents[contentIndex].users_count === 0" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline ml-auto" v-on:click="editCompleted($page.contents[contentIndex])">
+                    <button v-if="$page.contents[contentIndex].profiles_count === 0" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline ml-auto" v-on:click="editCompleted($page.contents[contentIndex])">
                         J'ai terminé
                     </button>
                     <button v-else class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline ml-auto" v-on:click="editCompleted($page.contents[contentIndex])">
@@ -663,7 +663,7 @@ export default {
             formData.append('contentUuid', content.uuid);
             formData.append('courseUuid', this.courseUuid);
 
-            this.$inertia.post(content.users_count > 0 ? '/completed/delete' : '/completed/edit', formData);
+            this.$inertia.post(content.profiles_count > 0 ? '/completed/delete' : '/completed/edit', formData);
         }
     }
 }

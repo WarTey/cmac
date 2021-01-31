@@ -3,12 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\Content;
+use App\Models\Profile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 
 class ContentUserController extends Controller
 {
-    public function store(Request $request)
+    public function edit(Request $request)
     {
         $request->validate([
             'contentUuid' => 'required|string',
@@ -16,9 +17,10 @@ class ContentUserController extends Controller
         ]);
 
         $content = Content::where('uuid', $request->post('contentUuid'))->first();
-        $user = Content::where('id', auth()->user()->id)->first();
+        //$user = Content::where('id', auth()->user()->id)->first();
+        $profile = Profile::where('user_id', auth()->user()->id)->where('active', true)->first();
 
-        $content->users()->attach($user);
+        $content->profiles()->attach($profile);
 
         return Redirect::route('contents.index', ['uuid' => $request->post('courseUuid')])->with('toast', 'Félicitation!');
     }
@@ -31,9 +33,10 @@ class ContentUserController extends Controller
         ]);
 
         $content = Content::where('uuid', $request->post('contentUuid'))->first();
-        $user = Content::where('id', auth()->user()->id)->first();
+        //$user = Content::where('id', auth()->user()->id)->first();
+        $profile = Profile::where('user_id', auth()->user()->id)->where('active', true)->first();
 
-        $content->users()->detach($user);
+        $content->profiles()->detach($profile);
 
         return Redirect::route('contents.index', ['uuid' => $request->post('courseUuid')]);
     }

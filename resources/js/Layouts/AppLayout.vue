@@ -185,48 +185,40 @@
             <div class="flex-grow">
                 <div v-for="(level, index) in copySidebarItems" :key="index">
                     <span class="flex items-center py-1 px-2 mx-auto text-base">
-                        <span class="mr-2" v-if="level['chapters'] && level['chapters'].length > 0">
+                        <span class="mr-4">-</span>
+                        <a :href="'/formation/' + level.uuid" class="mr-2 text-gray-500 hover:text-gray-700 cursor-pointer hover:underline">
+                            {{ level.title }}
+                        </a>
+                        <span v-if="level['chapters'] && level['chapters'].length > 0" class="ml-auto">
                             <i v-if="!level['unrolled']" class="fas fa-chevron-right text-gray-500 hover:text-gray-700 cursor-pointer" v-on:click="dropMenu(level)"></i>
                             <i v-else class="fas fa-chevron-down text-gray-500 hover:text-gray-700 cursor-pointer" v-on:click="dropMenu(level)"></i>
                         </span>
-                        <span class="mr-2" v-else>
-                            <i class="fas fa-caret-right fa-lg text-gray-500"></i>
-                        </span>
-                        <a :href="'/formation/' + level.uuid" class="text-gray-500 hover:text-gray-700 cursor-pointer hover:underline">
-                            {{ level.title }}
-                        </a>
                     </span>
                     <div v-if="level['unrolled']" v-for="(chapter, index) in level['chapters']" :key="index">
                         <span class="flex items-center py-1 pr-2 pl-8 mx-auto text-base">
-                            <span class="mr-2" v-if="chapter['courses'] && chapter['courses'].length > 0">
-                                <i v-if="!chapter['unrolled']" class="fas fa-chevron-right text-gray-500 hover:text-gray-700 cursor-pointer" v-on:click="dropMenu(chapter)"></i>
-                                <i v-else class="fas fa-chevron-down text-gray-500 hover:text-gray-700 cursor-pointer" v-on:click="dropMenu(chapter)"></i>
-                            </span>
-                            <span class="mr-2" v-else>
-                                <i class="fas fa-caret-right fa-lg text-gray-500"></i>
-                            </span>
+                            <span class="mr-4">-</span>
                             <a :href="'/chapitre/' + chapter.uuid" class="text-gray-500 hover:text-gray-700 cursor-pointer hover:underline">
                                 {{ chapter.title }}
                             </a>
+                            <span v-if="chapter['courses'] && chapter['courses'].length > 0" class="ml-auto">
+                                <i v-if="!chapter['unrolled']" class="fas fa-chevron-right text-gray-500 hover:text-gray-700 cursor-pointer" v-on:click="dropMenu(chapter)"></i>
+                                <i v-else class="fas fa-chevron-down text-gray-500 hover:text-gray-700 cursor-pointer" v-on:click="dropMenu(chapter)"></i>
+                            </span>
                         </span>
                         <div v-if="chapter['unrolled']" v-for="(course, index) in chapter['courses']" :key="index">
                             <span class="flex items-center py-1 pr-2 pl-14 mx-auto text-base">
-                                <span class="mr-2" v-if="course['contents'] && course['contents'].length > 0">
-                                    <i v-if="!course['unrolled']" class="fas fa-chevron-right text-gray-500 hover:text-gray-700 cursor-pointer" v-on:click="dropMenu(course)"></i>
-                                    <i v-else class="fas fa-chevron-down text-gray-500 hover:text-gray-700 cursor-pointer" v-on:click="dropMenu(course)"></i>
-                                </span>
-                                <span class="mr-2" v-else>
-                                    <i class="fas fa-caret-right fa-lg text-gray-500"></i>
-                                </span>
+                                <span class="mr-4">-</span>
                                 <a :href="'/cours/' + course.uuid" class="text-gray-500 hover:text-gray-700 cursor-pointer hover:underline">
                                     {{ course.title }}
                                 </a>
+                                <span v-if="course['contents'] && course['contents'].length > 0" class="ml-auto">
+                                    <i v-if="!course['unrolled']" class="fas fa-chevron-right text-gray-500 hover:text-gray-700 cursor-pointer" v-on:click="dropMenu(course)"></i>
+                                    <i v-else class="fas fa-chevron-down text-gray-500 hover:text-gray-700 cursor-pointer" v-on:click="dropMenu(course)"></i>
+                                </span>
                             </span>
                             <div v-if="course['unrolled']" v-for="(content, index) in course['contents']" :key="index">
                                 <span class="flex items-center py-1 pr-2 pl-20 mx-auto text-base">
-                                    <span class="mr-2">
-                                        <i class="fas fa-caret-right fa-lg text-gray-500"></i>
-                                    </span>
+                                    <span class="mr-4">-</span>
                                     <span class="text-gray-500 hover:text-gray-700 cursor-pointer hover:underline">
                                         {{ content.title }}
                                     </span>

@@ -19,7 +19,7 @@ class ContentController extends Controller
 
         $contents = Content::where('course_id', $course->id)->orderBy('position')->with('resources', function ($query) {
             $query->orderBy('position');
-        })->withCount('users')->get();
+        })->withCount('profiles')->get();
 
         $chapter = Chapter::select('uuid', 'title', 'level_id')->where('id', $course->chapter_id)->first();
 

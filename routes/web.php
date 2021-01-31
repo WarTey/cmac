@@ -30,7 +30,7 @@ Route::middleware(['auth', 'verified'])->group(function() {
 
     Route::get('/cours/{uuid}', 'App\Http\Controllers\ContentController@index')->name('contents.index');
 
-    Route::post('/completed/edit', 'App\Http\Controllers\ContentUserController@store')->name('contentUser.edit');
+    Route::post('/completed/edit', 'App\Http\Controllers\ContentUserController@edit')->name('contentUser.edit');
     Route::post('/completed/delete', 'App\Http\Controllers\ContentUserController@delete')->name('contentUser.delete');
 });
 

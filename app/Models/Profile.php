@@ -17,4 +17,9 @@ class Profile extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function contents()
+    {
+        return $this->belongsToMany(Content::class);
+    }
 }

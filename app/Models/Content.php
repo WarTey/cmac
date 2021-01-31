@@ -38,8 +38,8 @@ class Content extends Model
         return $this->hasMany(Resource::class);
     }
 
-    public function users()
+    public function profiles()
     {
-        return $this->belongsToMany(User::class)->where('user_id', auth()->user()->id);
+        return $this->belongsToMany(Profile::class)->where('user_id', auth()->user()->id)->where('active', true);
     }
 }
