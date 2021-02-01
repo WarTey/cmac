@@ -167,12 +167,12 @@
                 </div>
             </div>
         </transition>
-        <div class="pt-4">
+        <div class="pt-4" v-if="$page.contents.length > 0">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <progress-bar :name="$page.contents[contentIndex].title" :contents="$page.contents" :contentIndex="contentIndex" @updateContentIndex="updateContentIndex" />
             </div>
         </div>
-        <div class="py-4">
+        <div class="py-4" v-if="$page.contents.length > 0">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white overflow-hidden shadow-lg hover:shadow-xl rounded-lg transition duration-500 ease-in-out">
                     <div class="p-6 sm:px-20 bg-white border-b border-gray-200">

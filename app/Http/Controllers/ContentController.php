@@ -7,6 +7,7 @@ use App\Models\Content;
 use App\Models\Course;
 use App\Models\Level;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Validation\Rule;
 use Inertia\Inertia;
@@ -15,11 +16,19 @@ class ContentController extends Controller
 {
     public function index(string $uuid)
     {
-        $course = Course::select('id', 'uuid', 'title', 'chapter_id')->where('uuid', $uuid)->first();
+        $course = Course::select('id', 'uuid', 'title', 'chapter_id')->where('uuid', $uuid)->where('visible', true)->first();
+
+        if (!$course) {
+            return abort(404);
+        }
 
         $contents = Content::where('course_id', $course->id)->orderBy('position')->with('resources', function ($query) {
             $query->orderBy('position');
         })->withCount('profiles')->get();
+
+        if (count($contents) === 0 && Auth::user()->admin === 0) {
+            return abort(404);
+        }
 
         $chapter = Chapter::select('uuid', 'title', 'level_id')->where('id', $course->chapter_id)->first();
 

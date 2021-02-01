@@ -27,6 +27,7 @@ class CourseFactory extends Factory
             'title' => $this->faker->sentence(),
             'description' => $this->faker->paragraphs(2, true),
             'position' => $this->faker->numberBetween(0, 100),
+            'price' => $this->faker->numberBetween(0, 20),
             'chapter_id' => Chapter::all()->random()->id
         ];
     }

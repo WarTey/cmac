@@ -48,6 +48,23 @@
                                 <p class="text-red-700 mt-2" v-if="$page.errors.positionStore">{{ $page.errors.positionStore[0] }}</p>
                             </div>
                             <div class="mb-4">
+                                <label class="block text-gray-700 text-sm font-bold mb-2" for="price">
+                                    Prix
+                                </label>
+                                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="price" v-model="createForm.price" type="number" min="0" step="0.01" placeholder="0.0">
+                                <p class="text-red-700 mt-2" v-if="$page.errors.priceStore">{{ $page.errors.priceStore[0] }}</p>
+                            </div>
+                            <div class="mb-2 flex flex-col">
+                                <label>
+                                    <input type="radio" class="form-radio" name="visibility" value="0" v-model="createForm.visibility">
+                                    <span class="ml-2">Cours indisponible</span>
+                                </label>
+                                <label>
+                                    <input type="radio" class="form-radio" name="visibility" value="1" v-model="createForm.visibility">
+                                    <span class="ml-2">Cours disponible</span>
+                                </label>
+                            </div>
+                            <div class="mb-4">
                                 <label class="block text-gray-700 text-sm font-bold mb-2">
                                     Image (optionnel)
                                 </label>
@@ -81,16 +98,27 @@
                 </div>
             </div>
         </transition>
-        <div class="py-4" v-for="course in $page.courses" v-bind:key="course.uuid">
+        <div class="py-4" v-for="course in $page.courses" v-bind:key="course.uuid" v-if="$page.user && (($page.user.admin && course.contents_count >= 0) || course.contents_count > 0)">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white overflow-hidden shadow-lg hover:shadow-xl rounded-lg transition duration-500 ease-in-out">
                     <div v-if="course.image" class="h-20 bg-auto bg-center" :style="'background-image: url(/storage/img/courses/' + course.image + ')'"></div>
-                    <div class="p-6 sm:px-20 bg-white border-b border-gray-200">
+                    <div v-bind:class="{ 'bg-gray-300 cursor-pointer': course.price > 0 && $page.user.admin === 0 }" class="p-6 sm:px-20 bg-white border-b border-gray-200">
+                        <div v-if="course.price > 0 && $page.user.admin === 0" class="flex flex-col items-center text-2xl">
+                            <i class="fas fa-lock absolute text-center">
+                                <p class="mt-4">
+                                    Prix du cours : {{ course.price }}€
+                                </p>
+                            </i>
+                        </div>
                         <div class="flex justify-between items-center">
-                            <a v-if="course.contents_count < 1" href="#" class="text-2xl hover:underline">
+                            <a v-if="course.contents_count >= 0 && $page.user.admin" :href="'/cours/' + course.uuid" class="text-2xl hover:underline">
                                 {{ course.title }}
                             </a>
-                            <a v-else :href="'/cours/' + course.uuid" class="text-2xl hover:underline">
+                            <!-- TODO : Add price / profile check -->
+                            <a v-else-if="course.contents_count > 0" :href="'/cours/' + course.uuid" class="text-2xl hover:underline">
+                                {{ course.title }}
+                            </a>
+                            <a v-else href="#" class="text-2xl">
                                 {{ course.title }}
                             </a>
                             <div class="text-gray-400">
@@ -135,6 +163,23 @@
                     </label>
                     <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="edit-position" v-model="editForm.position" type="number" min="0" placeholder="0">
                     <p class="text-red-700 mt-2" v-if="$page.errors.positionEdit">{{ $page.errors.positionEdit[0] }}</p>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="price">
+                        Prix
+                    </label>
+                    <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="edit-price" v-model="editForm.price" type="number" min="0" step="0.01" placeholder="0.0">
+                    <p class="text-red-700 mt-2" v-if="$page.errors.priceEdit">{{ $page.errors.priceEdit[0] }}</p>
+                </div>
+                <div class="mb-2 flex flex-col">
+                    <label>
+                        <input type="radio" class="form-radio" name="visibility" value="0" v-model="editForm.visibility">
+                        <span class="ml-2">Cours indisponible</span>
+                    </label>
+                    <label>
+                        <input type="radio" class="form-radio" name="visibility" value="1" v-model="editForm.visibility">
+                        <span class="ml-2">Cours disponible</span>
+                    </label>
                 </div>
                 <div class="mb-4">
                     <label class="block text-gray-700 text-sm font-bold mb-2">
@@ -202,13 +247,17 @@ export default {
                 title: null,
                 description: null,
                 position: null,
+                price: null,
+                visibility: null,
                 image: null
             },
             editForm: {
                 uuid: null,
                 title: null,
                 description: null,
-                position: null
+                position: null,
+                price: null,
+                visibility: null,
             },
             editImage: null
         }
@@ -241,6 +290,12 @@ export default {
             }
             if (this.createForm.position) {
                 formData.append('positionStore', this.createForm.position);
+            }
+            if (this.createForm.price) {
+                formData.append('priceStore', this.createForm.price);
+            }
+            if (this.createForm.visibility) {
+                formData.append('visibilityStore', this.createForm.visibility);
             }
             if (this.createForm.image) {
                 formData.append('imageStore', this.createForm.image);
@@ -299,6 +354,12 @@ export default {
             if (this.editForm.position) {
                 formData.append('positionEdit', this.editForm.position);
             }
+            if (this.editForm.price) {
+                formData.append('priceEdit', this.editForm.price);
+            }
+            if (this.editForm.visibility) {
+                formData.append('visibilityEdit', this.editForm.visibility);
+            }
             if (this.editImage) {
                 formData.append('imageEdit', this.editImage);
             }
@@ -326,6 +387,8 @@ export default {
             this.editForm.title = course ? course.title : null;
             this.editForm.description = course ? course.description : null;
             this.editForm.position = course ? course.position : null;
+            this.editForm.price = course ? course.price : null;
+            this.editForm.visibility = course ? course.visible : null;
             this.editImage = course ? course.image : null;
         },
 

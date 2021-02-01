@@ -6,6 +6,7 @@ use App\Models\Chapter;
 use App\Models\Course;
 use App\Models\Level;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Validation\Rule;
 use Inertia\Inertia;
@@ -16,7 +17,11 @@ class CourseController extends Controller
     {
         $chapter = Chapter::select('id', 'uuid', 'title', 'level_id')->where('uuid', $uuid)->first();
 
-        $courses = Course::where('chapter_id', $chapter->id)->orderBy('position')->withCount('contents')->get();
+        $courses = Course::where('chapter_id', $chapter->id)->orderBy('position')->where('visible', true)->withCount('contents')->get();
+
+        if (count($courses) === 0 && Auth::user()->admin === 0) {
+            return abort(404);
+        }
 
         $level = Level::select('uuid', 'title')->where('id', $chapter->level_id)->first();
 
@@ -34,6 +39,8 @@ class CourseController extends Controller
             'titleStore' => 'required|unique:courses,title|max:100',
             'descriptionStore' => 'nullable|max:2048',
             'positionStore' => 'required|integer|min:0',
+            'priceStore' => 'required|numeric|min:0',
+            'visibilityStore' => 'nullable|boolean',
             'imageStore' => 'nullable|image|mimes:jpg,png,jpeg|max:2048',
             'chapterUuid' => 'required'
         ]);
@@ -42,6 +49,11 @@ class CourseController extends Controller
         $course->title = $request->post('titleStore');
         $course->description = $request->post('descriptionStore');
         $course->position = $request->post('positionStore');
+        $course->price = $request->post('priceStore');
+        if ($request->post('visibilityStore'))
+        {
+            $course->visible = $request->post('visibilityStore');
+        }
         $course->chapter_id = Chapter::where('uuid', $request->post('chapterUuid'))->first()->id;
 
         if ($request->file('imageStore'))
@@ -66,6 +78,8 @@ class CourseController extends Controller
             ],
             'descriptionEdit' => 'nullable|max:2048',
             'positionEdit' => 'required|integer|min:0',
+            'priceEdit' => 'required|numeric|min:0',
+            'visibilityEdit' => 'nullable|boolean',
             'chapterUuid' => 'required'
         ]);
 
@@ -91,6 +105,11 @@ class CourseController extends Controller
         }
 
         $course->position = $request->post('positionEdit');
+        $course->price = $request->post('priceEdit');
+        if ($request->post('visibilityEdit'))
+        {
+            $course->visible = $request->post('visibilityEdit');
+        }
 
         $course->update([
             'title' => $request->post('titleEdit'),

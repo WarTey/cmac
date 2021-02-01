@@ -35,6 +35,6 @@ class Chapter extends Model
 
     public function courses()
     {
-        return $this->hasMany(Course::class);
+        return $this->hasMany(Course::class)->where('visible', true);
     }
 }

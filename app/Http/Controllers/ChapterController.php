@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Chapter;
 use App\Models\Level;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Validation\Rule;
 use Inertia\Inertia;
@@ -16,6 +17,10 @@ class ChapterController extends Controller
         $level = Level::select('id', 'uuid', 'title')->where('uuid', $uuid)->first();
 
         $chapters = Chapter::where('level_id', $level->id)->orderBy('position')->withCount('courses')->get();
+
+        if (count($chapters) === 0 && Auth::user()->admin === 0) {
+            return abort(404);
+        }
 
         return Inertia::render('Chapters/Index', [
             'chapters' => $chapters,
