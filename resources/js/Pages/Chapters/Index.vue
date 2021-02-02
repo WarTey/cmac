@@ -77,7 +77,7 @@
                 </div>
             </div>
         </transition>
-        <div class="py-4" v-for="chapter in $page.chapters" v-bind:key="chapter.uuid" v-if="$page.user && (($page.user.admin && chapter.courses_count >= 0) || chapter.courses_count > 0)">
+        <div class="py-4" v-for="chapter in $page.chapters" v-bind:key="chapter.uuid">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white overflow-hidden shadow-lg hover:shadow-xl rounded-lg transition duration-500 ease-in-out">
                     <div v-if="chapter.image" class="h-20 bg-auto bg-center" :style="'background-image: url(/storage/img/chapters/' + chapter.image + ')'"></div>
@@ -89,9 +89,9 @@
                             <a v-else-if="chapter.courses_count > 0" :href="'/chapitre/' + chapter.uuid" class="text-2xl hover:underline">
                                 {{ chapter.title }}
                             </a>
-                            <a v-else href="#" class="text-2xl">
+                            <div v-else class="text-2xl">
                                 {{ chapter.title }}
-                            </a>
+                            </div>
                             <div class="text-gray-400">
                                 {{ chapter.courses_count }} sous-chapitres
                             </div>

@@ -37,4 +37,9 @@ class Course extends Model
     {
         return $this->hasMany(Content::class);
     }
+
+    public function profiles()
+    {
+        return $this->belongsToMany(Profile::class)->where('user_id', auth()->user()->id)->where('active', true);
+    }
 }

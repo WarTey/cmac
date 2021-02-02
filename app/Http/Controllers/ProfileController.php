@@ -69,7 +69,14 @@ class ProfileController extends Controller
             'active' => true
         ]);
 
-        return Redirect::route('levels.index');
+        if (Auth::user()->admin == 1)
+        {
+            return Redirect::route('dashboard.index');
+        }
+        else
+        {
+            return Redirect::route('levels.index');
+        }
     }
 
     private function resetActiveProfiles() {

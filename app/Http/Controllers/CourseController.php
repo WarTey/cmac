@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Chapter;
 use App\Models\Course;
 use App\Models\Level;
+use App\Models\Profile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
@@ -129,5 +130,26 @@ class CourseController extends Controller
         Course::where('uuid', $request->post('uuid'))->first()->delete();
 
         return Redirect::route('courses.index', ['uuid' => $request->post('chapterUuid')])->with('toast', 'Cours supprimé.');
+    }
+
+    public function buy(Request $request)
+    {
+        $request->validate([
+            'uuid' => 'required|string',
+            'chapterUuid' => 'required|string'
+        ]);
+
+        $course = Course::where('uuid', $request->post('uuid'))->first();
+        $profile = Profile::where('user_id', auth()->user()->id)->where('active', true)->first();
+
+        $course->profiles()->attach($profile);
+
+        $chapter = Chapter::select('id', 'uuid', 'title', 'level_id')->where('uuid', $request->post('chapterUuid'))->first();
+        $courses = Course::where('chapter_id', $chapter->id)->orderBy('position')->where('visible', true)->withCount('contents')->get();
+
+        return [
+            'success' => true,
+            'courses' => $courses
+        ];
     }
 }

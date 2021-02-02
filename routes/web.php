@@ -32,11 +32,16 @@ Route::middleware(['auth', 'verified'])->group(function() {
 
     Route::post('/completed/edit', 'App\Http\Controllers\ContentUserController@edit')->name('contentUser.edit');
     Route::post('/completed/delete', 'App\Http\Controllers\ContentUserController@delete')->name('contentUser.delete');
+
+    Route::post('/stripe', 'App\Http\Controllers\StripeController@index')->name('stripe.index');
+    Route::post('/stripe/buy', 'App\Http\Controllers\CourseController@buy')->name('course.buy');
 });
 
 Route::middleware(['auth', 'admin', 'verified'])->group(function() {
     Route::get('/dashboard', 'App\Http\Controllers\DashboardController@index')->name('dashboard.index');
     Route::get('/api/dashboard/logs', 'App\Http\Controllers\DashboardController@logs')->name('dashboard.logs');
+    Route::get('/api/dashboard/courses', 'App\Http\Controllers\DashboardController@courses')->name('dashboard.courses');
+    Route::post('/api/dashboard/courses/edit', 'App\Http\Controllers\DashboardController@editCourse')->name('dashboard.editCourse');
 
     Route::post('/formation/store', 'App\Http\Controllers\LevelController@store')->name('levels.store');
     Route::post('/chapter/store', 'App\Http\Controllers\ChapterController@store')->name('chapters.store');

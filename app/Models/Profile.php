@@ -22,4 +22,9 @@ class Profile extends Model
     {
         return $this->belongsToMany(Content::class);
     }
+
+    public function courses()
+    {
+        return $this->belongsToMany(Course::class);
+    }
 }

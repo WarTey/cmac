@@ -12,12 +12,10 @@ class ContentUserController extends Controller
     public function edit(Request $request)
     {
         $request->validate([
-            'contentUuid' => 'required|string',
-            'courseUuid' => 'required|string'
+            'contentUuid' => 'required|string'
         ]);
 
         $content = Content::where('uuid', $request->post('contentUuid'))->first();
-        //$user = Content::where('id', auth()->user()->id)->first();
         $profile = Profile::where('user_id', auth()->user()->id)->where('active', true)->first();
 
         $content->profiles()->attach($profile);
@@ -28,12 +26,10 @@ class ContentUserController extends Controller
     public function delete(Request $request)
     {
         $request->validate([
-            'contentUuid' => 'required|string',
-            'courseUuid' => 'required|string'
+            'contentUuid' => 'required|string'
         ]);
 
         $content = Content::where('uuid', $request->post('contentUuid'))->first();
-        //$user = Content::where('id', auth()->user()->id)->first();
         $profile = Profile::where('user_id', auth()->user()->id)->where('active', true)->first();
 
         $content->profiles()->detach($profile);

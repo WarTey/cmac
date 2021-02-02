@@ -661,7 +661,6 @@ export default {
         editCompleted(content) {
             const formData = new FormData();
             formData.append('contentUuid', content.uuid);
-            formData.append('courseUuid', this.courseUuid);
 
             this.$inertia.post(content.profiles_count > 0 ? '/completed/delete' : '/completed/edit', formData);
         }

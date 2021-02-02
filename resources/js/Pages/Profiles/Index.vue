@@ -191,7 +191,11 @@ export default {
 
         useProfile() {
             if (this.user.profiles[this.selected].active === 1) {
-                window.location = '/formations';
+                if (this.user.admin === 1) {
+                    window.location = '/dashboard';
+                } else {
+                    window.location = '/formations';
+                }
             } else {
                 this.$inertia.post('/profils/select', {
                     id: this.user.profiles[this.selected].id

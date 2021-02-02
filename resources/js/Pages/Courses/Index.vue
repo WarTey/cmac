@@ -100,7 +100,7 @@
         </transition>
         <div class="py-4" v-for="course in $page.courses" v-bind:key="course.uuid" v-if="$page.user && (($page.user.admin && course.contents_count >= 0) || course.contents_count > 0)">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                <div class="bg-white overflow-hidden shadow-lg hover:shadow-xl rounded-lg transition duration-500 ease-in-out">
+                <div class="bg-white overflow-hidden shadow-lg hover:shadow-xl rounded-lg transition duration-500 ease-in-out" v-on:click="showStrip(course)">
                     <div v-if="course.image" class="h-20 bg-auto bg-center" :style="'background-image: url(/storage/img/courses/' + course.image + ')'"></div>
                     <div v-bind:class="{ 'bg-gray-300 cursor-pointer': course.price > 0 && $page.user.admin === 0 }" class="p-6 sm:px-20 bg-white border-b border-gray-200">
                         <div v-if="course.price > 0 && $page.user.admin === 0" class="flex flex-col items-center text-2xl">
@@ -114,13 +114,13 @@
                             <a v-if="course.contents_count >= 0 && $page.user.admin" :href="'/cours/' + course.uuid" class="text-2xl hover:underline">
                                 {{ course.title }}
                             </a>
-                            <!-- TODO : Add price / profile check -->
+                            <!-- TODO : Add price-/-profile check to disable link -->
                             <a v-else-if="course.contents_count > 0" :href="'/cours/' + course.uuid" class="text-2xl hover:underline">
                                 {{ course.title }}
                             </a>
-                            <a v-else href="#" class="text-2xl">
+                            <div v-else class="text-2xl">
                                 {{ course.title }}
-                            </a>
+                            </div>
                             <div class="text-gray-400">
                                 {{ course.contents_count }} cours
                             </div>
@@ -139,6 +139,28 @@
                     </div>
                 </div>
             </div>
+        </div>
+        <div v-if="stripeVisible" class="fixed overflow-hidden top-0 left-0 flex items-center justify-center w-full h-full bg-black bg-opacity-50">
+            <form class="bg-white shadow-md rounded px-8 md:max-w-xl w-full max-h-4/5 overflow-auto" action="#">
+                <div class="mb-4 mt-6">
+                    <div id="card-element">
+
+                    </div>
+                    <div id="card-errors" role="alert" class="text-red-700 mt-2">
+
+                    </div>
+                </div>
+                <div class="mt-8 mb-6">
+                    <span class="flex w-full rounded">
+                        <button v-on:click="stripeCheckout" id="submitStripe" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                            Acheter
+                        </button>
+                        <button v-on:click="closeStrip" class="ml-auto bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                            Fermer
+                        </button>
+                    </span>
+                </div>
+            </form>
         </div>
         <div v-if="$page.user && $page.user.admin && modalVisible" class="fixed overflow-hidden top-0 left-0 flex items-center justify-center w-full h-full bg-black bg-opacity-50">
             <form class="bg-white shadow-md rounded px-8 md:max-w-xl w-full max-h-4/5 overflow-auto" @submit.prevent="editSubmit">
@@ -243,6 +265,7 @@ export default {
             levelUuid: this.level.uuid,
             addCourse: false,
             modalVisible: false,
+            stripeVisible: false,
             createForm: {
                 title: null,
                 description: null,
@@ -259,7 +282,12 @@ export default {
                 price: null,
                 visibility: null,
             },
-            editImage: null
+            editImage: null,
+            stripe: null,
+            stripeElements: null,
+            stripeStyle: null,
+            stripeCard: null,
+            clientSecret: null
         }
     },
 
@@ -271,6 +299,27 @@ export default {
                 }
             }
         }
+    },
+
+    mounted() {
+        this.stripe = Stripe('pk_test_51IGCNgLnof75IVchPBdJxLGv8C0kvKPTJmur2oWthhVpaIkUfyc9A5H8AWLtnokFvcu00nea7oZBoJynmhBpwP7g00gHltRcTH');
+        this.stripeElements = this.stripe.elements();
+        this.stripeStyle = {
+            base: {
+                color: "#32325d",
+                fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
+                fontSmoothing: "antialised",
+                fontSize: "16px",
+                "::placeholder": {
+                    color: "#aab7c4"
+                }
+            },
+            invalid: {
+                color: "#fa755a",
+                iconColor: "#fa755a"
+            }
+        }
+        this.stripeCard = this.stripeElements.create("card", { style: this.stripeStyle });
     },
 
     methods: {
@@ -395,7 +444,73 @@ export default {
         clearFormMessages() {
             this.$page.errors = {};
             this.$page.flash = {};
-        }
+        },
+
+        showStrip(course) {
+            axios.post("/stripe", {
+                uuid: course.uuid,
+                price: course.price * 100
+            }).then(response => {
+                if (response.data.success) {
+                    this.stripeVisible = !this.stripeVisible;
+                    this.clientSecret = response.data.secret;
+                    setTimeout(() => this.initStrip(), 250);
+                } else {
+                    toastr.warning("Erreur lors de l'ouverture du menu d'achat");
+                }
+            });
+        },
+
+        initStrip() {
+            this.stripeCard.mount("#card-element");
+            this.stripeCard.addEventListener('change', ({error}) => {
+                const displayError = document.getElementById('card-errors');
+                if (error) {
+                    displayError.textContent = error.message;
+                } else {
+                    displayError.textContent = '';
+                }
+            });
+        },
+
+        unlockCourse(uuid) {
+            this.closeStrip();
+            axios.post("/stripe/buy", {
+                uuid: uuid,
+                chapterUuid: this.chapterUuid
+            }).then(response => {
+                if (response.data.success) {
+                    this.$page.courses = response.data.courses;
+                } else {
+                    toastr.warning("Erreur lors de l'ajout du cours. Veuillez prendre contact avec CMAC.");
+                }
+            });
+        },
+
+        stripeCheckout() {
+            // TODO : Check not in possession of profile
+            if (this.clientSecret != null) {
+                toastr.success("Veuillez patienter...");
+                this.stripe.confirmCardPayment(this.clientSecret, {
+                    payment_method: {
+                        card: this.stripeCard
+                    }
+                }).then(result => {
+                    if (result.error) {
+                        toastr.warning(result.error.message);
+                    } else {
+                        if (result.paymentIntent.status === 'succeeded') {
+                            toastr.success("Vous possédez maintenant le cours");
+                            this.unlockCourse(result.paymentIntent.description);
+                        }
+                    }
+                });
+            }
+        },
+
+        closeStrip() {
+            this.stripeVisible = !this.stripeVisible;
+        },
     }
 }
 </script>
