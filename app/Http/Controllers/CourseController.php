@@ -23,7 +23,7 @@ class CourseController extends Controller
         $chapter = Chapter::select('id', 'uuid', 'title', 'level_id')->where('uuid', $uuid)->first();
 
         $courses = Course::where('chapter_id', $chapter->id)->orderBy('position')->where('visible', true)->with('users', function ($query) {
-            $query->where('user_id', Auth::user()->id);
+            $query->where('user_id', Auth::user() != null ? Auth::user()->id : -1);
         })->withCount('contents')->get();
 
         if (count($courses) === 0 && Auth::user()->admin === 0) {

@@ -13,6 +13,7 @@
                 {{ chapterTitle | truncate(30) }}
             </h2>
         </template>
+        <LoginForm :showLogin="loginForm" @updateLoginForm="updateLoginForm"></LoginForm>
         <div v-if="$page.user && $page.user.admin" class="pt-4 max-w-7xl mx-auto sm:px-6 lg:px-8 right-0">
             <div class="flex flex-row-reverse">
                 <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" v-on:click="toggleAddCourse">
@@ -112,16 +113,15 @@
                 </div>
             </div>
         </transition>
-        <div class="py-4" v-for="course in $page.courses" v-bind:key="course.uuid" v-if="$page.user && (($page.user.admin && course.contents_count >= 0) || course.contents_count > 0)">
+        <div class="py-4" v-for="course in $page.courses" v-bind:key="course.uuid">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white overflow-hidden shadow-lg hover:shadow-xl rounded-lg transition duration-500 ease-in-out">
                     <div v-if="course.image" class="h-20 bg-auto bg-center" :style="'background-image: url(/storage/img/courses/' + course.image + ')'"></div>
-                    <div v-bind:class="{ 'bg-gray-300 cursor-pointer': course.price > 0 && $page.user.admin === 0 && course.users.length === 0 }" class="p-6 sm:px-20 bg-white border-b border-gray-200">
+                    <div v-bind:class="{ 'bg-gray-300': course.price > 0 && (($page.user && $page.user.admin === 0) || $page.user == null) && course.users.length === 0 }" class="p-6 sm:px-20 bg-white border-b border-gray-200">
                         <div class="flex justify-between items-center">
-                            <a v-if="course.contents_count >= 0 && $page.user.admin" :href="'/cours/' + course.uuid" class="text-2xl hover:underline">
+                            <a v-if="course.contents_count >= 0 && $page.user && $page.user.admin" :href="'/cours/' + course.uuid" class="text-2xl hover:underline">
                                 {{ course.title }}
                             </a>
-                            <!-- TODO : Add price-/-profile check to disable link -->
                             <a v-else-if="course.contents_count > 0 && ((course.users.length > 0 && course.price > 0) || course.price === 0) " :href="'/cours/' + course.uuid" class="text-2xl hover:underline">
                                 {{ course.title }}
                             </a>
@@ -135,7 +135,7 @@
                         <div class="mt-6 text-gray-500 text-justify">
                             {{ course.description }}
                         </div>
-                        <div v-if="course.price > 0 && $page.user.admin === 0 && course.users.length === 0" class="mt-6 flex justify-center text-xl">
+                        <div v-if="course.price > 0 && (($page.user && $page.user.admin === 0) || $page.user == null) && course.users.length === 0" class="mt-6 flex justify-center text-xl">
                             <button v-on:click="showStrip(course)" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
                                 Acheter à partir de {{ course.price }}€
                             </button>
@@ -295,10 +295,12 @@
 
 <script>
 import AppLayout from "@/Layouts/AppLayout";
+import LoginForm from "@/Layouts/LoginForm";
 
 export default {
     components: {
-        AppLayout
+        AppLayout,
+        LoginForm
     },
 
     props: ['courses', 'chapter', 'level', 'sidebarItems'],
@@ -312,6 +314,7 @@ export default {
             addCourse: false,
             modalVisible: false,
             stripeVisible: false,
+            loginForm: false,
             createForm: {
                 title: null,
                 description: null,
@@ -513,7 +516,9 @@ export default {
         },
 
         showStrip(course) {
-            if (course.users.length === 0 && course.price > 0) {
+            if (this.$page.user == null) {
+                this.updateLoginForm(true);
+            } else if (course.users.length === 0 && course.price > 0) {
                 this.stripeDuration = 1;
                 axios.post("/stripe", {
                     uuid: course.uuid,
@@ -584,6 +589,10 @@ export default {
             this.clientSecret = null;
             this.clientCourse = null;
         },
+
+        updateLoginForm(value) {
+            this.loginForm = value;
+        }
     }
 }
 </script>

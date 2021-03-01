@@ -83,7 +83,7 @@
                     <div v-if="chapter.image" class="h-20 bg-auto bg-center" :style="'background-image: url(/storage/img/chapters/' + chapter.image + ')'"></div>
                     <div class="p-6 sm:px-20 bg-white border-b border-gray-200">
                         <div class="flex justify-between items-center">
-                            <a v-if="chapter.courses_count >= 0 && $page.user.admin" :href="'/chapitre/' + chapter.uuid" class="text-2xl hover:underline">
+                            <a v-if="chapter.courses_count >= 0 && $page.user && $page.user.admin" :href="'/chapitre/' + chapter.uuid" class="text-2xl hover:underline">
                                 {{ chapter.title }}
                             </a>
                             <a v-else-if="chapter.courses_count > 0" :href="'/chapitre/' + chapter.uuid" class="text-2xl hover:underline">
