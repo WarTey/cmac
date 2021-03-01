@@ -6,6 +6,7 @@ use App\Models\Chapter;
 use App\Models\Content;
 use App\Models\Course;
 use App\Models\Level;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
@@ -16,9 +17,13 @@ class ContentController extends Controller
 {
     public function index(string $uuid)
     {
-        $course = Course::select('id', 'uuid', 'title', 'chapter_id')->where('uuid', $uuid)->where('visible', true)->first();
+        $this->deleteUsersCourses();
 
-        if (!$course) {
+        $course = Course::select('id', 'uuid', 'title', 'price', 'chapter_id')->where('uuid', $uuid)->where('visible', true)->with('users', function ($query) {
+            $query->where('user_id', Auth::user()->id);
+        })->first();
+
+        if (!$course || (count($course->users) === 0 && $course->price > 0 && Auth::user()->admin === 0)) {
             return abort(404);
         }
 

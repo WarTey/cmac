@@ -38,8 +38,13 @@ class Course extends Model
         return $this->hasMany(Content::class);
     }
 
-    public function profiles()
+    public function users()
     {
-        return $this->belongsToMany(Profile::class)->where('user_id', auth()->user()->id)->where('active', true);
+        return $this->belongsToMany(User::class);
+    }
+
+    public function packs()
+    {
+        return $this->belongsToMany(Pack::class);
     }
 }

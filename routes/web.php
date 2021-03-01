@@ -40,8 +40,13 @@ Route::middleware(['auth', 'verified'])->group(function() {
 Route::middleware(['auth', 'admin', 'verified'])->group(function() {
     Route::get('/dashboard', 'App\Http\Controllers\DashboardController@index')->name('dashboard.index');
     Route::get('/api/dashboard/logs', 'App\Http\Controllers\DashboardController@logs')->name('dashboard.logs');
+    Route::get('/api/dashboard/coursesTable', 'App\Http\Controllers\DashboardController@coursesTable')->name('dashboard.coursesTable');
     Route::get('/api/dashboard/courses', 'App\Http\Controllers\DashboardController@courses')->name('dashboard.courses');
     Route::post('/api/dashboard/courses/edit', 'App\Http\Controllers\DashboardController@editCourse')->name('dashboard.editCourse');
+    Route::get('/api/dashboard/packsTable', 'App\Http\Controllers\DashboardController@packsTable')->name('dashboard.packsTable');
+    Route::post('/api/dashboard/pack/edit', 'App\Http\Controllers\DashboardController@editPack')->name('dashboard.editPack');
+    Route::post('/api/dashboard/pack/store', 'App\Http\Controllers\PackController@store')->name('pack.store');
+    Route::get('/api/dashboard/chapters', 'App\Http\Controllers\DashboardController@chapters')->name('dashboard.chapters');
 
     Route::post('/formation/store', 'App\Http\Controllers\LevelController@store')->name('levels.store');
     Route::post('/chapter/store', 'App\Http\Controllers\ChapterController@store')->name('chapters.store');

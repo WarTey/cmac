@@ -63,4 +63,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Profile::class);
     }
+
+    public function courses()
+    {
+        return $this->belongsToMany(Course::class);
+    }
 }

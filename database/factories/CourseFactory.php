@@ -28,6 +28,8 @@ class CourseFactory extends Factory
             'description' => $this->faker->paragraphs(2, true),
             'position' => $this->faker->numberBetween(0, 100),
             'price' => $this->faker->numberBetween(0, 20),
+            'price_three_months' => $this->faker->numberBetween(0, 20),
+            'price_six_months' => $this->faker->numberBetween(0, 20),
             'chapter_id' => Chapter::all()->random()->id
         ];
     }

@@ -16,6 +16,7 @@ class StripeController extends Controller
         ]);
 
         Stripe::setApiKey(config('stripe.secret_key'));
+        // TODO : Add user and more information (course)
         $intent = PaymentIntent::create([
             'amount' => $request->post('price'),
             'currency' => 'EUR',

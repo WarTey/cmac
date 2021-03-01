@@ -7,7 +7,9 @@ import Vue from 'vue';
 import DataTable from 'laravel-vue-datatable';
 import EditButton from "@/Pages/Dashboard/EditButton";
 import SelectInput from "@/Pages/Dashboard/SelectInput";
-import EditInput from "@/Pages/Dashboard/EditInput";
+import EditInputPrice from "@/Pages/Dashboard/EditInputPrice";
+import EditInputPriceThreeMonths from "@/Pages/Dashboard/EditInputPriceThreeMonths";
+import EditInputPriceSixMonths from "@/Pages/Dashboard/EditInputPriceSixMonths";
 
 Vue.use(DataTable);
 
@@ -15,7 +17,7 @@ export default {
     data() {
         return {
             data: {},
-            url: "/api/dashboard/courses",
+            url: "/api/dashboard/coursesTable",
             framework: "tailwind",
             translate: {
                 nextButton: 'Suivant',
@@ -37,11 +39,25 @@ export default {
                     component: SelectInput
                 },
                 {
-                    label: 'Prix',
+                    label: 'Prix (1 mois)',
                     name: 'price',
                     orderable: true,
                     searchable: true,
-                    component: EditInput
+                    component: EditInputPrice
+                },
+                {
+                    label: 'Prix (3 mois)',
+                    name: 'price_three_months',
+                    orderable: true,
+                    searchable: true,
+                    component: EditInputPriceThreeMonths
+                },
+                {
+                    label: 'Prix (6 mois)',
+                    name: 'price_six_months',
+                    orderable: true,
+                    searchable: true,
+                    component: EditInputPriceSixMonths
                 },
                 {
                     label: '',
@@ -87,6 +103,8 @@ export default {
             axios.post("/api/dashboard/courses/edit", {
                 uuid: data.uuid,
                 price: data.price,
+                price_three_months: data.price_three_months,
+                price_six_months: data.price_six_months,
                 visibility: data.visible === "1" || data.visible === 1,
             }).then(response => {
                 if (response.data.success) {

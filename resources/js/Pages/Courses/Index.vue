@@ -49,10 +49,24 @@
                             </div>
                             <div class="mb-4">
                                 <label class="block text-gray-700 text-sm font-bold mb-2" for="price">
-                                    Prix
+                                    Prix (1 mois)
                                 </label>
                                 <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="price" v-model="createForm.price" type="number" min="0" step="0.01" placeholder="0.0">
                                 <p class="text-red-700 mt-2" v-if="$page.errors.priceStore">{{ $page.errors.priceStore[0] }}</p>
+                            </div>
+                            <div class="mb-4">
+                                <label class="block text-gray-700 text-sm font-bold mb-2" for="price-three">
+                                    Prix (3 mois)
+                                </label>
+                                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="price-three" v-model="createForm.priceThree" type="number" min="0" step="0.01" placeholder="0.0">
+                                <p class="text-red-700 mt-2" v-if="$page.errors.priceThreeStore">{{ $page.errors.priceThreeStore[0] }}</p>
+                            </div>
+                            <div class="mb-4">
+                                <label class="block text-gray-700 text-sm font-bold mb-2" for="price-six">
+                                    Prix (6 mois)
+                                </label>
+                                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="price-six" v-model="createForm.priceSix" type="number" min="0" step="0.01" placeholder="0.0">
+                                <p class="text-red-700 mt-2" v-if="$page.errors.priceSixStore">{{ $page.errors.priceSixStore[0] }}</p>
                             </div>
                             <div class="mb-2 flex flex-col">
                                 <label>
@@ -100,22 +114,15 @@
         </transition>
         <div class="py-4" v-for="course in $page.courses" v-bind:key="course.uuid" v-if="$page.user && (($page.user.admin && course.contents_count >= 0) || course.contents_count > 0)">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                <div class="bg-white overflow-hidden shadow-lg hover:shadow-xl rounded-lg transition duration-500 ease-in-out" v-on:click="showStrip(course)">
+                <div class="bg-white overflow-hidden shadow-lg hover:shadow-xl rounded-lg transition duration-500 ease-in-out">
                     <div v-if="course.image" class="h-20 bg-auto bg-center" :style="'background-image: url(/storage/img/courses/' + course.image + ')'"></div>
-                    <div v-bind:class="{ 'bg-gray-300 cursor-pointer': course.price > 0 && $page.user.admin === 0 }" class="p-6 sm:px-20 bg-white border-b border-gray-200">
-                        <div v-if="course.price > 0 && $page.user.admin === 0" class="flex flex-col items-center text-2xl">
-                            <i class="fas fa-lock absolute text-center">
-                                <p class="mt-4">
-                                    Prix du cours : {{ course.price }}€
-                                </p>
-                            </i>
-                        </div>
+                    <div v-bind:class="{ 'bg-gray-300 cursor-pointer': course.price > 0 && $page.user.admin === 0 && course.users.length === 0 }" class="p-6 sm:px-20 bg-white border-b border-gray-200">
                         <div class="flex justify-between items-center">
                             <a v-if="course.contents_count >= 0 && $page.user.admin" :href="'/cours/' + course.uuid" class="text-2xl hover:underline">
                                 {{ course.title }}
                             </a>
                             <!-- TODO : Add price-/-profile check to disable link -->
-                            <a v-else-if="course.contents_count > 0" :href="'/cours/' + course.uuid" class="text-2xl hover:underline">
+                            <a v-else-if="course.contents_count > 0 && ((course.users.length > 0 && course.price > 0) || course.price === 0) " :href="'/cours/' + course.uuid" class="text-2xl hover:underline">
                                 {{ course.title }}
                             </a>
                             <div v-else class="text-2xl">
@@ -127,6 +134,11 @@
                         </div>
                         <div class="mt-6 text-gray-500 text-justify">
                             {{ course.description }}
+                        </div>
+                        <div v-if="course.price > 0 && $page.user.admin === 0 && course.users.length === 0" class="mt-6 flex justify-center text-xl">
+                            <button v-on:click="showStrip(course)" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                                Acheter à partir de {{ course.price }}€
+                            </button>
                         </div>
                         <div v-if="$page.user && $page.user.admin" class="mt-4 flex">
                             <a class="text-blue-500 font-semibold text-justify hover:underline cursor-pointer" v-on:click.prevent="showModal(course)">
@@ -142,17 +154,37 @@
         </div>
         <div v-if="stripeVisible" class="fixed overflow-hidden top-0 left-0 flex items-center justify-center w-full h-full bg-black bg-opacity-50">
             <form class="bg-white shadow-md rounded px-8 md:max-w-xl w-full max-h-4/5 overflow-auto" action="#">
-                <div class="mb-4 mt-6">
-                    <div id="card-element">
-
+                <div class="mb-4 mt-6 text-2xl">
+                    {{ clientCourse.title }}
+                </div>
+                <div class="mb-4">
+                    <span>Choisissez une formule :</span>
+                    <div class="flex flex-col mt-2">
+                        <label class="border rounded p-4 mb-2">
+                            <input checked type="radio" class="form-radio" name="formulae" value="1" v-model="stripeDuration">
+                            <span class="ml-2">1 mois pour <span class="text-green-700 text-lg">{{ clientCourse.price }}€</span></span>
+                        </label>
+                        <label class="border rounded p-4 mb-2">
+                            <input type="radio" class="form-radio" name="formulae" value="3" v-model="stripeDuration">
+                            <span class="ml-2">3 mois pour <span class="text-red-700 text-lg line-through">{{ 3 * clientCourse.price }}€</span> <span class="text-green-700 text-lg">{{ clientCourse.price_three_months }}€</span></span>
+                        </label>
+                        <label class="border rounded p-4">
+                            <input type="radio" class="form-radio" name="formulae" value="6" v-model="stripeDuration">
+                            <span class="ml-2">6 mois pour <span class="text-red-700 text-lg line-through">{{ 6 * clientCourse.price }}€</span> <span class="text-green-700 text-lg">{{ clientCourse.price_six_months }}€</span></span>
+                        </label>
                     </div>
-                    <div id="card-errors" role="alert" class="text-red-700 mt-2">
-
+                </div>
+                <div class="mt-6 pb-4">
+                    <div id="card-element"></div>
+                    <div id="card-errors" role="alert" class="text-red-700 mt-2"></div>
+                    <div class="text-sm float-right">
+                        Powered by <span class="font-bold underline">Stripe</span>
+                        <i class="fas fa-lock"></i>
                     </div>
                 </div>
                 <div class="mt-8 mb-6">
                     <span class="flex w-full rounded">
-                        <button v-on:click="stripeCheckout" id="submitStripe" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                        <button v-on:click.prevent="stripeCheckout" id="submitStripe" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
                             Acheter
                         </button>
                         <button v-on:click="closeStrip" class="ml-auto bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
@@ -180,18 +212,32 @@
                     <p class="text-red-700 mt-2" v-if="$page.errors.descriptionEdit">{{ $page.errors.descriptionEdit[0] }}</p>
                 </div>
                 <div class="mb-4">
-                    <label class="block text-gray-700 text-sm font-bold mb-2" for="position">
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="edit-position">
                         Position
                     </label>
                     <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="edit-position" v-model="editForm.position" type="number" min="0" placeholder="0">
                     <p class="text-red-700 mt-2" v-if="$page.errors.positionEdit">{{ $page.errors.positionEdit[0] }}</p>
                 </div>
                 <div class="mb-4">
-                    <label class="block text-gray-700 text-sm font-bold mb-2" for="price">
-                        Prix
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="edit-price">
+                        Prix (1 mois)
                     </label>
                     <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="edit-price" v-model="editForm.price" type="number" min="0" step="0.01" placeholder="0.0">
                     <p class="text-red-700 mt-2" v-if="$page.errors.priceEdit">{{ $page.errors.priceEdit[0] }}</p>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="edit-price-three">
+                        Prix (3 mois)
+                    </label>
+                    <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="edit-price-three" v-model="editForm.priceThree" type="number" min="0" step="0.01" placeholder="0.0">
+                    <p class="text-red-700 mt-2" v-if="$page.errors.priceThreeEdit">{{ $page.errors.priceThreeEdit[0] }}</p>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="edit-price-six">
+                        Prix (6 mois)
+                    </label>
+                    <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="edit-price-six" v-model="editForm.priceSix" type="number" min="0" step="0.01" placeholder="0.0">
+                    <p class="text-red-700 mt-2" v-if="$page.errors.priceSixEdit">{{ $page.errors.priceSixEdit[0] }}</p>
                 </div>
                 <div class="mb-2 flex flex-col">
                     <label>
@@ -271,6 +317,8 @@ export default {
                 description: null,
                 position: null,
                 price: null,
+                priceThree: null,
+                priceSix: null,
                 visibility: null,
                 image: null
             },
@@ -280,6 +328,8 @@ export default {
                 description: null,
                 position: null,
                 price: null,
+                priceThree: null,
+                priceSix: null,
                 visibility: null,
             },
             editImage: null,
@@ -287,7 +337,9 @@ export default {
             stripeElements: null,
             stripeStyle: null,
             stripeCard: null,
-            clientSecret: null
+            stripeDuration: 1,
+            clientSecret: null,
+            clientCourse: null
         }
     },
 
@@ -342,6 +394,12 @@ export default {
             }
             if (this.createForm.price) {
                 formData.append('priceStore', this.createForm.price);
+            }
+            if (this.createForm.priceThree) {
+                formData.append('priceThreeStore', this.createForm.priceThree);
+            }
+            if (this.createForm.priceSix) {
+                formData.append('priceSixStore', this.createForm.priceSix);
             }
             if (this.createForm.visibility) {
                 formData.append('visibilityStore', this.createForm.visibility);
@@ -406,6 +464,12 @@ export default {
             if (this.editForm.price) {
                 formData.append('priceEdit', this.editForm.price);
             }
+            if (this.editForm.priceThree) {
+                formData.append('priceThreeEdit', this.editForm.priceThree);
+            }
+            if (this.editForm.priceSix) {
+                formData.append('priceSixEdit', this.editForm.priceSix);
+            }
             if (this.editForm.visibility) {
                 formData.append('visibilityEdit', this.editForm.visibility);
             }
@@ -437,6 +501,8 @@ export default {
             this.editForm.description = course ? course.description : null;
             this.editForm.position = course ? course.position : null;
             this.editForm.price = course ? course.price : null;
+            this.editForm.priceThree = course ? course.price_three_months : null;
+            this.editForm.priceSix = course ? course.price_six_months : null;
             this.editForm.visibility = course ? course.visible : null;
             this.editImage = course ? course.image : null;
         },
@@ -447,18 +513,22 @@ export default {
         },
 
         showStrip(course) {
-            axios.post("/stripe", {
-                uuid: course.uuid,
-                price: course.price * 100
-            }).then(response => {
-                if (response.data.success) {
-                    this.stripeVisible = !this.stripeVisible;
-                    this.clientSecret = response.data.secret;
-                    setTimeout(() => this.initStrip(), 250);
-                } else {
-                    toastr.warning("Erreur lors de l'ouverture du menu d'achat");
-                }
-            });
+            if (course.users.length === 0 && course.price > 0) {
+                this.stripeDuration = 1;
+                axios.post("/stripe", {
+                    uuid: course.uuid,
+                    price: course.price * 100
+                }).then(response => {
+                    if (response.data.success) {
+                        this.clientCourse = course;
+                        this.stripeVisible = !this.stripeVisible;
+                        this.clientSecret = response.data.secret;
+                        setTimeout(() => this.initStrip(), 250);
+                    } else {
+                        toastr.warning("Erreur lors de l'ouverture du menu d'achat");
+                    }
+                });
+            }
         },
 
         initStrip() {
@@ -477,7 +547,8 @@ export default {
             this.closeStrip();
             axios.post("/stripe/buy", {
                 uuid: uuid,
-                chapterUuid: this.chapterUuid
+                chapterUuid: this.chapterUuid,
+                duration: this.stripeDuration
             }).then(response => {
                 if (response.data.success) {
                     this.$page.courses = response.data.courses;
@@ -510,6 +581,8 @@ export default {
 
         closeStrip() {
             this.stripeVisible = !this.stripeVisible;
+            this.clientSecret = null;
+            this.clientCourse = null;
         },
     }
 }

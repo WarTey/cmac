@@ -22,6 +22,8 @@ class CreateCoursesTable extends Migration
             $table->integer('position');
             $table->boolean('visible')->default(false);
             $table->float('price');
+            $table->float('price_three_months');
+            $table->float('price_six_months');
             $table->foreignId('chapter_id')->constrained()->cascadeOnDelete();
             $table->timestamps();
         });

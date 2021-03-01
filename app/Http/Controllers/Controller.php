@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Course;
+use App\Models\CourseUser;
 use App\Models\Level;
+use Carbon\Carbon;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
@@ -21,5 +24,13 @@ class Controller extends BaseController
                 });
             });
         })->get();
+    }
+
+    public function deleteUsersCourses()
+    {
+        $coursesUsers = CourseUser::where('validity_period', '<', Carbon::now())->get();
+        foreach ($coursesUsers as $element) {
+            $element->delete();
+        }
     }
 }

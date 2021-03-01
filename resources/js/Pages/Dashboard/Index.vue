@@ -9,11 +9,13 @@
                             <select v-model="categorySelected" class="border rounded" name="categories" id="category-select">
                                 <option value="history">Historique des connexions</option>
                                 <option value="price">Prix des cours</option>
+                                <option value="packs">Prix des packs</option>
                             </select>
                         </div>
                         <div class="mt-6">
                             <ConnectionHistory v-if="categorySelected === 'history'"></ConnectionHistory>
                             <CoursesPrice v-if="categorySelected === 'price'"></CoursesPrice>
+                            <PacksPrice v-if="categorySelected === 'packs'"></PacksPrice>
                         </div>
                     </div>
                 </div>
@@ -26,12 +28,14 @@
     import AppLayout from '@/Layouts/AppLayout';
     import ConnectionHistory from "@/Pages/Dashboard/ConnectionHistory";
     import CoursesPrice from "@/Pages/Dashboard/CoursesPrice";
+    import PacksPrice from "@/Pages/Dashboard/PacksPrice";
 
     export default {
         components: {
             AppLayout,
             ConnectionHistory,
-            CoursesPrice
+            CoursesPrice,
+            PacksPrice
         },
 
         data() {

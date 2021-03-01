@@ -497,7 +497,7 @@ export default {
                 email: this.userForm.email,
                 password: this.userForm.password
             }).then(() => {
-                window.location = '/profils';
+                location.reload();
             }).catch((err) => {
                 this.userError = err.response.data.errors;
             });
@@ -510,7 +510,7 @@ export default {
                 password: this.userForm.password,
                 password_confirmation: this.userForm.passwordConfirmation
             }).then(() => {
-                window.location = '/profils';
+                location.reload();
             }).catch((err) => {
                 this.userError = err.response.data.errors;
             });
