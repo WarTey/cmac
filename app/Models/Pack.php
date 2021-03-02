@@ -32,4 +32,14 @@ class Pack extends Model
     {
         return $this->belongsToMany(Course::class);
     }
+
+    public function chapter()
+    {
+        return $this->belongsTo(Chapter::class);
+    }
+
+    public function users()
+    {
+        return $this->belongsToMany(User::class);
+    }
 }

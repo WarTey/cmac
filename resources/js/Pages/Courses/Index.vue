@@ -113,6 +113,43 @@
                 </div>
             </div>
         </transition>
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div v-if="$page.packs.length > 0" class="text-center text-2xl font-bold">Packs</div>
+        </div>
+        <div class="py-4" v-for="pack in $page.packs" v-bind:key="pack.uuid">
+            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+                <div class="bg-white overflow-hidden shadow-lg hover:shadow-xl rounded-lg transition duration-500 ease-in-out">
+                    <div v-if="pack.image" class="h-20 bg-auto bg-center" :style="'background-image: url(/storage/img/packs/' + pack.image + ')'"></div>
+                    <div v-bind:class="{ 'bg-gray-300': pack.price > 0 && (($page.user && $page.user.admin === 0) || $page.user == null) && pack.users.length === 0 }" class="p-6 sm:px-20 bg-white border-b border-gray-200">
+                        <div class="flex justify-between items-center">
+                            <div class="text-2xl">
+                                {{ pack.title }}
+                            </div>
+                        </div>
+                        <div class="mt-6 text-gray-500 text-justify">
+                            {{ pack.description }}
+                        </div>
+                        <div v-if="pack.price > 0 && (($page.user && $page.user.admin === 0) || $page.user == null) && pack.users.length === 0" class="mt-6 flex justify-center text-xl">
+                            <button v-on:click="showStrip(pack, false)" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                                Acheter à partir de {{ pack.price }}€
+                            </button>
+                        </div>
+                        <div v-if="$page.user && $page.user.admin" class="mt-4 flex">
+                            <a class="text-blue-500 font-semibold text-justify hover:underline cursor-pointer" v-on:click.prevent="showModal(pack)">
+                                Éditer le pack
+                            </a>
+                            <a class="text-red-500 font-semibold text-justify hover:underline cursor-pointer ml-auto" v-on:click.prevent="removeCourse(pack.uuid)">
+                                Retirer le pack
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div v-if="$page.packs.length > 0" class="border-t border-gray-300 mb-4 mt-4"></div>
+            <div v-if="$page.packs.length > 0" class="text-center text-2xl font-bold">Cours</div>
+        </div>
         <div class="py-4" v-for="course in $page.courses" v-bind:key="course.uuid">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white overflow-hidden shadow-lg hover:shadow-xl rounded-lg transition duration-500 ease-in-out">
@@ -136,7 +173,7 @@
                             {{ course.description }}
                         </div>
                         <div v-if="course.price > 0 && (($page.user && $page.user.admin === 0) || $page.user == null) && course.users.length === 0" class="mt-6 flex justify-center text-xl">
-                            <button v-on:click="showStrip(course)" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                            <button v-on:click="showStrip(course, true)" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
                                 Acheter à partir de {{ course.price }}€
                             </button>
                         </div>
@@ -157,7 +194,12 @@
                 <div class="mb-4 mt-6 text-2xl">
                     {{ clientCourse.title }}
                 </div>
-                <div class="mb-4">
+                <div class="border-t border-gray-300 mb-4"></div>
+                <p class="text-2xl mb-2">Informations sur l'acheteur</p>
+                <p>Nom : {{ $page.user.name }}</p>
+                <p class="mb-4">Mail : {{ $page.user.email }}</p>
+                <div class="border-t border-gray-300 mb-4"></div>
+                <div class="mb-8">
                     <span>Choisissez une formule :</span>
                     <div class="flex flex-col mt-2">
                         <label class="border rounded p-4 mb-2">
@@ -174,6 +216,24 @@
                         </label>
                     </div>
                 </div>
+                <div class="border-t border-gray-300 mb-4"></div>
+                <div class="mb-4" v-if="isCourse">
+                    <p class="text-2xl mb-2">Packs incluant ce cours :</p>
+                    <p v-for="pack in clientCourse.packs" v-bind:key="pack.uuid">
+                        <a target="_blank" rel="noopener noreferrer" :href="'/chapitre/' + pack.chapter.uuid" class="hover:underline">
+                            {{ pack.title }} - À partir de <span class="text-green-700 font-bold">{{ pack.price }}€</span>
+                        </a>
+                    </p>
+                </div>
+                <div v-else class="mb-4">
+                    <p class="text-2xl mb-2">Cours dans ce pack :</p>
+                    <p v-for="course in clientCourse.courses" v-bind:key="course.uuid">
+                        <a target="_blank" rel="noopener noreferrer" :href="'/chapitre/' + course.chapter.uuid" class="hover:underline">
+                            {{ course.title }}
+                        </a>
+                    </p>
+                </div>
+                <div class="border-t border-gray-300 mb-4"></div>
                 <div class="mt-6 pb-4">
                     <div id="card-element"></div>
                     <div id="card-errors" role="alert" class="text-red-700 mt-2"></div>
@@ -303,7 +363,7 @@ export default {
         LoginForm
     },
 
-    props: ['courses', 'chapter', 'level', 'sidebarItems'],
+    props: ['courses', 'packs', 'chapter', 'level', 'sidebarItems'],
 
     data() {
         return {
@@ -342,7 +402,8 @@ export default {
             stripeCard: null,
             stripeDuration: 1,
             clientSecret: null,
-            clientCourse: null
+            clientCourse: null,
+            isCourse: null
         }
     },
 
@@ -515,7 +576,8 @@ export default {
             this.$page.flash = {};
         },
 
-        showStrip(course) {
+        showStrip(course, isCourse) {
+            this.isCourse = isCourse;
             if (this.$page.user == null) {
                 this.updateLoginForm(true);
             } else if (course.users.length === 0 && course.price > 0) {
@@ -553,12 +615,14 @@ export default {
             axios.post("/stripe/buy", {
                 uuid: uuid,
                 chapterUuid: this.chapterUuid,
-                duration: this.stripeDuration
+                duration: this.stripeDuration,
+                isCourse: this.isCourse
             }).then(response => {
                 if (response.data.success) {
                     this.$page.courses = response.data.courses;
+                    this.$page.packs = response.data.packs;
                 } else {
-                    toastr.warning("Erreur lors de l'ajout du cours. Veuillez prendre contact avec CMAC.");
+                    toastr.warning("Erreur lors de l'ajout. Veuillez prendre contact avec CMAC.");
                 }
             });
         },

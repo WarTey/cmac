@@ -37,4 +37,9 @@ class Chapter extends Model
     {
         return $this->hasMany(Course::class)->where('visible', true);
     }
+
+    public function packs()
+    {
+        return $this->hasMany(Pack::class)->where('visible', true);
+    }
 }

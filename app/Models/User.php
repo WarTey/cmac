@@ -68,4 +68,9 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Course::class);
     }
+
+    public function packs()
+    {
+        return $this->belongsToMany(Pack::class);
+    }
 }

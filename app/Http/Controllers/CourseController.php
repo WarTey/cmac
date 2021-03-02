@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Chapter;
 use App\Models\Course;
 use App\Models\Level;
+use App\Models\Pack;
 use App\Models\Profile;
 use App\Models\User;
 use Carbon\Carbon;
@@ -24,7 +25,17 @@ class CourseController extends Controller
 
         $courses = Course::where('chapter_id', $chapter->id)->orderBy('position')->where('visible', true)->with('users', function ($query) {
             $query->where('user_id', Auth::user() != null ? Auth::user()->id : -1);
-        })->withCount('contents')->get();
+        })->withCount('contents')->with('packs', function($query) {
+            $query->select('id', 'uuid', 'title', 'price', 'chapter_id')->with('chapter');
+        })->get();
+
+        $packs = Pack::where('chapter_id', $chapter->id)->orderBy('position')->where('visible', true)->with('users', function ($query) {
+            $query->where('user_id', Auth::user() != null ? Auth::user()->id : -1);
+        })->with('courses', function($query) {
+            $query->select('id', 'uuid', 'title', 'chapter_id')->with('chapter', function($query) {
+                $query->select('id', 'uuid');
+            });
+        })->get();
 
         if (count($courses) === 0 && Auth::user()->admin === 0) {
             return abort(404);
@@ -34,6 +45,7 @@ class CourseController extends Controller
 
         return Inertia::render('Courses/Index', [
             'courses' => $courses,
+            'packs' => $packs,
             'chapter' => $chapter,
             'level' => $level,
             'sidebarItems' => $this->sidebar()
@@ -151,26 +163,62 @@ class CourseController extends Controller
         $request->validate([
             'uuid' => 'required|string',
             'chapterUuid' => 'required|string',
-            'duration' => 'required|integer|min:1|max:6'
+            'duration' => 'required|integer|min:1|max:6',
+            'isCourse' => 'required|boolean'
         ]);
 
-        $course = Course::where('uuid', $request->post('uuid'))->first();
         $user = User::where('id', Auth::user()->id)->first();
 
-        $course->users()->attach($user, [
-            'validity_period' => Carbon::now()->addMonths($request->post('duration')),
-            'created_at' => Carbon::now(),
-            'updated_at' => Carbon::now(),
-        ]);
+        if ($request->post('isCourse'))
+        {
+            $course = Course::where('uuid', $request->post('uuid'))->first();
+
+            $course->users()->attach($user, [
+                'validity_period' => Carbon::now()->addMonths($request->post('duration')),
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ]);
+        }
+        else
+        {
+            $pack = Pack::where('uuid', $request->post('uuid'))->first();
+
+            $pack->users()->attach($user, [
+                'validity_period' => Carbon::now()->addMonths($request->post('duration')),
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ]);
+
+            foreach ($pack->courses as $elem)
+            {
+                $elem->users()->attach($user, [
+                    'validity_period' => Carbon::now()->addMonths($request->post('duration')),
+                    'created_at' => Carbon::now(),
+                    'updated_at' => Carbon::now(),
+                ]);
+            }
+        }
 
         $chapter = Chapter::select('id', 'uuid', 'title', 'level_id')->where('uuid', $request->post('chapterUuid'))->first();
+
         $courses = Course::where('chapter_id', $chapter->id)->orderBy('position')->where('visible', true)->with('users', function ($query) {
-            $query->where('user_id', Auth::user()->id);
-        })->withCount('contents')->get();
+            $query->where('user_id', Auth::user() != null ? Auth::user()->id : -1);
+        })->withCount('contents')->with('packs', function($query) {
+            $query->select('id', 'uuid', 'title', 'price', 'chapter_id')->with('chapter');
+        })->get();
+
+        $packs = Pack::where('chapter_id', $chapter->id)->orderBy('position')->where('visible', true)->with('users', function ($query) {
+            $query->where('user_id', Auth::user() != null ? Auth::user()->id : -1);
+        })->with('courses', function($query) {
+            $query->select('id', 'uuid', 'title', 'chapter_id')->with('chapter', function($query) {
+                $query->select('id', 'uuid');
+            });
+        })->get();
 
         return [
             'success' => true,
-            'courses' => $courses
+            'courses' => $courses,
+            'packs' => $packs,
         ];
     }
 }
