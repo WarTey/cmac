@@ -40,6 +40,9 @@ Route::middleware(['auth', 'verified'])->group(function() {
 Route::middleware(['auth', 'admin', 'verified'])->group(function() {
     Route::get('/dashboard', 'App\Http\Controllers\DashboardController@index')->name('dashboard.index');
     Route::get('/api/dashboard/logs', 'App\Http\Controllers\DashboardController@logs')->name('dashboard.logs');
+    Route::get('/api/dashboard/users', 'App\Http\Controllers\DashboardController@users')->name('dashboard.users');
+    Route::post('/api/dashboard/user/admin', 'App\Http\Controllers\DashboardController@userAdmin')->name('dashboard.userAdmin');
+    Route::post('/api/dashboard/user/delete', 'App\Http\Controllers\DashboardController@userDelete')->name('dashboard.userDelete');
     Route::get('/api/dashboard/coursesTable', 'App\Http\Controllers\DashboardController@coursesTable')->name('dashboard.coursesTable');
     Route::get('/api/dashboard/courses', 'App\Http\Controllers\DashboardController@courses')->name('dashboard.courses');
     Route::post('/api/dashboard/courses/edit', 'App\Http\Controllers\DashboardController@editCourse')->name('dashboard.editCourse');

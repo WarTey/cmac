@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Chapter;
 use App\Models\Course;
 use App\Models\Pack;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use JamesDordoy\LaravelVueDatatable\Http\Resources\DataTableCollectionResource;
 use Yadahan\AuthenticationLog\AuthenticationLog;
@@ -34,6 +36,57 @@ class DashboardController extends Controller
             ->paginate($length);
 
         return new DataTableCollectionResource($logs);
+    }
+
+    public function users(Request $request)
+    {
+        $length = $request->input('length');
+        $orderBy = $request->input('column');
+        $orderByDir = $request->input('dir', 'asc');
+        $searchValue = $request->input('search');
+
+        $users = User::select('name', 'email', 'admin')
+            ->where('name', 'like', '%' . $searchValue . '%')
+            ->orWhere('email', 'like', '%' . $searchValue . '%')
+            ->orWhere('admin', 'like', '%' . $searchValue . '%')
+            ->orderBy($orderBy, $orderByDir)
+            ->paginate($length);
+
+        return new DataTableCollectionResource($users);
+    }
+
+    public function userAdmin(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email'
+        ]);
+
+        if ($request->post('email') == Auth::user()->email)
+        {
+            return ['success' => false];
+        }
+
+        $user = User::where('email', $request->post('email'))->first();
+        $user->admin = $user->admin == 1 ? 0 : 1;
+        $user->save();
+
+        return ['success' => true];
+    }
+
+    public function userDelete(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email'
+        ]);
+
+        if ($request->post('email') == Auth::user()->email)
+        {
+            return ['success' => false];
+        }
+
+        User::where('email', $request->post('email'))->first()->delete();
+
+        return ['success' => true];
     }
 
     public function coursesTable(Request $request)

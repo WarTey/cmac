@@ -10,12 +10,14 @@
                                 <option value="history">Historique des connexions</option>
                                 <option value="price">Prix des cours</option>
                                 <option value="packs">Prix des packs</option>
+                                <option value="users">Utilisateurs</option>
                             </select>
                         </div>
                         <div class="mt-6">
                             <ConnectionHistory v-if="categorySelected === 'history'"></ConnectionHistory>
                             <CoursesPrice v-if="categorySelected === 'price'"></CoursesPrice>
                             <PacksPrice v-if="categorySelected === 'packs'"></PacksPrice>
+                            <Users v-if="categorySelected === 'users'"></Users>
                         </div>
                     </div>
                 </div>
@@ -29,13 +31,15 @@
     import ConnectionHistory from "@/Pages/Dashboard/ConnectionHistory";
     import CoursesPrice from "@/Pages/Dashboard/CoursesPrice";
     import PacksPrice from "@/Pages/Dashboard/PacksPrice";
+    import Users from "@/Pages/Dashboard/Users";
 
     export default {
         components: {
             AppLayout,
             ConnectionHistory,
             CoursesPrice,
-            PacksPrice
+            PacksPrice,
+            Users
         },
 
         data() {
