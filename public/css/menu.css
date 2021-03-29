@@ -1,0 +1,146 @@
+#wheel-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow: hidden;
+}
+
+#menu {
+    display: flex;
+    width: 60%;
+    max-width: 35em;
+}
+
+#menu li {
+    position: absolute;
+}
+
+#menu ul {
+    position: relative;
+    max-width: 0;
+    max-height: 0;
+    padding: 50%;
+    margin-bottom: 0;
+    list-style: none;
+}
+
+#menu span {
+    font-family: "Andale Mono", monospace;
+}
+
+#products { transform: rotate(54deg) skewX(18deg) scale(1); transition: transform 1s; }
+#ressources { transform: rotate(126deg) skewX(18deg) scale(1); transition: transform 1s; }
+#forum { transform: rotate(198deg) skewX(18deg) scale(1); transition: transform 1s; }
+#art-science { transform: rotate(270deg) skewX(18deg) scale(1); transition: transform 1s; }
+#old-students { transform: rotate(342deg) skewX(18deg) scale(1); transition: transform 1s; }
+
+.slice {
+    top: 0;
+    left: 0;
+    width: 50%;
+    height: 50%;
+    overflow: hidden;
+    transform-origin: 100% 100%;
+}
+
+.slice a {
+    display: block;
+    background: rgb(42, 44, 50);
+    width: 200%;
+    height: 200%;
+    transform: skew(-18deg) rotate(-52.5deg);
+    line-height: 1.75;
+    text-align: center;
+    color: rgba(255, 255, 255, 0.8);
+    font-weight: 500;
+    transition: font-size 1s;
+    cursor: pointer;
+}
+
+.slice a:hover {
+    color: rgba(255, 255, 255, 1);
+    text-decoration: none;
+    cursor: pointer;
+}
+
+#middle {
+    z-index: 1;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url("/img/menu.png");
+    background-position: center;
+    background-size: contain;
+    pointer-events: none;
+}
+
+#arrow {
+    z-index: 1;
+    margin-left: 10%;
+    font-size: 1.35rem;
+    cursor: pointer;
+    transition: text-shadow 0.3s;
+    pointer-events: auto;
+}
+
+#menu-small {
+    display: none;
+}
+
+#menu-small #down-small {
+    text-align: center;
+}
+
+.list-group-item {
+    border: 1px solid rgb(42, 44, 50);
+}
+
+#down, #down-small {
+    position: relative;
+    bottom: 2%;
+    font-size: 1.5rem;
+    transition: text-shadow 0.3s;
+    -webkit-animation: 2s arrow infinite ease;
+    animation: 2s arrow infinite ease;
+}
+
+#down:hover, #down-small:hover, #arrow:hover {
+    cursor: pointer;
+    text-shadow: 5px 5px 15px black;
+    transition: text-shadow 0.3s;
+}
+
+@-webkit-keyframes arrow {
+    50% { bottom: 5%; }
+}
+
+@keyframes arrow {
+    50% { bottom: 5%; }
+}
+
+small {
+    float: right;
+}
+
+/*@media (max-width: 250px), (max-height: 235px) {
+	header { height: 100% !important; }
+
+	#menu { display: none; }
+
+	#menu-small { display: inline; }
+
+	.navbar { margin-bottom: 0 !important; }
+}*/
+
+@media (min-width: 700px) and (max-width: 768px), (max-height: 780px) {
+    /*#down {
+        display: none;
+    }*/
+}
+
+@media (max-width: 768px) {
+    /*#arrow {
+        display: none;
+    }*/
+}

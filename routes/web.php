@@ -13,10 +13,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function() {
-    return Inertia\Inertia::render('Levels/Index');
-})->name('home');
-
+Route::get('/', 'App\Http\Controllers\HomeController@index')->name('home');
 Route::get('/formations', 'App\Http\Controllers\LevelController@index')->name('levels.index');
 Route::get('/formation/{uuid}', 'App\Http\Controllers\ChapterController@index')->name('chapters.index');
 Route::get('/chapitre/{uuid}', 'App\Http\Controllers\CourseController@index')->name('courses.index');

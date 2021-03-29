@@ -18,15 +18,56 @@
 
                     <div class="flex">
                         <!-- Navigation Links -->
-                        <div class="hidden space-x-8 sm:-my-px sm:ml-10 md:flex">
-                            <jet-nav-link :href="route('home')" :active="route().current('home')">
-                                <span class="text-base">Accueil</span>
+                        <div class="hidden space-x-8 sm:-my-px sm:ml-10 lg:flex">
+                            <jet-nav-link :href="route('profile.show')">
+                                Produits et services
                             </jet-nav-link>
-                            <jet-nav-link :href="route('dashboard.index')" :active="route().current('dashboard.index')">
-                                <span class="text-base">Produits / Services</span>
+                            <jet-nav-link :href="route('profile.show')">
+                                Cours et exercices
                             </jet-nav-link>
-                            <jet-nav-link :href="route('dashboard.index')" :active="route().current('dashboard.index')">
-                                <span class="text-base">Contact</span>
+                            <jet-nav-link :href="route('profile.show')">
+                                Livre d'or et forum
+                            </jet-nav-link>
+                            <jet-nav-link :href="route('profile.show')">
+                                Articles
+                            </jet-nav-link>
+                            <jet-nav-link :href="route('profile.show')">
+                                Annuaire des anciens
+                            </jet-nav-link>
+                        </div>
+                        <div class="hidden space-x-8 sm:-my-px sm:ml-10 md:flex lg:hidden">
+                            <jet-nav-link>
+                                <jet-dropdown align="right" width="48">
+                                    <template #trigger>
+                                        <button class="flex items-center text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300 focus:outline-none focus:text-gray-700 focus:border-gray-300 transition duration-150 ease-in-out">
+                                            <div class="text-base">Menu</div>
+
+                                            <div class="ml-1">
+                                                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                                </svg>
+                                            </div>
+                                        </button>
+                                    </template>
+
+                                    <template #content>
+                                        <jet-dropdown-link :href="route('profile.show')">
+                                            Produits et services
+                                        </jet-dropdown-link>
+                                        <jet-dropdown-link :href="route('dashboard.index')">
+                                            Cours et exercices
+                                        </jet-dropdown-link>
+                                        <jet-dropdown-link :href="route('dashboard.index')">
+                                            Livre d'or et forum
+                                        </jet-dropdown-link>
+                                        <jet-dropdown-link :href="route('dashboard.index')">
+                                            Articles
+                                        </jet-dropdown-link>
+                                        <jet-dropdown-link :href="route('dashboard.index')">
+                                            Annuaire des anciens
+                                        </jet-dropdown-link>
+                                    </template>
+                                </jet-dropdown>
                             </jet-nav-link>
                         </div>
                     </div>
@@ -111,14 +152,20 @@
             <!-- Responsive Navigation Menu -->
             <div :class="{'block': showingNavigationDropdown, 'hidden': ! showingNavigationDropdown}" class="md:hidden">
                 <div class="pt-2 pb-3 space-y-1">
-                    <jet-responsive-nav-link :href="route('home')" :active="route().current('home')">
-                        Accueil
+                    <jet-responsive-nav-link :href="route('profile.show')">
+                        Produits et services
                     </jet-responsive-nav-link>
-                    <jet-responsive-nav-link :href="route('dashboard.index')" :active="route().current('dashboard.index')">
-                        Produits / Services
+                    <jet-responsive-nav-link :href="route('dashboard.index')">
+                        Cours et exercices
                     </jet-responsive-nav-link>
-                    <jet-responsive-nav-link :href="route('dashboard.index')" :active="route().current('dashboard.index')">
-                        Contact
+                    <jet-responsive-nav-link :href="route('dashboard.index')">
+                        Livre d'or et forum
+                    </jet-responsive-nav-link>
+                    <jet-responsive-nav-link :href="route('dashboard.index')">
+                        Articles
+                    </jet-responsive-nav-link>
+                    <jet-responsive-nav-link :href="route('dashboard.index')">
+                        Annuaire des anciens
                     </jet-responsive-nav-link>
                     <inertia-link :href="route('home')">
                         <i class="fab fa-facebook-f fa-lg py-4 pl-3 mr-3 border-l-4 border-transparent text-gray-500 hover:text-gray-700"></i>
@@ -180,11 +227,11 @@
         </div>
         <aside v-if="sidebarItems" class="flex flex-col z-30 rounded-r-lg transform top-0 left-0 w-64 bg-white fixed h-full overflow-auto ease-in-out transition-all duration-300" :class="showingNavigationSide ? 'translate-x-0' : '-translate-x-full'">
             <div class="flex flex-col items-center mb-3 w-10/12 mx-auto">
-                <input class="mt-4 border-b-2 border-gray-300 h-10 focus:outline-none" placeholder="Recherche">
+                <input v-on:keyup="updateSidebar" class="mt-4 border-b-2 border-gray-300 h-10 focus:outline-none" placeholder="Recherche">
             </div>
             <div class="flex-grow">
                 <div v-for="(level, index) in copySidebarItems" :key="index">
-                    <span class="flex items-center py-1 px-2 mx-auto text-base">
+                    <span v-if="level['visible']" class="flex items-center py-1 px-2 mx-auto text-base">
                         <span class="mr-4">-</span>
                         <a :href="'/formation/' + level.uuid" class="mr-2 text-gray-500 hover:text-gray-700 cursor-pointer hover:underline">
                             {{ level.title }}
@@ -194,8 +241,8 @@
                             <i v-else class="fas fa-chevron-down text-gray-500 hover:text-gray-700 cursor-pointer" v-on:click="dropMenu(level)"></i>
                         </span>
                     </span>
-                    <div v-if="level['unrolled']" v-for="(chapter, index) in level['chapters']" :key="index">
-                        <span class="flex items-center py-1 pr-2 pl-8 mx-auto text-base">
+                    <div v-if="level['visible'] && level['unrolled']" v-for="(chapter, index) in level['chapters']" :key="index">
+                        <span v-if="chapter['visible']" class="flex items-center py-1 pr-2 pl-8 mx-auto text-base">
                             <span class="mr-4">-</span>
                             <a :href="'/chapitre/' + chapter.uuid" class="text-gray-500 hover:text-gray-700 cursor-pointer hover:underline">
                                 {{ chapter.title }}
@@ -205,8 +252,8 @@
                                 <i v-else class="fas fa-chevron-down text-gray-500 hover:text-gray-700 cursor-pointer" v-on:click="dropMenu(chapter)"></i>
                             </span>
                         </span>
-                        <div v-if="chapter['unrolled']" v-for="(course, index) in chapter['courses']" :key="index">
-                            <span class="flex items-center py-1 pr-2 pl-14 mx-auto text-base">
+                        <div v-if="chapter['unrolled'] && chapter['visible']" v-for="(course, index) in chapter['courses']" :key="index">
+                            <span v-if="course['visible']" class="flex items-center py-1 pr-2 pl-14 mx-auto text-base">
                                 <span class="mr-4">-</span>
                                 <a :href="'/cours/' + course.uuid" class="text-gray-500 hover:text-gray-700 cursor-pointer hover:underline">
                                     {{ course.title }}
@@ -216,14 +263,14 @@
                                     <i v-else class="fas fa-chevron-down text-gray-500 hover:text-gray-700 cursor-pointer" v-on:click="dropMenu(course)"></i>
                                 </span>
                             </span>
-                            <div v-if="course['unrolled']" v-for="(content, index) in course['contents']" :key="index">
+                            <!--<div v-if="course['visible']" v-for="(content, index) in course['contents']" :key="index">
                                 <span class="flex items-center py-1 pr-2 pl-20 mx-auto text-base">
                                     <span class="mr-4">-</span>
                                     <span class="text-gray-500 hover:text-gray-700 cursor-pointer hover:underline">
                                         {{ content.title }}
                                     </span>
                                 </span>
-                            </div>
+                            </div>-->
                         </div>
                     </div>
                 </div>
@@ -384,10 +431,13 @@ export default {
             if (this.sidebarItems) {
                 this.copySidebarItems.forEach(element => {
                     element['unrolled'] = false;
+                    element['visible'] = true;
                     element['chapters'].forEach(element => {
                         element['unrolled'] = false;
+                        element['visible'] = true;
                         element['courses'].forEach(element => {
                             element['unrolled'] = false;
+                            element['visible'] = true;
                         });
                     });
                 });
@@ -399,12 +449,32 @@ export default {
             this.refreshSidebar();
         },
 
+        refreshSidebar() {
+            this.showingNavigationSide = !this.showingNavigationSide;
+            this.showingNavigationSide = !this.showingNavigationSide;
+        },
+
         showConnectionForm() {
             this.loginForm = true;
         },
 
         updateLoginForm(value) {
             this.loginForm = value;
+        },
+
+        updateSidebar(search) {
+            if (this.sidebarItems) {
+                this.copySidebarItems.forEach(element => {
+                    element['chapters'].forEach(element => {
+                        element['courses'].forEach(element => {
+                            element['visible'] = element.title.includes(search.target.value);
+                        });
+                        element['visible'] = element['courses'].filter(course => course['visible']).length > 0 || element.title.includes(search.target.value);
+                    });
+                    element['visible'] = element['chapters'].filter(course => course['visible']).length > 0 || element.title.includes(search.target.value);
+                });
+                this.refreshSidebar();
+            }
         }
     }
 }
