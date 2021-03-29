@@ -14,7 +14,7 @@
                                 </span>
                             </a>
                         </li>
-                        <li id="ressources" class="slice">
+                        <li id="resources" class="slice">
                             <a href="#" class="rounded-full pt-1 text-xs md:text-sm lg:text-base">
                                 <span class="icn">
                                     <i class="icn fas fa-briefcase fa-lg"></i>

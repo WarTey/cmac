@@ -29,7 +29,7 @@
 }
 
 #products { transform: rotate(54deg) skewX(18deg) scale(1); transition: transform 1s; }
-#ressources { transform: rotate(126deg) skewX(18deg) scale(1); transition: transform 1s; }
+#resources { transform: rotate(126deg) skewX(18deg) scale(1); transition: transform 1s; }
 #forum { transform: rotate(198deg) skewX(18deg) scale(1); transition: transform 1s; }
 #art-science { transform: rotate(270deg) skewX(18deg) scale(1); transition: transform 1s; }
 #old-students { transform: rotate(342deg) skewX(18deg) scale(1); transition: transform 1s; }
@@ -84,28 +84,7 @@
     pointer-events: auto;
 }
 
-#menu-small {
-    display: none;
-}
-
-#menu-small #down-small {
-    text-align: center;
-}
-
-.list-group-item {
-    border: 1px solid rgb(42, 44, 50);
-}
-
-#down, #down-small {
-    position: relative;
-    bottom: 2%;
-    font-size: 1.5rem;
-    transition: text-shadow 0.3s;
-    -webkit-animation: 2s arrow infinite ease;
-    animation: 2s arrow infinite ease;
-}
-
-#down:hover, #down-small:hover, #arrow:hover {
+#arrow:hover {
     cursor: pointer;
     text-shadow: 5px 5px 15px black;
     transition: text-shadow 0.3s;
@@ -121,26 +100,4 @@
 
 small {
     float: right;
-}
-
-/*@media (max-width: 250px), (max-height: 235px) {
-	header { height: 100% !important; }
-
-	#menu { display: none; }
-
-	#menu-small { display: inline; }
-
-	.navbar { margin-bottom: 0 !important; }
-}*/
-
-@media (min-width: 700px) and (max-width: 768px), (max-height: 780px) {
-    /*#down {
-        display: none;
-    }*/
-}
-
-@media (max-width: 768px) {
-    /*#arrow {
-        display: none;
-    }*/
 }
