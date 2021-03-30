@@ -101,18 +101,6 @@ export default {
         AppLayout
     },
 
-    props: [],
-
-    data() {
-        return {
-
-        }
-    },
-
-    watch: {
-
-    },
-
     created: function() {
         axios.get("https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=1&playlistId=UUP4eZIghdl2Pneq5vH4XiRA&forUsername=coursmaths_ac&key=AIzaSyDnHrh5DobcXSGN5FhZj6O1JUh7lZt4zOM").then(response => {
             response.data.items.forEach(item => {
@@ -122,10 +110,6 @@ export default {
                 document.getElementById('result-url-youtube').setAttribute("href", "https://youtu.be/qbpaa7qzhjo" + item.snippet.resourceId.videoId);
             })
         });
-    },
-
-    methods: {
-
     }
 }
 </script>

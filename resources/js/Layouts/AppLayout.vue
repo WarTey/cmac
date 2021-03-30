@@ -263,14 +263,6 @@
                                     <i v-else class="fas fa-chevron-down text-gray-500 hover:text-gray-700 cursor-pointer" v-on:click="dropMenu(course)"></i>
                                 </span>
                             </span>
-                            <!--<div v-if="course['visible']" v-for="(content, index) in course['contents']" :key="index">
-                                <span class="flex items-center py-1 pr-2 pl-20 mx-auto text-base">
-                                    <span class="mr-4">-</span>
-                                    <span class="text-gray-500 hover:text-gray-700 cursor-pointer hover:underline">
-                                        {{ content.title }}
-                                    </span>
-                                </span>
-                            </div>-->
                         </div>
                     </div>
                 </div>

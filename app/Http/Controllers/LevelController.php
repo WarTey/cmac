@@ -4,23 +4,25 @@ namespace App\Http\Controllers;
 
 use App\Models\Level;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Redirect;
 use Illuminate\Validation\Rule;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class LevelController extends Controller
 {
-    public function index()
+    public function index(): Response
     {
-        $levels = Level::orderBy('position')->withCount('chapters')->get();
-
         return Inertia::render('Levels/Index', [
-            'levels' => $levels,
+            'levels' => $this->get(),
             'sidebarItems' => $this->sidebar()
         ]);
     }
 
-    public function store(Request $request)
+    public function get() {
+        return Level::orderBy('position')->withCount('chapters as child_count')->get();
+    }
+
+    public function store(Request $request): array
     {
         $request->validate([
             'titleStore' => 'required|unique:levels,title|max:100',
@@ -43,10 +45,10 @@ class LevelController extends Controller
 
         $level->save();
 
-        return Redirect::route('levels.index')->with('successStore', 'Formation en ligne.');
+        return ['success' => true, 'elements' => $this->get()];
     }
 
-    public function edit(Request $request)
+    public function edit(Request $request): array
     {
         $request->validate([
             'uuid' => 'required',
@@ -87,10 +89,10 @@ class LevelController extends Controller
             'description' => $request->post('descriptionEdit')
         ]);
 
-        return Redirect::route('levels.index')->with('successEdit', 'Formation mise à jour.');
+        return ['success' => true, 'elements' => $this->get()];
     }
 
-    public function delete(Request $request)
+    public function delete(Request $request): array
     {
         $request->validate([
             'uuid' => 'required'
@@ -98,6 +100,6 @@ class LevelController extends Controller
 
         Level::where('uuid', $request->post('uuid'))->first()->delete();
 
-        return Redirect::route('levels.index')->with('toast', 'Formation supprimée.');
+        return ['success' => true, 'elements' => $this->get()];
     }
 }
